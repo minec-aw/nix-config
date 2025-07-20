@@ -152,7 +152,7 @@ PanelWindow {
 				}
 			},
 			Transition {
-				from: ""; to: "opened"; reversible: true
+				from: ""; to: "opened"
 				SequentialAnimation {
 					PropertyAnimation { 
 						property: "anchors.bottomMargin"; duration: 200
@@ -160,13 +160,47 @@ PanelWindow {
 							type: Easing.OutBack; overshoot: 2
 						}
 					}
-					PropertyAnimation { 
-						property: "height"; duration: 200
-						easing {
-							type: Easing.OutBack; overshoot: 1
+					SequentialAnimation {
+						PropertyAnimation { 
+							property: "height"; duration: 150
+							easing {
+								type: Easing.InQuart
+							}
+						}
+						PropertyAnimation { 
+							property: "anchors.bottomMargin"
+							duration: 100
+							to: bigpanel.margin + 20
+							easing {
+								type: Easing.OutCirc
+							}
+						}
+						PropertyAnimation { 
+							property: "anchors.bottomMargin"
+							duration: 100
+							to: bigpanel.margin
+							easing {
+								type: Easing.OutCirc
+							}
 						}
 					}
-					
+				}
+			},
+			Transition {
+				from: "opened"; to: ""
+				SequentialAnimation {
+					PropertyAnimation { 
+						property: "height"; duration: 150
+						easing {
+							type: Easing.InQuart
+						}
+					}
+					PropertyAnimation { 
+						property: "anchors.bottomMargin"; duration: 200
+						easing {
+							type: Easing.InBack; overshoot: 2
+						}
+					}
 				}
 			},
 			Transition {
@@ -178,13 +212,30 @@ PanelWindow {
 							type: Easing.OutBack; overshoot: 2
 						}
 					}
-					PropertyAnimation { 
-						property: "height"; duration: 200
-						easing {
-							type: Easing.OutBack; overshoot: 1
+					SequentialAnimation {
+						PropertyAnimation { 
+							property: "height"; duration: 150
+							easing {
+								type: Easing.InQuart
+							}
+						}
+						PropertyAnimation { 
+							property: "anchors.bottomMargin"
+							duration: 100
+							to: bigpanel.margin + 20
+							easing {
+								type: Easing.OutCirc
+							}
+						}
+						PropertyAnimation { 
+							property: "anchors.bottomMargin"
+							duration: 100
+							to: bigpanel.margin
+							easing {
+								type: Easing.OutCirc
+							}
 						}
 					}
-					
 				}
 			}
 		]

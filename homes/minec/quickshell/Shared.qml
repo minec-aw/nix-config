@@ -6,6 +6,7 @@ import Quickshell.Io
 import Quickshell.Hyprland
 import Quickshell.Wayland
 import Quickshell.Services.Notifications
+import QtMultimedia
 
 Singleton {
 	//properties of UI
@@ -268,7 +269,10 @@ Singleton {
 		}
 	}
 	property bool savingScreenshot: false
-
+	SoundEffect {
+        id: shutterSound
+        source: "assets/shutter2.wav"
+    }
 	Process {
 		id: removescreenshot
 		command: ["rm", `${screenshotFilePath}`]
@@ -291,6 +295,7 @@ Singleton {
 	}
 	function saveScreenshot() {
 		if (savingScreenshot) return
+		shutterSound.play()
 		savingScreenshot = true
 		const firstScreenScale = Hyprland.monitorFor(Quickshell.screens[0]).height / Quickshell.screens[0].height
 		const width = Math.abs(screenshotWidth)*firstScreenScale

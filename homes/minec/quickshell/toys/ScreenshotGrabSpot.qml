@@ -8,7 +8,7 @@ MouseArea {
     property string corner: "topleft"
     property bool fullHide: false
     property bool showWhen: true
-    property color color: Shared.textColor
+    property color color: Shared.colors.on_surface
     property double unshownThickness: 1
     property double thickness: 3
     states: State {

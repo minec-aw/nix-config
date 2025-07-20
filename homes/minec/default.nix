@@ -74,6 +74,7 @@ in
 			lutris
 			umu-launcher
 			qpwgraph
+			tenacity
 			scrcpy
 			pinta
 			rquickshare

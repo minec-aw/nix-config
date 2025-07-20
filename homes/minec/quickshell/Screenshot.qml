@@ -2,7 +2,6 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
-//import QtMultimedia
 
 import QtQuick
 import QtQuick.Layouts
@@ -28,16 +27,12 @@ PanelWindow {
         Keys.onReleased: (event) => {
             if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
                 Shared.saveScreenshot()
-                shutterSound.play()
             } else if (event.key == Qt.Key_Escape) {
                 Shared.screenshotTrigger()
             }
         }
     }
-    /*SoundEffect {
-        id: shutterSound
-        source: "assets/shutter.wav"
-    }*/
+    
     property bool screenshotBeingSaved: Shared.savingScreenshot
     onScreenshotBeingSavedChanged: () => {
         selection.color = Qt.rgba(1, 1, 1, 1)
@@ -170,7 +165,7 @@ PanelWindow {
         property point revolutionPosition: Qt.point(0,0)
         
         OuterBorder {
-            color: Shared.textColor
+            color: Shared.colors.on_surface
             borderWidth: 1
         }
         MouseArea {
@@ -182,8 +177,8 @@ PanelWindow {
             onPositionChanged: (mouseEvent) => {
                 const mousePos = selection.mapToItem(bigmouse, mouseEvent.x - selection.revolutionPosition.x, mouseEvent.y - selection.revolutionPosition.y)
                 Shared.screenshotInitialPosition = Qt.point(
-                    Shared.screenshotWidth < 0? mousePos.x + screen.x - Shared.screenshotWidth: mousePos.x + screen.x,
-                    Shared.screenshotHeight < 0? mousePos.y + screen.y - Shared.screenshotHeight: mousePos.y + screen.y
+                    Math.min(Math.max(mousePos.x + screen.x, 0), Shared.screensBoundingBox.width-Shared.screenshotWidth),
+                    Math.min(Math.max(mousePos.y + screen.y, 0), Shared.screensBoundingBox.height-Shared.screenshotHeight)
                 )
             }
             onReleased: {Shared.screenshotShowCorners = true; fixPositions()}
@@ -192,7 +187,7 @@ PanelWindow {
             id: topleft
             corner: "topleft"
             showWhen: Shared.screenshotShowCorners
-            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
+            fullHide: Math.abs(Shared.screenshotWidth) < width || Math.abs(Shared.screenshotHeight) < height
             anchors {
                 horizontalCenter: parent.left
                 verticalCenter: parent.top
@@ -210,7 +205,7 @@ PanelWindow {
             id: topright
             corner: "topright"
             showWhen: Shared.screenshotShowCorners
-            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
+            fullHide: Math.abs(Shared.screenshotWidth) < width || Math.abs(Shared.screenshotHeight) < height
             anchors {
                 horizontalCenter: parent.right
                 verticalCenter: parent.top
@@ -229,7 +224,7 @@ PanelWindow {
             id: bottomleft
             corner: "bottomleft"
             showWhen: Shared.screenshotShowCorners
-            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
+            fullHide: Math.abs(Shared.screenshotWidth) < width || Math.abs(Shared.screenshotHeight) < height
             anchors {
                 horizontalCenter: parent.left
                 verticalCenter: parent.bottom
@@ -247,7 +242,7 @@ PanelWindow {
             id: bottomright
             corner: "bottomright"
             showWhen: Shared.screenshotShowCorners
-            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
+            fullHide: Math.abs(Shared.screenshotWidth) < width || Math.abs(Shared.screenshotHeight) < height
             anchors {
                 horizontalCenter: parent.right
                 verticalCenter: parent.bottom

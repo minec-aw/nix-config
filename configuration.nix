@@ -204,8 +204,7 @@ in
 			hyprpolkitagent
 			gnome-disk-utility
 			git
-			qt6.qtmultimedia
-			inputs.quickshell.packages.x86_64-linux.default
+			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			fastfetch
 			flatpak
 			ffmpeg
