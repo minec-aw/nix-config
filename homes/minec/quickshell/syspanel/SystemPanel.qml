@@ -17,7 +17,9 @@ PanelWindow {
 	property bool opened: false
 	property bool hover: false
 	property var expandedPanel
+	property bool fullHide: Hyprland.monitorFor(screen).activeWorkspace.hasFullscreen
 	color: "transparent"
+	
 	HyprlandFocusGrab {
       id: grab
       windows: [panel]
@@ -104,7 +106,7 @@ PanelWindow {
 		},
 		State { //this is required otherwise it goes crazy ahhgfhghggh and stupid hahahhahahahhhh
 			name: "nothovered"; when: !panel.hover
-			PropertyChanges {target: panelhitbox; height: 1}
+			PropertyChanges {target: panelhitbox; height: fullHide? 0: 1}
 		}
 		]
 	}

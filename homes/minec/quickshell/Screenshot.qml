@@ -2,6 +2,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Hyprland
+//import QtMultimedia
 
 import QtQuick
 import QtQuick.Layouts
@@ -15,72 +16,48 @@ PanelWindow {
 	WlrLayershell.layer: WlrLayer.Overlay
 	WlrLayershell.namespace: "shell:screenshot"
     exclusionMode: ExclusionMode.Ignore
-    visible: Shared.takingScreenshot
-    property point initialPosition: Qt.point(-5000,-5000)
-    property point finalPosition: Qt.point(-5000,-5000)
+    //property point Shared.screenshotInitialPosition: Qt.point(-5000,-5000)
+    //property point Shared.screenshotFinalPosition: Qt.point(-5000,-5000)
     property bool showDots: false
     //this is done rather than using the scale property since hyprland rounds the scaling factor when sending it out, funnily enough
     property var screenScale: Hyprland.monitorFor(screen).height / screen.height
-    property string screenshotPath: ""
     Item {
         id: keyboardgrabber
         anchors.fill: parent
         focus: true
-        Keys.onReleased: (event)=> {
+        Keys.onReleased: (event) => {
             if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
-                savescreenshot.running = true
-                event.accepted = true;
+                Shared.saveScreenshot()
+                shutterSound.play()
             } else if (event.key == Qt.Key_Escape) {
-                Shared.takingScreenshot = false
+                Shared.screenshotTrigger()
             }
         }
+    }
+    /*SoundEffect {
+        id: shutterSound
+        source: "assets/shutter.wav"
+    }*/
+    property bool screenshotBeingSaved: Shared.savingScreenshot
+    onScreenshotBeingSavedChanged: () => {
+        selection.color = Qt.rgba(1, 1, 1, 1)
+        selection.flash.running = true
     }
     Component.onCompleted: {
         if (this.WlrLayershell != null) {
             this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive
         }
+        Shared.screenshotInitialPosition = Qt.point(-5000,-5000)
     }
-    onVisibleChanged: () => {
-        if (visible == false) {
-            screenshotPath = ""
-            initialPosition = Qt.point(-5000,-5000)
-            finalPosition = Qt.point(-5000,-5000)
-            selection.x = -5000
-            selection.y = -5000
-            selection.width = 0
-            selection.height = 0
-        } else {
-            screenfreeze.opacity = 0
-            screenshot.running = true
-        }
-    }
-    Process {
-		id: screenshot
-		command: ["sh", "-c", `ssfile=$(mktemp /tmp/ssXXXXXX.png); grim -o ${screen.name} "$ssfile"; echo $ssfile`]
-		running: false
-		stdout: SplitParser {
-			onRead: (data) => {
-				screenshotPath = data
-                Shared.registerFileForExtinction(screenshotPath)
-                screenfreeze.opacity = 1
-			}
-		}
-	}
 
-    Process {
-		id: savescreenshot
-        // magick /tmp/ssXZyNr3.png -crop 32x32+30+10 wa.png
-        command: ["sh", "-c", `magick ${screenshotPath} -crop ${selection.width*screenScale}x${selection.height*screenScale}+${initialPosition.x*screenScale}+${initialPosition.y*screenScale} - | wl-copy`]
-		running: false
-        onRunningChanged: () => {
-            Shared.takingScreenshot = false
-        }
-	}
-    
     Image {
         id: screenfreeze
-        anchors.fill: parent
-        source: screenshotPath
+        source: Shared.screenshotFilePath
+        fillMode: Image.PreserveAspectFit
+        width: sourceSize.width/screenScale
+        height: sourceSize.height/screenScale
+        x: -screen.x
+        y: screen.y
     }
 	anchors {
 		top: true
@@ -125,53 +102,73 @@ PanelWindow {
         }
         color: Qt.rgba(0, 0, 0, 0.5)
     }
-    function updateRect() {
-        selection.x = Math.min(initialPosition.x, finalPosition.x)
-        selection.y = Math.min(initialPosition.y, finalPosition.y)
-        selection.width = Math.abs(initialPosition.x - finalPosition.x)
-        selection.height = Math.abs(initialPosition.y - finalPosition.y)
-        //hacky but we need to grab input
-        if (keyboardgrabber.focus == false) { keyboardgrabber.focus = true}
-    }
+    property point screenshotPosInitial: Shared.screenshotInitialPosition
+    property point screenshotPosFinal: Shared.screenshotInitialPosition
+
     function fixPositions() {
-        let initx = initialPosition.x
-        let finx = finalPosition.x
-        let inity = initialPosition.y
-        let finy = finalPosition.y
-        if (initialPosition.x > finalPosition.x) {
-            initialPosition.x = finx
-            finalPosition.x = initx
+        if (Shared.screenshotWidth < 0) {
+            Shared.screenshotInitialPosition = Qt.point(Shared.screenshotInitialPosition.x + Shared.screenshotWidth, Shared.screenshotInitialPosition.y)
+            Shared.screenshotWidth = -Shared.screenshotWidth
         }
-        if (initialPosition.y > finalPosition.y) {
-            initialPosition.y = finy
-            finalPosition.y = inity
+        if (Shared.screenshotHeight < 0) {
+            Shared.screenshotInitialPosition = Qt.point(Shared.screenshotInitialPosition.x, Shared.screenshotInitialPosition.y + Shared.screenshotHeight)
+            Shared.screenshotHeight = -Shared.screenshotHeight
         }
-        updateRect()
+    }
+    function resizeRect(corner, mousePos) {
+        const oldInitialPosition = Qt.point(Shared.screenshotInitialPosition.x, Shared.screenshotInitialPosition.y)
+        if (corner == "topleft") {
+            Shared.screenshotInitialPosition = Qt.point(mousePos.x + screen.x, mousePos.y + screen.y)
+            Shared.screenshotWidth = Shared.screenshotWidth + (oldInitialPosition.x - Shared.screenshotInitialPosition.x)
+            Shared.screenshotHeight = Shared.screenshotHeight + (oldInitialPosition.y - Shared.screenshotInitialPosition.y)
+        } else if (corner == "topright") {
+            Shared.screenshotInitialPosition = Qt.point(Shared.screenshotInitialPosition.x, mousePos.y + screen.y)
+            Shared.screenshotWidth = (mousePos.x + screen.x) - Shared.screenshotInitialPosition.x
+            Shared.screenshotHeight = oldInitialPosition.y + Shared.screenshotHeight -(mousePos.y + screen.y)
+        } else if (corner == "bottomleft") {
+            Shared.screenshotInitialPosition = Qt.point(mousePos.x + screen.x, Shared.screenshotInitialPosition.y)
+            Shared.screenshotWidth = oldInitialPosition.x + Shared.screenshotWidth -(mousePos.x + screen.x)
+            Shared.screenshotHeight = (mousePos.y + screen.y) - Shared.screenshotInitialPosition.y
+        } else if (corner == "bottomright") {
+            Shared.screenshotWidth = (mousePos.x + screen.x) - Shared.screenshotInitialPosition.x
+            Shared.screenshotHeight = (mousePos.y + screen.y) - Shared.screenshotInitialPosition.y
+        }
     }
     MouseArea {
         id: bigmouse
         anchors.fill: parent
         onPressed: (mouseEvent) => {
-            showDots = false
-            initialPosition = Qt.point(mouseEvent.x, mouseEvent.y)
-            finalPosition = Qt.point(mouseEvent.x, mouseEvent.y)
-            updateRect()
+            Shared.screenshotShowCorners = false
+            Shared.screenshotInitialPosition = Qt.point(mouseEvent.x + screen.x, mouseEvent.y + screen.y)
+            Shared.screenshotWidth = 0
+            Shared.screenshotHeight = 0
         }
         onPositionChanged: (mouseEvent) => {
-            finalPosition = Qt.point(mouseEvent.x, mouseEvent.y)
-            updateRect()
+            Shared.screenshotWidth = mouseEvent.x + screen.x - Shared.screenshotInitialPosition.x
+            Shared.screenshotHeight = mouseEvent.y + screen.y - Shared.screenshotInitialPosition.y
         }
-        onReleased: {fixPositions(); updateRect(); showDots = true}
+        onReleased: {Shared.screenshotShowCorners = true; fixPositions()}
     }
 
     Rectangle {
         id: selection
-        color: "transparent"
-        width: 0
-        height: 0
-        x: -5000
-        y: -5000
+        color: Qt.rgba(1,1,1,0)
+
+        property ColorAnimation flash: ColorAnimation { 
+            id: flash
+            target: selection
+            easing.type: Easing.OutCirc
+            property: "color"
+            to: Qt.rgba(1, 1, 1, 0)
+            duration: 400 
+        }
+
+        width: Math.abs(Shared.screenshotWidth)
+        height: Math.abs(Shared.screenshotHeight)
+        x: (Shared.screenshotWidth < 0? Shared.screenshotInitialPosition.x + Shared.screenshotWidth: Shared.screenshotInitialPosition.x) - screen.x
+        y: (Shared.screenshotHeight < 0? Shared.screenshotInitialPosition.y + Shared.screenshotHeight: Shared.screenshotInitialPosition.y) - screen.y
         property point revolutionPosition: Qt.point(0,0)
+        
         OuterBorder {
             color: Shared.textColor
             borderWidth: 1
@@ -180,83 +177,89 @@ PanelWindow {
             anchors.fill: parent
             onPressed: (mouseEvent) => {
                 selection.revolutionPosition = Qt.point(mouseEvent.x, mouseEvent.y)
+                Shared.screenshotShowCorners = false
             }
             onPositionChanged: (mouseEvent) => {
-                initialPosition = selection.mapToItem(bigmouse, mouseEvent.x - selection.revolutionPosition.x, mouseEvent.y - selection.revolutionPosition.y)
-                initialPosition = Qt.point(Math.min(Math.max(initialPosition.x, 0), bigmouse.width - selection.width), Math.min(Math.max(initialPosition.y, 0), bigmouse.height - selection.height))
-                finalPosition = Qt.point(initialPosition.x + selection.width, initialPosition.y + selection.height)
-                updateRect()
+                const mousePos = selection.mapToItem(bigmouse, mouseEvent.x - selection.revolutionPosition.x, mouseEvent.y - selection.revolutionPosition.y)
+                Shared.screenshotInitialPosition = Qt.point(
+                    Shared.screenshotWidth < 0? mousePos.x + screen.x - Shared.screenshotWidth: mousePos.x + screen.x,
+                    Shared.screenshotHeight < 0? mousePos.y + screen.y - Shared.screenshotHeight: mousePos.y + screen.y
+                )
             }
+            onReleased: {Shared.screenshotShowCorners = true; fixPositions()}
         }   
         ScreenshotGrabSpot {
             id: topleft
-            showWhen: showDots
+            corner: "topleft"
+            showWhen: Shared.screenshotShowCorners
+            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
             anchors {
                 horizontalCenter: parent.left
                 verticalCenter: parent.top
-            }
+            } 
             onPressed: (mouseEvent) => {
-                initialPosition = topleft.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y)
-                showDots = false
-                updateRect()
+                Shared.screenshotShowCorners = false
             }
-            onPositionChanged: (mouseEvent) => {initialPosition = topleft.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y); updateRect()}
-            onReleased: {fixPositions(); showDots = true}
+            onPositionChanged: (mouseEvent) => {
+                const mousePos = topleft.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y)
+                resizeRect("topleft", mousePos)
+            }
+            onReleased: {Shared.screenshotShowCorners = true; fixPositions()}
         }
         ScreenshotGrabSpot {
             id: topright
-            showWhen: showDots
+            corner: "topright"
+            showWhen: Shared.screenshotShowCorners
+            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
             anchors {
                 horizontalCenter: parent.right
                 verticalCenter: parent.top
             }
             onPressed: (mouseEvent) => {
-                finalPosition = Qt.point(topright.mapToItem(bigmouse, mouseEvent.x, 0).x, finalPosition.y)
-                initialPosition = Qt.point(initialPosition.x, topright.mapToItem(bigmouse, 0, mouseEvent.y).y)
-                showDots = false
-                updateRect()
+                Shared.screenshotShowCorners = false
             }
             onPositionChanged: (mouseEvent) => {
-                finalPosition = Qt.point(topright.mapToItem(bigmouse, mouseEvent.x, 0).x, finalPosition.y)
-                initialPosition = Qt.point(initialPosition.x, topright.mapToItem(bigmouse, 0, mouseEvent.y).y)
-                updateRect()
+                const mousePos = topright.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y)
+                resizeRect("topright", mousePos)
+
             }
-            onReleased: {fixPositions(); showDots = true}
+            onReleased: {Shared.screenshotShowCorners = true; fixPositions()}
         }
         ScreenshotGrabSpot {
             id: bottomleft
-            showWhen: showDots
+            corner: "bottomleft"
+            showWhen: Shared.screenshotShowCorners
+            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
             anchors {
                 horizontalCenter: parent.left
                 verticalCenter: parent.bottom
             }
             onPressed: (mouseEvent) => {
-                initialPosition = Qt.point(bottomleft.mapToItem(bigmouse, mouseEvent.x, 0).x, initialPosition.y)
-                finalPosition = Qt.point(finalPosition.x, bottomleft.mapToItem(bigmouse, 0, mouseEvent.y).y)
-                showDots = false
-                updateRect()
+                Shared.screenshotShowCorners = false
             }
             onPositionChanged: (mouseEvent) => {
-                initialPosition = Qt.point(bottomleft.mapToItem(bigmouse, mouseEvent.x, 0).x, initialPosition.y)
-                finalPosition = Qt.point(finalPosition.x, bottomleft.mapToItem(bigmouse, 0, mouseEvent.y).y)
-                updateRect()
+                const mousePos = bottomleft.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y)
+                resizeRect("bottomleft", mousePos)
             }
-            onReleased: {fixPositions(); showDots = true}
+            onReleased: {Shared.screenshotShowCorners = true; fixPositions()}
         }
         ScreenshotGrabSpot {
             id: bottomright
-            showWhen: showDots
+            corner: "bottomright"
+            showWhen: Shared.screenshotShowCorners
+            fullHide: Math.abs(Shared.screenshotWidth) < width*2 || Math.abs(Shared.screenshotHeight) < height*2
             anchors {
                 horizontalCenter: parent.right
                 verticalCenter: parent.bottom
             }
             onPressed: (mouseEvent) => {
-                finalPosition = bottomright.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y)
-                showDots = false
-                updateRect()
+                Shared.screenshotShowCorners = false
             }
-            onPositionChanged: (mouseEvent) => {finalPosition = bottomright.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y); updateRect()}
-            onReleased: {fixPositions(); showDots = true}
+            onPositionChanged: (mouseEvent) => {
+                const mousePos = bottomright.mapToItem(bigmouse, mouseEvent.x, mouseEvent.y)
+                resizeRect("bottomright", mousePos)
+            }
+            onReleased: {Shared.screenshotShowCorners = true; fixPositions()}
         }
     }
 }

@@ -19,7 +19,7 @@ Singleton {
 	property color borderColor: Qt.rgba(1,1,1,0.08);
 	property color textColor: Qt.rgba(1,1,1,1);
 	property color subtextColor: Qt.rgba(0.9,0.9,0.9, 1);
-	property var iconsPath: Qt.resolvedUrl("./icons")
+	property var iconsPath: Qt.resolvedUrl("./assets/icons")
 	// system stats
 	property int ramCapacity: 1
 	property int usedRam: 2
@@ -32,13 +32,29 @@ Singleton {
 	property var dataPrefixes: ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei"]
 	property bool overviewVisible: false
 
+	property string screenshotFilePath: ""
+	property bool screenshotTaken: false
 
 	NotificationServer {
 		onNotification: (notification) => {
 			console.log("Notification recieved!", notification.appName, notification.body, notification.summary)
 		}
 	}
-
+	property point screenshotInitialPosition: Qt.point(-5000, -5000)
+	property bool screenshotShowCorners: true
+	property var screenshotWidth: 0
+	property var screenshotHeight: 0
+	property var screensBoundingBox: (Quickshell.screens.reduce((acc, screen) => {
+		if (screen.x >= acc.x) {
+			acc.x = screen.x
+			acc.width = screen.x + screen.width
+		}
+		if (screen.y >= acc.y) {
+			acc.y = screen.y
+			acc.height = screen.y + screen.height
+		}
+		return acc
+	}, {x: 0, width: 0, y: 0, height: 0}))
 	
 	// other properties
 	property bool takingScreenshot: false
@@ -233,14 +249,77 @@ Singleton {
 	// cat /proc/net/dev | awk '/enp42s0/ {print $2}'] //total downloaded
 	// hyprctl dispatch workspace e+1
 
+	function randomString(length) {
+		let result = '';
+		const letters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+		for (let i = 0; i < length; i++) {
+			result += letters.charAt(Math.floor(Math.random() * letters.length));
+		}
+		return result;
+	}
+	property Process screenshotProcess: Process {
+		id: screenshot_process
+		command: ["grim", `${screenshotFilePath}`]
+		running: false
+		onRunningChanged: () => {
+			if (!running) {
+				screenshotTaken = true
+			}
+		}
+	}
+	property bool savingScreenshot: false
+
+	Process {
+		id: removescreenshot
+		command: ["rm", `${screenshotFilePath}`]
+		running: false
+	}
+
+	Process {
+		id: savescreenshot
+        // magick /tmp/ssXZyNr3.png -crop 32x32+30+10 wa.png
+		running: false
+        onRunningChanged: () => {
+			if (!running) {
+				removescreenshot.command = ["rm", `${screenshotFilePath}`]
+				screenshotFilePath = ""
+				screenshotTaken = false
+				savingScreenshot = false
+				removescreenshot.running = true
+			}
+        }
+	}
+	function saveScreenshot() {
+		if (savingScreenshot) return
+		savingScreenshot = true
+		const firstScreenScale = Hyprland.monitorFor(Quickshell.screens[0]).height / Quickshell.screens[0].height
+		const width = Math.abs(screenshotWidth)*firstScreenScale
+		const height = Math.abs(screenshotHeight)*firstScreenScale
+		const x = screenshotInitialPosition.x*firstScreenScale
+		const y = screenshotInitialPosition.y*firstScreenScale
+		savescreenshot.command = ["sh", "-c", `magick ${screenshotFilePath} -crop ${width}x${height}+${x}+${y} - | wl-copy`]
+		savescreenshot.running = true
+	}
+	function screenshotTrigger() {
+		if (screenshotProcess.running) return
+		if (screenshotTaken) {
+			//destroy it
+			screenshotFilePath = ""
+			screenshotTaken = false
+		} else {
+			screenshotFilePath = `/tmp/${randomString(8)}.png`
+			//screenshotProcess.command =  ["grim", `${screenshotFilePath}`]
+			screenshotProcess.running = true
+		}
+	}
 	IpcHandler {
     	target: "shell"
 		function toggleBar() { 
 			Shared.barsShown = !Shared.barsShown
 			//print("Bar toggled!")
 		}
-		function screenshot() { 
-			Shared.takingScreenshot = !Shared.takingScreenshot
+		function screenshot() {
+			screenshotTrigger()
 		}
 		function overview() {
 			if (Shared.overviewVisible == false) {

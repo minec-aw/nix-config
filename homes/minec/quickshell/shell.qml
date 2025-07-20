@@ -18,10 +18,13 @@ ShellRoot {
 				id: bar
 				screen: modelData
 			}
-			Screenshot {
+			LazyLoader {
+				active: Shared.screenshotTaken
+				Screenshot {screen: modelData}
+			}
+			BackgroundAlternate {
 				screen: modelData
 			}
-			Background {screen: modelData}
 			//Overview {screen: modelData; visible: Shared.overviewVisible && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)}
 			LazyLoader {
 				active: Shared.overviewVisible && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)
