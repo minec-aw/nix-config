@@ -15,6 +15,7 @@ PanelWindow {
 	WlrLayershell.layer: WlrLayer.Overlay
 	WlrLayershell.namespace: "shell:screenshot"
     exclusionMode: ExclusionMode.Ignore
+    property double existenceStart: 0
     //property point Shared.screenshotInitialPosition: Qt.point(-5000,-5000)
     //property point Shared.screenshotFinalPosition: Qt.point(-5000,-5000)
     property bool showDots: false
@@ -32,6 +33,27 @@ PanelWindow {
             }
         }
     }
+
+    /*ScreencopyView {
+		id: screencap
+		anchors.fill: parent
+		captureSource: Quickshell.screens[0]
+        property double existenceStarhjt: 0
+        Component.onCompleted: () => {
+            existenceStarhjt = Date.now()
+        }
+		onHasContentChanged: () => {
+			if (screencap.hasContent) {
+				console.log("captured screen")
+				screencap.grabToImage(function(result) {
+					console.log(`took ${Date.now() - screenshotpanel.existenceStart} ms to take screenshot with screencopyview`)
+                    console.log(`from beginning of screencopyview, ${Date.now() - existenceStarhjt} ms have passed`)
+                    console.log(result.url)
+                    result.saveToFile("something.png")
+				})
+			}
+		}
+	}*/
     
     property bool screenshotBeingSaved: Shared.savingScreenshot
     onScreenshotBeingSavedChanged: () => {
@@ -43,6 +65,7 @@ PanelWindow {
             this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive
         }
         Shared.screenshotInitialPosition = Qt.point(-5000,-5000)
+        existenceStart = Date.now()
     }
 
     Image {

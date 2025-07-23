@@ -58,8 +58,6 @@ Singleton {
 	}, {x: 0, width: 0, y: 0, height: 0}))
 	
 	// other properties
-	property bool takingScreenshot: false
-	property var extinctList: []
 	property var time: new Date();
 	property var days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 	property var months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
@@ -166,25 +164,7 @@ Singleton {
             }
         }
     }
-
-	function registerFileForExtinction(filePath) {
-		extinctList.push(filePath)
-	}
-	onTakingScreenshotChanged: () => {
-		if (takingScreenshot == false) {
-			let cmd = ["sh", "-c", `sleep 1 && rm "${extinctList.join('" "')}"`]
-			extinctList = []
-			clearfiles.command = cmd
-			clearfiles.startDetached()
-		}
-	}
 	
-	Process {
-		id: clearfiles
-		command: ["rm"]
-		clearEnvironment: true
-		running: false
-	}
 	//stats commands
 	Process {
 		id: getmaxram
@@ -258,6 +238,7 @@ Singleton {
 		}
 		return result;
 	}
+	property double screenyexistence: 0
 	property Process screenshotProcess: Process {
 		id: screenshot_process
 		command: ["grim", `${screenshotFilePath}`]
@@ -265,6 +246,7 @@ Singleton {
 		onRunningChanged: () => {
 			if (!running) {
 				screenshotTaken = true
+				console.log(`screenshot taken in ${Date.now() - screenyexistence} ms`)
 			}
 		}
 	}
@@ -312,6 +294,7 @@ Singleton {
 			screenshotFilePath = ""
 			screenshotTaken = false
 		} else {
+			screenyexistence = Date.now()
 			screenshotFilePath = `/tmp/${randomString(8)}.png`
 			//screenshotProcess.command =  ["grim", `${screenshotFilePath}`]
 			screenshotProcess.running = true
@@ -320,7 +303,9 @@ Singleton {
 	IpcHandler {
     	target: "shell"
 		function toggleBar() { 
-			Shared.barsShown = !Shared.barsShown
+			for (const panel of panels) {
+				panel.keybindReveal()
+			}
 			//print("Bar toggled!")
 		}
 		function screenshot() {
@@ -361,5 +346,4 @@ Singleton {
 			getcurrentcpu.running = true
 		}
 	}
-	
 }

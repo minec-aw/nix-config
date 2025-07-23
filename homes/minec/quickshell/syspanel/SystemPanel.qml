@@ -13,7 +13,6 @@ import QtQuick.Effects
 PanelWindow {
 	id: panel
 	property bool pinned: false
-	property bool show: Shared.barsShown
 	property bool opened: false
 	property bool hover: false
 	property var expandedPanel
@@ -35,29 +34,15 @@ PanelWindow {
 	}
 	WlrLayershell.layer: WlrLayer.Overlay
 
-	/*Column {
-		spacing: 6
-		Repeater {
-			model: ToplevelManager.toplevels
-			ScreencopyView {
-				id: scview
-				required property Toplevel modelData
-				captureSource: modelData
-				live: true
-				width: 200
-				height: 200
-			}
-		}
-	}*/
-
-	onShowChanged: () => {
-		if (show == true) {
-			opened = true
-		} else {
-			panel.hover = false
+	function keybindReveal() {
+		if (opened) {
 			opened = false
+			hover = false
+		} else if (Hyprland.focusedMonitor == Hyprland.monitorFor(screen)) {
+			opened = true
 		}
 	}
+
 	onOpenedChanged: () => {
 		if (opened == true) {
 			grab.active = true
@@ -90,10 +75,6 @@ PanelWindow {
 			bottom: parent.bottom
 			left: parent.left
 		}
-		/*Rectangle {
-			anchors.fill: parent
-			color: Qt.rgba(1,0,0,0.1)
-		}*/ // debug rectangle
 		height: 1
 		states: [
 		State {
@@ -267,7 +248,6 @@ PanelWindow {
 						//maskSource: bigpanel
 					}
 				}*/
-				
 				
 				Clock {
 					id: clock

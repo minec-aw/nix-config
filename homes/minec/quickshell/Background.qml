@@ -23,6 +23,7 @@ PanelWindow {
 	}
 	// in dead cells the "resolution" is 640x360
 	property var scalingFactor: height/360
+
 	//math should be done in terms of the original resolution
 	Image {
 		smooth: false
