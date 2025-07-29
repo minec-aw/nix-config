@@ -237,6 +237,7 @@ in
 	programs = {
 		hyprland.enable = true;
 		fish.enable = true;
+		flashrom.enable = true;
 		kdeconnect = {
 			enable = true;
 			package = pkgs.kdePackages.kdeconnect-kde;
