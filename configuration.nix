@@ -219,6 +219,7 @@ in
 			wl-clipboard
 			easyeffects
 			pwvucontrol
+			isoimagewriter
 			
 			wsuricons
 			orchis-theme
