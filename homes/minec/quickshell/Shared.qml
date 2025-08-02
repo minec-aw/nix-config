@@ -113,6 +113,16 @@ Singleton {
 			}
 		}
 	}*/
+
+	// organized workspaces by time of focus
+	property var workspacesFocusOrder: Hyprland.workspaces.values.filter((workspace) =>  workspace.id >= 0).sort((workspaceA, workspaceB) => workspacesFocusOrderIds.indexOf(workspaceA.id) - workspacesFocusOrderIds.indexOf(workspaceB.id))
+	property var focusedWorkspace: Hyprland.focusedWorkspace
+	property var workspacesFocusOrderIds: Hyprland.workspaces.values.filter((workspace) =>  workspace.id >= 0).sort((workspaceA, workspaceB) => workspaceA.id - workspaceB.id).map((workspace) => workspace.id)
+	property var nextWorkspaceIndex: 0
+	onFocusedWorkspaceChanged: () => {
+		//const newWorkspaces = Hyprland.workspaces.values.filter((workspace) =>  workspace.id >= 0 && workspace.id != focusedWorkspace.id)
+		workspacesFocusOrderIds = [focusedWorkspace.id, ...workspacesFocusOrderIds]
+	}
 	
 	//stats commands
 	Process {
@@ -263,14 +273,26 @@ Singleton {
 		function overview() {
 			if (Shared.overviewVisible == false) {
 				Hyprland.refreshToplevels()
+				nextWorkspaceIndex = workspacesFocusOrder.length > 1? 1: 0
 				Shared.overviewVisible = true
-				Hyprland.dispatch("workspace e+1")
+				//Hyprland.dispatch("workspace e+1")
 			} else {
-				Hyprland.dispatch("workspace e+1")
+				nextWorkspaceIndex = nextWorkspaceIndex == workspacesFocusOrder.length-1? 0: nextWorkspaceIndex+1
+				//Hyprland.dispatch("workspace e+1")
 			}
 		}
 		function overviewClose() {
 			Shared.overviewVisible = false
+			Hyprland.dispatch("workspace "+workspacesFocusOrder[nextWorkspaceIndex].id)
+		}
+	}
+	property bool keepShowingOverview: false
+	property Timer timeOverviewClose: Timer {
+		interval: 300
+		running: false
+
+		onTriggered: () => {
+			keepShowingOverview = false
 		}
 	}
 

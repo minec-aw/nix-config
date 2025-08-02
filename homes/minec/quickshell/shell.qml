@@ -27,7 +27,7 @@ ShellRoot {
 			}
 			//Overview {screen: modelData; visible: Shared.overviewVisible && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)}
 			LazyLoader {
-				active: Shared.overviewVisible && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)
+				active: (Shared.overviewVisible == true || Shared.keepShowingOverview == true) && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)
 				Overview {screen: modelData}
 			}
 		}
