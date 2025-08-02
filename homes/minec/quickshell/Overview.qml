@@ -24,7 +24,7 @@ PanelWindow {
     WlrLayershell.layer: WlrLayer.Overlay
 	WlrLayershell.namespace: "shell:overview"
     property var workspaceSize: 400
-    /*Item {
+    Item {
         id: keyboardgrabber
         anchors.fill: parent
         focus: true
@@ -43,7 +43,7 @@ PanelWindow {
         if (this.WlrLayershell != null) {
             this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive
         }
-    }*/
+    }
 	Rectangle {
         width: childrenRect.width
         height: childrenRect.height
@@ -67,7 +67,7 @@ PanelWindow {
                     height: modelData.monitor.height/6
                     border {
                         width: 2
-                        color: modelData.active? Shared.colors.outline: Qt.rgba(0,0,0,1)
+                        color: modelData.active? Shared.colors.outline: Qt.rgba(0,0,0,0)
                         Behavior on color {ColorAnimation { duration: 100}}
                         pixelAligned: false
                     }
