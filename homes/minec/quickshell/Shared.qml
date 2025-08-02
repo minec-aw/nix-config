@@ -35,6 +35,8 @@ Singleton {
 
 	property string screenshotFilePath: ""
 	property bool screenshotTaken: false
+	property int hyprlandRadius: 10
+	property int hyprlandBorderSize: 2
 
 	NotificationServer {
 		onNotification: (notification) => {
@@ -98,22 +100,18 @@ Singleton {
 
 	property var colors: colorSchemes.dark
 	
-	property var toplevels: []
-	property var workspaceTopLevels: []
-	property var tlAddresses: []
-	
 	property var inlineTopLevels: ToplevelManager.toplevels.values.length
 	onInlineTopLevelsChanged: () => {
-		flower.running = true
+		Hyprland.refreshToplevels()
 	}
 	Connections {
 		target: Hyprland
 		onRawEvent: (event) => {
 			if (event.name != "movewindowv2") {return}
-			flower.running = true
+			Hyprland.refreshToplevels()
 		}
 	}
-	Process {
+	/*Process {
 		id: colorgen
 		command: ["sh","-c", `ssfile=$(mktemp /tmp/ssXXXXXX.png); grim "$ssfile"; matugen image "$ssfile" --dry-run --json rgb; rm "$ssfile"`]
 		running: false //persist.loadColors
@@ -122,48 +120,22 @@ Singleton {
 				
 			}
 		}
-	}
+	}*/
 
-	Process {
+	/*Process {
         id: flower
         command: ["sh", "-c", "hyprctl clients -j | jq -c"]
         running: true
         stdout: SplitParser {
             onRead: data => {
-				let levels = [] // sloplevels
-				let workspaces = [] //toplevels organized by workspace
-				let topLevelsHypr = JSON.parse(data)
-				for (let toplevel of topLevelsHypr) {
-					if (!tlAddresses.find((value) => value == toplevel.address)) {
-						tlAddresses.push(toplevel.address)
-					}
-				}
-				let addressIndexMap = {}
-				tlAddresses.forEach((address, index) => {
-					addressIndexMap[address] = index;
-				})
-
-				topLevelsHypr = topLevelsHypr.sort((a, b) => {
-					return addressIndexMap[a.address] - addressIndexMap[b.address]
-				})
-
-				const validTopLevels = new Set(topLevelsHypr.map(obj => obj.address))
-				tlAddresses = tlAddresses.filter(address => validTopLevels.has(address))
-
-				for (let index in ToplevelManager.toplevels.values) {
-					let topLevel = ToplevelManager.toplevels.values[index]
-					levels.push({toplevel: topLevel, position: topLevelsHypr[index].at, workspace: topLevelsHypr[index].workspace, pid: topLevelsHypr[index].pid})
-				}
-				for (let workspace of Hyprland.workspaces.values) {
-					let q = {workspace: workspace, id: workspace.id, toplevels: levels.filter((toplevel) => toplevel.workspace.id == workspace.id)}
-					workspaces.push(q)
-				}
-				toplevels = levels
-				workspaceTopLevels = workspaces
-
+				const topLevelsHypr = JSON.parse(data).reduce((acc, entry) => {
+					acc[entry.address] = entry
+					return acc
+				}, {})
+				hyprlandTopLevelsAddresses = topLevelsHypr
             }
         }
-    }
+    }*/
 	
 	//stats commands
 	Process {
@@ -313,7 +285,7 @@ Singleton {
 		}
 		function overview() {
 			if (Shared.overviewVisible == false) {
-				flower.running = true
+				Hyprland.refreshToplevels()
 				Shared.overviewVisible = true
 				Hyprland.dispatch("workspace e+1")
 			} else {

@@ -26,6 +26,7 @@ in
 			refind = {
 				enable = true;
 				extraConfig = ''
+				include prioboot.conf
 				enable_mouse true
 				resolution 1920 1080
 				mouse_speed 10

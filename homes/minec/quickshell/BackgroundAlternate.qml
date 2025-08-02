@@ -245,7 +245,5 @@ PanelWindow {
 				source: Qt.resolvedUrl("alternate_background_props/cloudsFog.png")
 			}
 		}
-	}
-	
-	
+	}	
 }

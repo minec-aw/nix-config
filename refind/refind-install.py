@@ -148,9 +148,14 @@ def generate_config_entry(profile: str, gen: str, special: bool, group_name: str
 
     specialisation_list = boot_spec.specialisations.items()
     entry = ""
+    entryName = ""
+    if special == True:
+        entryName = f"Latest NixOS {group_name}"
+    else:
+        entryName = f"NixOS {group_name} Generation {gen}"
 
     if len(specialisation_list) > 0:
-        entry += f'menuentry "NixOS {group_name} Generation {gen}" {{\n'
+        entry += f'menuentry "{entryName}" {{\n'
         entry += config_entry(True, boot_spec, f'Default', str(time))
 
         for spec, spec_boot_spec in specialisation_list:
@@ -158,7 +163,7 @@ def generate_config_entry(profile: str, gen: str, special: bool, group_name: str
 
         entry += '}\n'
     else:
-        entry += config_entry(False, boot_spec, f'NixOS {group_name} Generation {gen}', str(time))
+        entry += config_entry(False, boot_spec, entryName, str(time))
     return entry
 
 
@@ -236,7 +241,6 @@ def install_bootloader() -> None:
     config_file = str(config('extraConfig')) + '\n'
     config_file += textwrap.dedent(f'''
         timeout {timeout}
-        default_selection "+"
     ''')
 
     config_file += textwrap.dedent('''

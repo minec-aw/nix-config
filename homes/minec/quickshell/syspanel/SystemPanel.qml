@@ -87,7 +87,7 @@ PanelWindow {
 		},
 		State { //this is required otherwise it goes crazy ahhgfhghggh and stupid hahahhahahahhhh
 			name: "nothovered"; when: !panel.hover
-			PropertyChanges {target: panelhitbox; height: fullHide? 0: 1}
+			PropertyChanges {target: panelhitbox; height: fullHide? 0: 5}
 		}
 		]
 	}
