@@ -64,14 +64,6 @@ Singleton {
 	property var days: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]
 	property var months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 	
-	property PersistentProperties persist: PersistentProperties { // save between reloads
-		id: persist
-		reloadableId: "persistedStates"
-
-		property var toplevels: []
-		property var workspaceTopLevels: []
-		property var tlAddresses: []
-	}
 	//colors
 	FileView {
 		// matugen image wallpaperRender.png --dry-run --json rgb
@@ -121,21 +113,6 @@ Singleton {
 			}
 		}
 	}*/
-
-	/*Process {
-        id: flower
-        command: ["sh", "-c", "hyprctl clients -j | jq -c"]
-        running: true
-        stdout: SplitParser {
-            onRead: data => {
-				const topLevelsHypr = JSON.parse(data).reduce((acc, entry) => {
-					acc[entry.address] = entry
-					return acc
-				}, {})
-				hyprlandTopLevelsAddresses = topLevelsHypr
-            }
-        }
-    }*/
 	
 	//stats commands
 	Process {

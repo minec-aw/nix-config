@@ -13,7 +13,7 @@ PanelWindow {
 	color: "transparent"
     //property var slidingFactor: Hyprland.focusedWorkspace.id
     //property var biggest: screen.width > screen.height? screen.width: screen.height
-    //property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(screen)
+    property HyprlandMonitor hyprlandMonitor: Hyprland.monitorFor(screen)
     //property var screenScale: Hyprland.monitorFor(screen).height / screen.height
     anchors {
 		top: true
@@ -60,7 +60,7 @@ PanelWindow {
             padding: 8
             Repeater {
                 id: workspaces
-                model: Hyprland.workspaces
+                model: ScriptModel { values: Hyprland.workspaces.values.filter((workspace) => workspace.monitor == hyprlandMonitor && workspace.id >= 0).sort((workspaceA, workspaceB) => workspaceA.id - workspaceB.id)}
                 Rectangle {
                     required property var modelData
                     width: modelData.monitor.width/6
