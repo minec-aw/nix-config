@@ -123,7 +123,11 @@ PanelWindow {
                             fill: parent
                             margins: 2
                         }
-
+                        AlternateBackgroundObject {
+                            animate: false
+                            anchors.fill: parent
+                            slidingFactor: modelData.id || 0
+                        }
                         WorkspacePanel {
                             anchors.fill: parent
                             workspace: modelData
@@ -137,6 +141,11 @@ PanelWindow {
         id: expandanimcontainer
         anchors.fill: parent
         visible: finalAnimation == true && finalDimensions.length == 4
+        AlternateBackgroundObject {
+            animate: false
+            anchors.fill: parent
+            slidingFactor: previousWorkspace.id || 0
+        }
         WorkspacePanel {
             anchors.fill: parent
             workspace: previousWorkspace
@@ -161,7 +170,7 @@ PanelWindow {
                 ParallelAnimation {
                     NumberAnimation { 
                         properties: "x,y,width,height,radius"
-                        duration: 150
+                        duration: Shared.timeOverviewClose.interval
                         easing {
                             type: Easing.InOutCubic
                         }
@@ -174,7 +183,11 @@ PanelWindow {
             y: finalDimensions[1] || -5000
             width: (finalDimensions[2]|| -5000) - 4
             height: (finalDimensions[3] || -5000) - 4
-
+            AlternateBackgroundObject {
+                animate: false
+                anchors.fill: parent
+                slidingFactor: selectedWorkspace.id || 0
+            }
             WorkspacePanel {
                 anchors.fill: parent
                 workspace: selectedWorkspace

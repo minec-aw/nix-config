@@ -240,6 +240,12 @@ in
 		hyprland.enable = true;
 		fish.enable = true;
 		flashrom.enable = true;
+		obs-studio = {
+			enable = true;
+			package = (pkgs.obs-studio.override {
+				cudaSupport = true;
+			});
+		};
 		kdeconnect = {
 			enable = true;
 			package = pkgs.kdePackages.kdeconnect-kde;

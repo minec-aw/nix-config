@@ -291,7 +291,7 @@ Singleton {
 	}
 	property bool keepShowingOverview: false
 	property Timer timeOverviewClose: Timer {
-		interval: 150
+		interval: 300
 		running: false
 
 		onTriggered: () => {
