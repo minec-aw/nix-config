@@ -16,6 +16,13 @@ PanelWindow {
     property var selectedWorkspace: workspaces[Shared.nextWorkspaceIndex]
     property bool finalAnimation: false
     property var finalDimensions: []
+    property HyprlandWorkspace previousWorkspace
+    Component.onCompleted: () => {
+        if (this.WlrLayershell != null) {
+            this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive
+        }
+        previousWorkspace = workspaces[0]
+    }
 
     anchors {
 		top: true
@@ -25,6 +32,15 @@ PanelWindow {
 	}
     WlrLayershell.layer: WlrLayer.Overlay
 	WlrLayershell.namespace: "shell:overview"
+
+    Timer {
+        // this timer is just to make the workspace transition slightly smoother
+        id: changeworkspace
+        interval: 20
+        onTriggered: () => {
+            Hyprland.dispatch("workspace "+workspaces[Shared.nextWorkspaceIndex].id)
+        }
+    }
     Item {
         id: keyboardgrabber
         anchors.fill: parent
@@ -33,7 +49,7 @@ PanelWindow {
             if (event.key == Qt.Key_Alt) {
                 workspaces = [...workspaces]
                 finalAnimation = true
-                Hyprland.dispatch("workspace "+workspaces[Shared.nextWorkspaceIndex].id)
+                changeworkspace.start()
                 Shared.keepShowingOverview = true
                 Shared.timeOverviewClose.start()
                 Shared.overviewVisible = false
@@ -44,11 +60,6 @@ PanelWindow {
             if (event.key == Qt.Key_Shift) {
                 Shared.nextWorkspaceIndex = Shared.nextWorkspaceIndex == 0? Shared.workspacesFocusOrder.length - 1: Shared.nextWorkspaceIndex-1
             }
-        }
-    }
-    Component.onCompleted: {
-        if (this.WlrLayershell != null) {
-            this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive
         }
     }
 	Rectangle {
@@ -126,6 +137,10 @@ PanelWindow {
         id: expandanimcontainer
         anchors.fill: parent
         visible: finalAnimation == true && finalDimensions.length == 4
+        WorkspacePanel {
+            anchors.fill: parent
+            workspace: previousWorkspace
+        }
         ClippingRectangle {
             id: cliprect
             states: State {
@@ -146,22 +161,21 @@ PanelWindow {
                 ParallelAnimation {
                     NumberAnimation { 
                         properties: "x,y,width,height,radius"
-                        duration: 300
+                        duration: 150
                         easing {
-                            type: Easing.OutExpo
+                            type: Easing.InOutCubic
                         }
                     }                    
                 }
             }
             radius: 10
             color: Qt.rgba(0,0,0,0)
-            x: finalDimensions[0]
-            y: finalDimensions[1]
-            width: finalDimensions[2] - 4
-            height: finalDimensions[3] - 4
+            x: finalDimensions[0] || -5000
+            y: finalDimensions[1] || -5000
+            width: (finalDimensions[2]|| -5000) - 4
+            height: (finalDimensions[3] || -5000) - 4
 
             WorkspacePanel {
-                id: wpanel
                 anchors.fill: parent
                 workspace: selectedWorkspace
             }

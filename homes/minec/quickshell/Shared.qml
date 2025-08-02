@@ -274,7 +274,10 @@ Singleton {
 			if (Shared.overviewVisible == false) {
 				Hyprland.refreshToplevels()
 				nextWorkspaceIndex = workspacesFocusOrder.length > 1? 1: 0
+				timeOverviewClose.stop()
+				keepShowingOverview = false
 				Shared.overviewVisible = true
+				
 				//Hyprland.dispatch("workspace e+1")
 			} else {
 				nextWorkspaceIndex = nextWorkspaceIndex == workspacesFocusOrder.length-1? 0: nextWorkspaceIndex+1
@@ -288,7 +291,7 @@ Singleton {
 	}
 	property bool keepShowingOverview: false
 	property Timer timeOverviewClose: Timer {
-		interval: 300
+		interval: 150
 		running: false
 
 		onTriggered: () => {
