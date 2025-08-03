@@ -245,6 +245,7 @@ in
 			darkly-qt5
 			darkly
 			kde-rounded-corners
+			tail-tray
 		];
 	};
 	nix.settings = {
