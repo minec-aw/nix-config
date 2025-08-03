@@ -86,20 +86,25 @@ in
 	# Select internationalisation properties.
 	i18n.defaultLocale = "en_CA.UTF-8";
 
-
 	services = {
 		xserver.xkb = {
 			layout = "us";
 			variant = "";
 		};
-		#dbus.implementation = "broker";
+		dbus.implementation = "broker";
 
 		playerctld.enable = true;
 		desktopManager.plasma6.enable = true;
-		displayManager.sddm = {
-			enable = true;
-			wayland.enable = true;
-
+		displayManager = {
+			autoLogin = {
+				enable = true;
+				user = "minec";
+			};
+			sddm = {
+				enable = true;
+				wayland.enable = true;
+				autoLogin.relogin = true;
+			};
 		};
 
 		/*greetd = {
@@ -125,6 +130,9 @@ in
 		gvfs.enable = true;
 		sunshine = {
 			enable = true;
+			package = (pkgs.sunshine.override {
+				cudaSupport = true;
+			});
 			capSysAdmin = true;
 			settings = {
 				sunshine_name = "Minec";
@@ -143,7 +151,7 @@ in
 	};
 	
 	hardware = {
-		/*display = {
+		display = {
 			edid = {
 				enable = true;
 				modelines = {
@@ -161,7 +169,7 @@ in
     			edid = "wh.bin";
         		mode = "e";
       		};
-		};*/
+		};
 		bluetooth = {
 			enable = true;
 			powerOnBoot = true;
@@ -200,19 +208,19 @@ in
 			#  wget
 			zed-editor
 			
-			grim
+			#grim
 			jq
-			hyprpicker
+			#hyprpicker
 			socat
 			sysstat
 			imagemagick
 
 			wofi
-			blueberry
+			#blueberry
 			hyprpolkitagent
 			gnome-disk-utility
 			git
-			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
+			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			fastfetch
 			flatpak
 			ffmpeg
@@ -233,6 +241,10 @@ in
 			orchis-theme
 			arduino-ide
 			kdePackages.plasma-browser-integration
+
+			darkly-qt5
+			darkly
+			kde-rounded-corners
 		];
 	};
 	nix.settings = {
@@ -255,7 +267,6 @@ in
 		};
 		kdeconnect = {
 			enable = true;
-			package = pkgs.kdePackages.kdeconnect-kde;
 		};
 		adb.enable = true;
 		bash = {
