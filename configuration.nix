@@ -298,6 +298,7 @@ in
 		steam = {
 			#gamescopeSession.enable = true;
 			enable = true;
+			protontricks.enable = true;
 			extraCompatPackages = with pkgs; [
 				proton-ge-bin
 			];

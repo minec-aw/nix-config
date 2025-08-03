@@ -63,7 +63,7 @@ in
 				'';
 			}))
 			element-desktop
-			nautilus
+			#nautilus
 			python3
 			vscode
 			matugen
