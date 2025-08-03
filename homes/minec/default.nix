@@ -11,7 +11,7 @@ in
 	hjem.users = {
 		minec.files = {
 			# Hyprland configurating
-			".config/hypr/hyprland.conf".source = ./hyprland.conf;
+			/*".config/hypr/hyprland.conf".source = ./hyprland.conf;
 			".config/hypr/xdph.conf".text = ''
 				screencopy {
 						allow_token_by_default = true
@@ -27,7 +27,7 @@ in
 			".themes/Orchis-Red".source = gtk-theme;
 			#".themes/Orchis-Red-dark".source = "${gtk-theme}-Dark";
 
-			".gtkrc-2.0".source = ./.gtkrc-2.0;
+			".gtkrc-2.0".source = ./.gtkrc-2.0;*/
 
 			# Cursors & icons & themes
 			".local/share/icons/macOS".source = "${localPackages.macos-hyprcursor}/share/icons/macOS";
@@ -82,7 +82,6 @@ in
 			slack
 			walker
 			protonplus
-
 			gh
 			libqalculate
 			grim

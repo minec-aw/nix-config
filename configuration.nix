@@ -92,10 +92,17 @@ in
 			layout = "us";
 			variant = "";
 		};
-		dbus.implementation = "broker";
+		#dbus.implementation = "broker";
 
 		playerctld.enable = true;
-		greetd = {
+		desktopManager.plasma6.enable = true;
+		displayManager.sddm = {
+			enable = true;
+			wayland.enable = true;
+
+		};
+
+		/*greetd = {
 			enable = true;
 			settings = {
 				initial_session = {
@@ -107,7 +114,7 @@ in
 					user = "greeter";
 				};
 			};
-		};
+		};*/
 		tailscale = {
 			enable = true;
 			useRoutingFeatures = "both";
@@ -174,7 +181,7 @@ in
 	nixpkgs.config.android_sdk.accept_license = true;
 	security = {
 		polkit.enable = true;
-		soteria.enable = true;
+		#soteria.enable = true;
 		rtkit.enable = true;
 	};
 	# List packages installed in system profile. To search, run:
@@ -237,7 +244,7 @@ in
 	};
 
 	programs = {
-		hyprland.enable = true;
+		#hyprland.enable = true;
 		fish.enable = true;
 		flashrom.enable = true;
 		obs-studio = {
