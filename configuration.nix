@@ -76,7 +76,7 @@ in
 			allowedTCPPorts = [ 22 4000 47984 47989 48010 47990 21538 8384 22000 21538 45978 ];
 		};
 	};
-
+	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
 	# Set your time zone.
 	time = {
 		timeZone = "America/Toronto";
@@ -95,7 +95,11 @@ in
 			variant = "";
 		};
 		dbus.implementation = "broker";
-
+		wivrn = {
+			enable = true;
+			openFirewall = true;
+			#defaultRuntime = true;
+		};
 		playerctld.enable = true;
 		desktopManager.plasma6.enable = true;
 		displayManager = {
@@ -249,6 +253,8 @@ in
 			darkly
 			kde-rounded-corners
 			tail-tray
+			wayvr-dashboard
+			wlx-overlay-s
 		];
 	};
 	nix.settings = {

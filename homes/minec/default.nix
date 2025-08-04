@@ -26,8 +26,30 @@ in
 			".config/gtk-4.0/assets".source = "${gtk-theme}/gtk-4.0/assets";
 			".themes/Orchis-Red".source = gtk-theme;
 			#".themes/Orchis-Red-dark".source = "${gtk-theme}-Dark";
+			
 
 			".gtkrc-2.0".source = ./.gtkrc-2.0;*/
+
+			".config/openxr/1/active_runtime.json".source = "${pkgs.wivrn}/share/openxr/1/openxr_wivrn.json";
+			".config/openvr/openvrpaths.vrpath".text = ''
+				{
+					"config" :
+					[
+					"/home/minec/.local/share/Steam/config"
+					],
+					"external_drivers" : null,
+					"jsonid" : "vrpathreg",
+					"log" :
+					[
+					"/home/minec/.local/share/Steam/logs"
+					],
+					"runtime" :
+					[
+					"${pkgs.xrizer}/lib/xrizer"
+					],
+					"version" : 1
+				}
+			'';
 
 			# Cursors & icons & themes
 			".local/share/icons/macOS".source = "${localPackages.macos-hyprcursor}/share/icons/macOS";
@@ -85,6 +107,7 @@ in
 			gh
 			libqalculate
 			grim
+			xclicker
 			(vesktop.override {
 				withMiddleClickScroll = true;
 			})
