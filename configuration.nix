@@ -86,6 +86,9 @@ in
 	# Select internationalisation properties.
 	i18n.defaultLocale = "en_CA.UTF-8";
 
+	i18n.extraLocales = ["en_CA.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
+
+
 	services = {
 		xserver.xkb = {
 			layout = "us";
@@ -181,7 +184,7 @@ in
 		nvidia = {
 			open = true;
 			powerManagement.enable = true;
-			package = config.boot.kernelPackages.nvidiaPackages.stable;
+			package = config.boot.kernelPackages.nvidiaPackages.latest;
 		};
 	};
 	# Allow unfree packages
