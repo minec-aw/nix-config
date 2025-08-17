@@ -108,6 +108,7 @@ in
 			libqalculate
 			grim
 			xclicker
+			jetbrains.webstorm
 			(vesktop.override {
 				withMiddleClickScroll = true;
 			})

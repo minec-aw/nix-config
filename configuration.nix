@@ -98,6 +98,9 @@ in
 		wivrn = {
 			enable = true;
 			openFirewall = true;
+			package = (pkgs.wivrn.override {
+				cudaSupport = true;
+			});
 			#defaultRuntime = true;
 		};
 		playerctld.enable = true;
@@ -196,8 +199,12 @@ in
 		};
 	};
 	# Allow unfree packages
-	nixpkgs.config.allowUnfree = true;
-	nixpkgs.config.android_sdk.accept_license = true;
+	nixpkgs = {
+		config = {
+			allowUnfree = true;
+			android_sdk.accept_license = true;
+		};
+	};
 	security = {
 		polkit.enable = true;
 		#soteria.enable = true;
@@ -207,6 +214,16 @@ in
 	# $ nix search wget
 	environment = {
 		shells = with pkgs; [bash];
+		variables = {
+			MOZ_DISABLE_RDD_SANDBOX = "1";
+			LIBVA_DRIVER_NAME = "nvidia";
+			GBM_BACKEND = "nvidia-drm";
+			__GLX_VENDOR_LIBRARY_NAME = "nvidia";
+			NVD_BACKEND = "direct";
+			#EGL_PLATFORM = "wayland";
+			#WLR_NO_HARDWARE_CURSORS = "1";
+		};
+
 		systemPackages = with pkgs; 
 		let 
 			wsuricons = whitesur-icon-theme.override {
@@ -234,7 +251,6 @@ in
 			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			fastfetch
 			flatpak
-			ffmpeg
 			wget
 			lshw
 			unrar
@@ -259,6 +275,14 @@ in
 			tail-tray
 			wayvr-dashboard
 			wlx-overlay-s
+			ungoogled-chromium
+			nvidia-vaapi-driver
+			vaapiVdpau
+			libvdpau-va-gl
+			libva
+			libva-utils
+			ffmpeg
+			inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
 		];
 	};
 	nix.settings = {

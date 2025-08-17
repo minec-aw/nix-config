@@ -11,9 +11,16 @@
 			url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
-		zen-browser.url = "github:0xc000022070/zen-browser-flake";
+		zen-browser = {
+			url = "github:youwen5/zen-browser-flake";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 		hjem = {
 			url = "github:feel-co/hjem";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
+		firefox = {
+			url = "github:nix-community/flake-firefox-nightly";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
