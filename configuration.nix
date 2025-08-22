@@ -263,6 +263,7 @@ in
 			easyeffects
 			pwvucontrol
 			isoimagewriter
+			kdiskmark
 			
 			wsuricons
 			orchis-theme

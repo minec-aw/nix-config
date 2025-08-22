@@ -23,12 +23,12 @@
       fsType = "vfat";
       options = [ "fmask=0077" "dmask=0077" ];
     };
-  fileSystems."/media/Storage" = {
+  /*fileSystems."/media/Storage" = {
 		device = "/dev/disk/by-uuid/b7b5fc13-8278-4f46-88d3-ff05f9b6c3b9";
 		fsType = "btrfs";
 		#options = ["nosuid" "nodev" "nofail" "x-gvfs-show" "rw" "user" "exec" "uid=1000" "gid=100"];
 		depends = ["/media"];
-	};
+	};*/
   swapDevices = [ {
     device = "/var/lib/swapfile";
     size = 32*1024;
