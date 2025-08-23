@@ -3,12 +3,6 @@
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
 { config, pkgs, inputs, ... }:
-let
-  kernelFilename = builtins.baseNameOf config.system.build.kernel;
-  parts = pkgs.lib.strings.split "-" kernelFilename;
-  kernelHash = builtins.elemAt parts 0;
-  kernelVersion = builtins.elemAt parts 4;
-in
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -135,7 +129,7 @@ in
 			useRoutingFeatures = "both";
 			openFirewall = true;
 		};
-		xserver.videoDrivers = [ "nvidia" ];
+		xserver.videoDrivers = [ /*"nvidia"*/ "amdgpu" ];
 		openssh.enable = true;
 		gvfs.enable = true;
 		sunshine = {
@@ -161,7 +155,7 @@ in
 	};
 	
 	hardware = {
-		display = {
+		/*display = {
 			edid = {
 				enable = true;
 				modelines = {
@@ -179,7 +173,7 @@ in
     			edid = "wh.bin";
         		mode = "e";
       		};
-		};
+		};*/
 		bluetooth = {
 			enable = true;
 			powerOnBoot = true;
@@ -187,16 +181,23 @@ in
 		graphics = {
 			enable = true;
 			enable32Bit = true;
-			extraPackages = with pkgs; [
+			/*extraPackages = with pkgs; [
 				nvidia-vaapi-driver
-			];
+			];*/
 
 		};
-		nvidia = {
+		/*nvidia = {
 			open = true;
 			powerManagement.enable = true;
+			prime = {
+				reverseSync.enable = true;
+				# Enable if using an external GPU
+				amdgpuBusId = "PCI:43:0:0";
+				nvidiaBusId = "PCI:4:0:0";
+			};
+
 			package = config.boot.kernelPackages.nvidiaPackages.latest;
-		};
+		};*/
 	};
 	# Allow unfree packages
 	nixpkgs = {
@@ -215,11 +216,11 @@ in
 	environment = {
 		shells = with pkgs; [bash];
 		variables = {
-			MOZ_DISABLE_RDD_SANDBOX = "1";
+			/*MOZ_DISABLE_RDD_SANDBOX = "1";
 			LIBVA_DRIVER_NAME = "nvidia";
 			GBM_BACKEND = "nvidia-drm";
 			__GLX_VENDOR_LIBRARY_NAME = "nvidia";
-			NVD_BACKEND = "direct";
+			NVD_BACKEND = "direct";*/
 			#EGL_PLATFORM = "wayland";
 			#WLR_NO_HARDWARE_CURSORS = "1";
 		};
@@ -277,7 +278,7 @@ in
 			wayvr-dashboard
 			wlx-overlay-s
 			ungoogled-chromium
-			nvidia-vaapi-driver
+			#nvidia-vaapi-driver
 			vaapiVdpau
 			libvdpau-va-gl
 			libva
