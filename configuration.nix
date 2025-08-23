@@ -22,7 +22,7 @@
 				extraConfig = ''
 				include prioboot.conf
 				enable_mouse true
-				resolution 1920 1080
+				resolution 2560 1440
 				mouse_speed 10
 				mouse_size 22
 				scan_driver_dirs drivers,EFI/tools/drivers
@@ -129,7 +129,7 @@
 			useRoutingFeatures = "both";
 			openFirewall = true;
 		};
-		xserver.videoDrivers = [ /*"nvidia"*/ "amdgpu" ];
+		xserver.videoDrivers = [ "nvidia" "amdgpu" ];
 		openssh.enable = true;
 		gvfs.enable = true;
 		sunshine = {
@@ -181,23 +181,23 @@
 		graphics = {
 			enable = true;
 			enable32Bit = true;
-			/*extraPackages = with pkgs; [
+			extraPackages = with pkgs; [
 				nvidia-vaapi-driver
-			];*/
-
+			];
 		};
-		/*nvidia = {
+		nvidia = {
+			modesetting.enable = true;
 			open = true;
 			powerManagement.enable = true;
 			prime = {
 				reverseSync.enable = true;
 				# Enable if using an external GPU
-				amdgpuBusId = "PCI:43:0:0";
-				nvidiaBusId = "PCI:4:0:0";
+				amdgpuBusId = "PCI:6:0:0";
+				nvidiaBusId = "PCI:43:0:0";
 			};
-
+			nvidiaSettings = true;
 			package = config.boot.kernelPackages.nvidiaPackages.latest;
-		};*/
+		};
 	};
 	# Allow unfree packages
 	nixpkgs = {
