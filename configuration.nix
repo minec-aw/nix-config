@@ -88,6 +88,7 @@
 			layout = "us";
 			variant = "";
 		};
+		lact.enable = true;
 		dbus.implementation = "broker";
 		wivrn = {
 			enable = true;

@@ -14,7 +14,7 @@ modprobe nvidia "NVreg_DynamicPowerManagement=0x02"
 # This parameter is for power saving on laptops, you can just do modprobe nvidia
 # if you are a desktop user
 sleep 1
-systemctl start nvidia-powerd.service
+#systemctl start nvidia-powerd.service
 
 echo 1 | tee /sys/bus/pci/devices/0000:2b:00.1/remove
 # this is to remove audio through hdmi, to make power saving on laptops work
