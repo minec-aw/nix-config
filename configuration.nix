@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, ... }:
+{ config, pkgs, pkgs-mesa-pin, inputs, ... }:
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -10,9 +10,22 @@
 		./homes/minec
 		./virtualisation
 	];
+	system.replaceDependencies.replacements = [
+		({ original = pkgs.mesa; replacement = pkgs-mesa-pin.mesa; })
+		({ original = pkgs.mesa.drivers; replacement = pkgs-mesa-pin.mesa.drivers; })
+	];
+	nixpkgs.overlays = [
+		(self: super: {
+		mesa = pkgs-mesa-pin.mesa;
+		})
+	];
+
 	hjem.clobberByDefault = true;
 	boot = {
 		kernelParams = ["quiet" "splash" "loglevel=3"];
+		kernel.sysctl = {
+			"vm.swappiness" = 20;
+		};
 		/*extraModprobeConfig = ''
 			options nvidia NVreg_UsePageAttributeTable=1 NVreg_InitializeSystemMemoryAllocations=0 NVreg_EnableStreamMemOPs=1 NVreg_EnableGpuFirmware=0
 		'';*/
@@ -71,6 +84,9 @@
 		};
 	};
 	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
+	zramSwap = {
+		enable = true;
+	};
 	# Set your time zone.
 	time = {
 		timeZone = "America/Toronto";
@@ -283,7 +299,7 @@
 			libvdpau-va-gl
 			libva
 			libva-utils
-			ffmpeg
+			#ffmpeg
 		];
 	};
 	nix.settings = {

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, modulesPath, ... }:
+{ config, lib, pkgs, pkgs-mesa-pin, modulesPath, ... }:
 let
 	beginScript = pkgs.writeShellScriptBin "nvidia-bind-vfio" ''
 #!/run/current-system/sw/bin/bash
@@ -160,7 +160,7 @@ in
 		psmisc
 		pciutils
 		libvncserver
-		looking-glass-client
+		pkgs-mesa-pin.looking-glass-client
 		beginScript
 		endScript
 	];

@@ -30,10 +30,10 @@
 		#options = ["nosuid" "nodev" "nofail" "x-gvfs-show" "rw" "user" "exec" "uid=1000" "gid=100"];
 		depends = ["/media"];
 	};
-  swapDevices = [ {
+  /*swapDevices = [ {
     device = "/var/lib/swapfile";
     size = 32*1024;
-  } ];
+  } ];*/
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
