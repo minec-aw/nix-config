@@ -8,6 +8,7 @@
 		./hardware-configuration.nix
 		./refind/refind.nix
 		./homes/minec
+		./virtualisation
 	];
 	hjem.clobberByDefault = true;
 	boot = {
@@ -20,11 +21,10 @@
 			refind = {
 				enable = true;
 				extraConfig = ''
-				include prioboot.conf
 				enable_mouse true
-				resolution 2560 1440
 				mouse_speed 10
 				mouse_size 22
+				textonly 0
 				scan_driver_dirs drivers,EFI/tools/drivers
 				include themes/rEFInd-minimal/theme.conf
 				dont_scan_dirs efi/nixos
@@ -155,6 +155,7 @@
 	};
 	
 	hardware = {
+		i2c.enable = true;
 		/*display = {
 			edid = {
 				enable = true;
@@ -191,6 +192,7 @@
 			powerManagement.enable = true;
 			prime = {
 				reverseSync.enable = true;
+				offload.enableOffloadCmd = true;
 				# Enable if using an external GPU
 				amdgpuBusId = "PCI:6:0:0";
 				nvidiaBusId = "PCI:43:0:0";
@@ -233,20 +235,15 @@
 			};
 		in
 		[
-			#  vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
-			#  wget
 			zed-editor
-			
-			#grim
 			jq
-			#hyprpicker
 			socat
 			sysstat
 			imagemagick
 
-			wofi
+			#wofi
 			#blueberry
-			hyprpolkitagent
+			#hyprpolkitagent
 			gnome-disk-utility
 			git
 			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
@@ -266,9 +263,11 @@
 			isoimagewriter
 			kdiskmark
 			
+			ddcutil
+			ddcui
+			
 			wsuricons
 			orchis-theme
-			arduino-ide
 			kdePackages.plasma-browser-integration
 
 			darkly-qt5
@@ -278,13 +277,12 @@
 			wayvr-dashboard
 			wlx-overlay-s
 			ungoogled-chromium
-			#nvidia-vaapi-driver
+			nvidia-vaapi-driver
 			vaapiVdpau
 			libvdpau-va-gl
 			libva
 			libva-utils
 			ffmpeg
-			inputs.firefox.packages.${pkgs.system}.firefox-nightly-bin
 		];
 	};
 	nix.settings = {
@@ -299,6 +297,7 @@
 		#hyprland.enable = true;
 		fish.enable = true;
 		flashrom.enable = true;
+		corectrl.enable = true;
 		obs-studio = {
 			enable = true;
 			package = (pkgs.obs-studio.override {

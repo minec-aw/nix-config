@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "kvmfr-${version}-${kernel.version}";
-  version = "B7-rc1";
+  version = "B7";
 
   src = fetchFromGitHub {
     owner = "gnif";
     repo = "LookingGlass";
-    rev = "d060e375ea47e4ca38894ea7bf02a85dbe29b1f8";
-    sha256 = "sha256-DuCznF2b3kbt6OfoOUD3ijJ1im7anxj25/xcQnIVnWc=";
+    rev = lib.fakeHash;
+    sha256 = lib.fakeHash;
     fetchSubmodules = true;
   };
   sourceRoot = "source/module";

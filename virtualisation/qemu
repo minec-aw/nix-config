@@ -1,0 +1,18 @@
+#!/run/current-system/sw/bin/bash
+
+
+GUEST_NAME="$1"
+HOOK_NAME="$2"
+STATE_NAME="$3"
+MISC="${@:4}"
+
+BASEDIR="$(dirname $0)"
+
+SCRIPT="$BASEDIR/vms/$GUEST_NAME/$HOOK_NAME/$STATE_NAME.sh"
+
+set -e # If a script exits with an error, we should as well.
+
+if [ -e "$SCRIPT" ]; then
+    # If the script exists, execute it using eval
+    eval \"$SCRIPT\" "$@"
+fi
