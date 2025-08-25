@@ -184,6 +184,38 @@ in
 
 	services.spice-vdagentd.enable = true;
 
+	services.samba = {
+		enable = true;
+		openFirewall = true;
+		settings = {
+			global = {
+				security = "user";
+				"acl allow execute always" = "yes";
+				"server min protocol" = "SMB3";
+      			"server max protocol" = "SMB3";
+			};
+			public = {
+				path = "/media/Storage";
+				browseable = "yes";
+				"valid users" = "minec";
+				"read only" = "no";
+				"guest ok" = "no";
+			};
+		};
+	};
+
+	services.samba-wsdd = {
+		enable = true;
+		openFirewall = true;
+	};
+
+	#networking.firewall.enable = lib.mkForce false;
+	networking.firewall = {
+		allowedTCPPorts = [ 111 2049 4000 4001 4002 20048 ];
+    	allowedUDPPorts = [ 111 2049 4000 4001 4002 20048 ];
+	};
+	networking.firewall.allowPing = true;
+
     services.udev.extraRules = ''
       SUBSYSTEM=="kvmfr", OWNER="minec", GROUP="kvm", MODE="0600"
     '';

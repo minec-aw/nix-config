@@ -22,7 +22,7 @@
 
 	hjem.clobberByDefault = true;
 	boot = {
-		kernelParams = ["quiet" "splash" "loglevel=3"];
+		kernelParams = ["quiet" "splash" "loglevel=3" "drm_kms_helper.edid_firmware=HDMI-A-2:edid/ignored.bin"];
 		kernel.sysctl = {
 			"vm.swappiness" = 20;
 		};
@@ -173,7 +173,7 @@
 	
 	hardware = {
 		i2c.enable = true;
-		/*display = {
+		display = {
 			edid = {
 				enable = true;
 				modelines = {
@@ -185,13 +185,18 @@
 						mkdir -p "$out/lib/firmware/edid"
 						cp "${./customdp}" $out/lib/firmware/edid/wh.bin
 					'')
+					(pkgs.runCommand "edid-creation" {} ''
+						mkdir -p "$out/lib/firmware/edid"
+						cp "${./ignored.bin}" $out/lib/firmware/edid/ignored.bin
+					'')
+					
 				];
 			};
 			outputs."HDMI-A-2" = {
     			edid = "wh.bin";
         		mode = "e";
       		};
-		};*/
+		};
 		bluetooth = {
 			enable = true;
 			powerOnBoot = true;
