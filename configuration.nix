@@ -10,10 +10,6 @@
 		./homes/minec
 		./virtualisation
 	];
-	system.replaceDependencies.replacements = [
-		({ original = pkgs.mesa; replacement = pkgs-mesa-pin.mesa; })
-		({ original = pkgs.mesa.drivers; replacement = pkgs-mesa-pin.mesa.drivers; })
-	];
 	nixpkgs.overlays = [
 		(self: super: {
 		mesa = pkgs-mesa-pin.mesa;
@@ -97,7 +93,6 @@
 	i18n.defaultLocale = "en_CA.UTF-8";
 
 	i18n.extraLocales = ["en_CA.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
-
 
 	services = {
 		xserver.xkb = {
