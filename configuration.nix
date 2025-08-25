@@ -10,11 +10,11 @@
 		./homes/minec
 		./virtualisation
 	];
-	nixpkgs.overlays = [
+	/*nixpkgs.overlays = [
 		(self: super: {
 		mesa = pkgs-mesa-pin.mesa;
 		})
-	];
+	];*/
 
 	hjem.clobberByDefault = true;
 	boot = {
