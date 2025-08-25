@@ -22,7 +22,7 @@
 
 	hjem.clobberByDefault = true;
 	boot = {
-		kernelParams = ["quiet" "splash" "loglevel=3" "drm_kms_helper.edid_firmware=HDMI-A-2:edid/ignored.bin"];
+		kernelParams = ["quiet" "splash" "loglevel=3"];
 		kernel.sysctl = {
 			"vm.swappiness" = 20;
 		};
@@ -183,19 +183,23 @@
 				packages = [
 					(pkgs.runCommand "edid-creation" {} ''
 						mkdir -p "$out/lib/firmware/edid"
-						cp "${./customdp}" $out/lib/firmware/edid/wh.bin
+						cp "${./edidFiles/SamsungTV}" $out/lib/firmware/edid/wh.bin
 					'')
 					(pkgs.runCommand "edid-creation" {} ''
 						mkdir -p "$out/lib/firmware/edid"
-						cp "${./ignored.bin}" $out/lib/firmware/edid/ignored.bin
+						cp "${./edidFiles/Empty}" $out/lib/firmware/edid/ignored.bin
 					'')
 					
 				];
 			};
-			outputs."HDMI-A-2" = {
-    			edid = "wh.bin";
-        		mode = "e";
+			/*outputs."HDMI-A-2" = {
+    			edid = "ignored.bin";
+        		mode = "d";
       		};
+			outputs."HDMI-A-3" = {
+    			edid = "ignored.bin";
+        		mode = "d";
+      		};*/
 		};
 		bluetooth = {
 			enable = true;
