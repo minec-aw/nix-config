@@ -100,8 +100,10 @@
 		immich = {
 			enable = true;
 			port = 2283;
+			host = "100.70.40.10";
 			accelerationDevices = [ "/dev/dri/renderD128" ];
-			mediaLocation = "/media/Storage/immich";
+			#mediaLocation = "/media/Storage/immich";
+			openFirewall = true;
 		};
 		dbus.implementation = "broker";
 		wivrn = {
