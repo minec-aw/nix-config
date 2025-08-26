@@ -10,11 +10,6 @@
 		./homes/minec
 		./virtualisation
 	];
-	/*nixpkgs.overlays = [
-		(self: super: {
-		mesa = pkgs-mesa-pin.mesa;
-		})
-	];*/
 
 	hjem.clobberByDefault = true;
 	boot = {
@@ -34,6 +29,7 @@
 				mouse_speed 10
 				mouse_size 22
 				textonly 0
+				resolution 2560 1440
 				scan_driver_dirs drivers,EFI/tools/drivers
 				include themes/rEFInd-minimal/theme.conf
 				dont_scan_dirs efi/nixos
@@ -82,6 +78,7 @@
 	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
 	zramSwap = {
 		enable = true;
+		swapDevices = 0;
 	};
 	# Set your time zone.
 	time = {
@@ -93,13 +90,19 @@
 	i18n.defaultLocale = "en_CA.UTF-8";
 
 	i18n.extraLocales = ["en_CA.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
-
+	users.users.immich.extraGroups = [ "video" "render" ];
 	services = {
 		xserver.xkb = {
 			layout = "us";
 			variant = "";
 		};
 		lact.enable = true;
+		immich = {
+			enable = true;
+			port = 2283;
+			accelerationDevices = [ "/dev/dri/renderD128" ];
+			mediaLocation = "/media/Storage/immich";
+		};
 		dbus.implementation = "broker";
 		wivrn = {
 			enable = true;
@@ -203,6 +206,8 @@
 		graphics = {
 			enable = true;
 			enable32Bit = true;
+			package = pkgs-mesa-pin.mesa;
+			package32 = pkgs-mesa-pin.driversi686Linux.mesa;
 			extraPackages = with pkgs; [
 				nvidia-vaapi-driver
 			];
@@ -284,9 +289,6 @@
 			isoimagewriter
 			kdiskmark
 			
-			ddcutil
-			ddcui
-			
 			wsuricons
 			orchis-theme
 			kdePackages.plasma-browser-integration
@@ -298,20 +300,12 @@
 			wayvr-dashboard
 			wlx-overlay-s
 			ungoogled-chromium
-			nvidia-vaapi-driver
-			vaapiVdpau
-			libvdpau-va-gl
-			libva
-			libva-utils
 			#ffmpeg
 		];
 	};
 	nix.settings = {
 		auto-optimise-store = true;
 		experimental-features = [ "nix-command" "flakes" ];
-		#substituters = ["https://hyprland.cachix.org"];
-		#trusted-substituters = ["https://ai.cachix.org"];
-		#trusted-public-keys = ["ai.cachix.org-1:N9dzRK+alWwoKXQlnn0H6aUx0lU/mspIoz8hMvGvbbc=" "hyprland.cachix.org-1:a7pgxzMz7+chwVL3/pzj6jIBMioiJM7ypFP8PwtkuGc="];
 	};
 
 	programs = {
@@ -407,18 +401,6 @@
 			#inputs.apple-fonts.packages.${pkgs.system}.sf-pro
 		];
 	};
-	# Open ports in the firewall.
-	# networking.firewall.allowedTCPPorts = [ ... ];
-	# networking.firewall.allowedUDPPorts = [ ... ];
-	# Or disable the firewall altogether.
-	# networking.firewall.enable = false;
-
-	# This value determines the NixOS release from which the default
-	# settings for stateful data, like file locations and database versions
-	# on your system were taken. It‘s perfectly fine and recommended to leave
-	# this value at the release version of the first install of this system.
-	# Before changing this value read the documentation for this option
-	# (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
 	system.stateVersion = "25.05"; # Did you read the comment?
 
 }

@@ -161,12 +161,12 @@ in
 		pciutils
 		libvncserver
 
-		(pkgs.writeShellScriptBin "looking-glass-client-pinned" ''
+		/*(pkgs.writeShellScriptBin "looking-glass-client-pinned" ''
 		export LD_LIBRARY_PATH=${pkgs-mesa-pin.mesa}/lib:${pkgs-mesa-pin.driversi686Linux.mesa}/lib:$LD_LIBRARY_PATH
 		exec ${pkgs-mesa-pin.looking-glass-client}/bin/looking-glass-client "$@"
-		'')
+		'')*/
 
-		/*pkgs-mesa-pin.looking-glass-client*/
+		looking-glass-client
 		beginScript
 		endScript
 	];
