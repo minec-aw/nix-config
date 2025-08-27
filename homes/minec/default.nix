@@ -69,14 +69,8 @@ in
 	users.users.minec = {
 		isNormalUser = true;
 		description = "Minec";
-		extraGroups = [ "networkmanager" "wheel" "adbusers" "kvm" "dialout" "flashrom" ];
+		extraGroups = [ "networkmanager" "wheel" "adbusers" "kvm" "dialout" "flashrom" "corectrl" ];
 		packages = with pkgs; [
-			(inputs.zen-browser.packages."${system}".default.override {
-				nativeMessagingHosts = [
-					pkgs.firefoxpwa
-					pkgs.kdePackages.plasma-browser-integration
-				];
-			})
       		(ghostty.overrideAttrs (_: {
 				preBuild = ''
 					shopt -s globstar
@@ -86,6 +80,7 @@ in
 			}))
 			element-desktop
 			#nautilus
+
 			python3
 			vscode
 			matugen
@@ -104,6 +99,7 @@ in
 			slack
 			walker
 			protonplus
+			stremio
 			gh
 			libqalculate
 			grim

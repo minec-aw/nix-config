@@ -96,7 +96,12 @@
 			layout = "us";
 			variant = "";
 		};
-		lact.enable = true;
+		/*lact = {
+			enable = true;
+			settings = {
+				devices = [ "06:00.0" ];
+			};	
+		};*/
 		immich = {
 			enable = true;
 			port = 2283;
@@ -271,6 +276,13 @@
 
 			#wofi
 			#blueberry
+			(inputs.zen-browser.packages."${system}".default.override {
+				nativeMessagingHosts = [
+					pkgs.firefoxpwa
+					pkgs.kdePackages.plasma-browser-integration
+				];
+			})
+			firefoxpwa
 			#hyprpolkitagent
 			gnome-disk-utility
 			git
@@ -320,6 +332,10 @@
 			package = (pkgs.obs-studio.override {
 				cudaSupport = true;
 			});
+		};
+		firefox = {
+			enable = true;
+			nativeMessagingHosts.packages = [ pkgs.firefoxpwa ];
 		};
 		kdeconnect = {
 			enable = true;
