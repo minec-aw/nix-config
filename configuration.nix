@@ -271,6 +271,7 @@
 			tail-tray
 			wayvr-dashboard
 			wlx-overlay-s
+			blesh
 			#ffmpeg
 		];
 	};
@@ -281,7 +282,6 @@
 
 	programs = {
 		#hyprland.enable = true;
-		fish.enable = true;
 		flashrom.enable = true;
 		corectrl.enable = true;
 		obs-studio = {
@@ -299,13 +299,8 @@
 		};
 		adb.enable = true;
 		bash = {
-			interactiveShellInit = ''
-				if [[ $(${pkgs.procps}/bin/ps --no-header --pid=$PPID --format=comm) != "fish" && -z ''${BASH_EXECUTION_STRING} ]]
-				then
-				shopt -q login_shell && LOGIN_OPTION='--login' || LOGIN_OPTION=""
-				exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
-				fi
-			'';
+			enable = true;
+			blesh.enable = true;
 		};
 		
 		nh = {

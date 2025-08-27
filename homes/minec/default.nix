@@ -36,7 +36,7 @@ in
 		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-red-light";
 		
 		".config/ghostty/config".text = "background = 000000";
-		".config/fish".source = ./fish;
+		".blerc".source = ./blesh-config.sh;
 		
 		".local/share/dev.mandre.rquickshare/.settings.json".text = ''{"port": "45978"}'';
 	};

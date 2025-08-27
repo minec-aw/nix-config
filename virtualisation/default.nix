@@ -74,7 +74,7 @@ in
 	boot = {
 		blacklistedKernelModules = [ "nvidia" "nouveau" "nvidia_drm" "nvidia_uvm" "nvidia_modeset" ]; ##passthrough stuff
 		kernelModules = ["vfio_virqfd" "vfio_pci" "vfio_iommu_type1" "vfio"]; ##passthrough stuff
-		extraModprobeConfig = "options vfio-pci ids=10de:2504,10de:228e";
+		#extraModprobeConfig = "options vfio-pci ids=10de:2504,10de:228e";
 		kernelParams = ["intel_iommu=on" "iommu=pt" "vfio_iommu_type1.allow_unsafe_interrupts=1" "kvm.ignore_msrs=1" "vfio-pci.ids=10de:2504,10de:228e" "kvmfr.static_size_mb=128"];
 		initrd.kernelModules = [ "kvmfr" ];
 		extraModulePackages = with config.boot.kernelPackages; [
