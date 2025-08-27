@@ -156,9 +156,9 @@
 		gvfs.enable = true;
 		sunshine = {
 			enable = true;
-			package = (pkgs.sunshine.override {
+			/*package = (pkgs.sunshine.override {
 				cudaSupport = true;
-			});
+			});*/
 			capSysAdmin = true;
 			settings = {
 				sunshine_name = "Minec";
@@ -284,8 +284,6 @@
 			})
 			firefoxpwa
 			#hyprpolkitagent
-			gnome-disk-utility
-			git
 			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			fastfetch
 			flatpak
@@ -298,10 +296,6 @@
 			lsof
 			psmisc
 			wl-clipboard
-			easyeffects
-			pwvucontrol
-			isoimagewriter
-			kdiskmark
 			
 			wsuricons
 			orchis-theme
@@ -313,7 +307,6 @@
 			tail-tray
 			wayvr-dashboard
 			wlx-overlay-s
-			ungoogled-chromium
 			#ffmpeg
 		];
 	};

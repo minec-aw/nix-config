@@ -80,7 +80,13 @@ in
 			}))
 			element-desktop
 			#nautilus
-
+			pwvucontrol
+			isoimagewriter
+			kdiskmark
+			easyeffects
+			gnome-disk-utility
+			git
+			ungoogled-chromium
 			python3
 			vscode
 			matugen
