@@ -62,17 +62,7 @@
 		networkmanager.enable = true;
 		firewall = {
 			enable = true;
-			allowedTCPPortRanges = [{
-				from = 1714;
-				to = 1764;
-			}];
-			allowedUDPPortRanges = [{
-				from = 1714;
-				to = 1764;
-			}];
 			trustedInterfaces = [ "tailscale0" ];
-			allowedUDPPorts = [ config.services.tailscale.port 47998 47999 48000 48002 48010 21538 22000 21027 45978 ];
-			allowedTCPPorts = [ 22 4000 47984 47989 48010 47990 21538 8384 22000 21538 45978 ];
 		};
 	};
 	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
@@ -96,12 +86,6 @@
 			layout = "us";
 			variant = "";
 		};
-		/*lact = {
-			enable = true;
-			settings = {
-				devices = [ "06:00.0" ];
-			};	
-		};*/
 		immich = {
 			enable = true;
 			port = 2283;
@@ -132,20 +116,6 @@
 				autoLogin.relogin = true;
 			};
 		};
-
-		/*greetd = {
-			enable = true;
-			settings = {
-				initial_session = {
-					command = "${pkgs.hyprland}/bin/Hyprland";
-					user = "minec";
-				};
-				default_session = {
-					command = "$${pkgs.greetd.tuigreet}/bin/tuigreet --greeting 'Welcome to NixOS!' --asterisks --remember --remember-user-session --time -cmd ${pkgs.hyprland}/bin/Hyprland";
-					user = "greeter";
-				};
-			};
-		};*/
 		tailscale = {
 			enable = true;
 			useRoutingFeatures = "both";
@@ -181,10 +151,6 @@
 		display = {
 			edid = {
 				enable = true;
-				modelines = {
-					#"Sunshine" = "368.76  1920 2072 2288 2656  1080 1081 1084 1157  -hsync +vsync";
-					#"PG278Q_120" = "   497.75   2560 2608 2640 2720   1440 1443 1448 1525   +hsync -vsync";
-				};
 				packages = [
 					(pkgs.runCommand "edid-creation" {} ''
 						mkdir -p "$out/lib/firmware/edid"
@@ -268,7 +234,6 @@
 			};
 		in
 		[
-			zed-editor
 			jq
 			socat
 			sysstat
@@ -298,7 +263,6 @@
 			wl-clipboard
 			
 			wsuricons
-			orchis-theme
 			kdePackages.plasma-browser-integration
 
 			darkly-qt5
@@ -342,19 +306,6 @@
 				exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
 				fi
 			'';
-		};
-		dconf = {
-			enable = true;
-			profiles.user.databases = [{
-				settings."org/gnome/desktop/interface" = {
-					gtk-theme = "Orchis-Red-Dark";
-					icon-theme = "WhiteSur-Red";
-					font-name = "Noto Sans Medium 11";
-					color-scheme = "prefer-dark";
-					document-font-name = "Noto Sans Medium 11";
-					monospace-font-name = "Noto Sans Mono Medium 11";
-				};
-			}];
 		};
 		
 		nh = {
