@@ -65,7 +65,7 @@
 			trustedInterfaces = [ "tailscale0" ];
 		};
 	};
-	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
+	#systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
 	zramSwap = {
 		enable = true;
 		swapDevices = 0;
@@ -205,26 +205,19 @@
 		config = {
 			allowUnfree = true;
 			android_sdk.accept_license = true;
+			permittedInsecurePackages = [
+                 "qtwebengine-5.15.19"
+        	];
 		};
 	};
 	security = {
 		polkit.enable = true;
-		#soteria.enable = true;
 		rtkit.enable = true;
 	};
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget
 	environment = {
 		shells = with pkgs; [bash];
-		variables = {
-			/*MOZ_DISABLE_RDD_SANDBOX = "1";
-			LIBVA_DRIVER_NAME = "nvidia";
-			GBM_BACKEND = "nvidia-drm";
-			__GLX_VENDOR_LIBRARY_NAME = "nvidia";
-			NVD_BACKEND = "direct";*/
-			#EGL_PLATFORM = "wayland";
-			#WLR_NO_HARDWARE_CURSORS = "1";
-		};
 
 		systemPackages = with pkgs; 
 		let 
@@ -271,7 +264,6 @@
 			tail-tray
 			wayvr-dashboard
 			wlx-overlay-s
-			blesh
 			#ffmpeg
 		];
 	};
@@ -281,8 +273,6 @@
 	};
 
 	programs = {
-		#hyprland.enable = true;
-		flashrom.enable = true;
 		corectrl.enable = true;
 		obs-studio = {
 			enable = true;
@@ -302,7 +292,6 @@
 			enable = true;
 			blesh.enable = true;
 		};
-		
 		nh = {
 			enable = true;	
 		};
@@ -310,9 +299,6 @@
 			#gamescopeSession.enable = true;
 			enable = true;
 			protontricks.enable = true;
-			extraCompatPackages = with pkgs; [
-				proton-ge-bin
-			];
 			package = with pkgs; steam.override {
 				extraPkgs = pkgs: [
 					attr
