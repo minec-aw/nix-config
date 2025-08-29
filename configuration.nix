@@ -276,7 +276,7 @@
 		};
 		firefox = {
 			enable = true;
-			nativeMessagingHosts.packages = [ pkgs.firefoxpwa ];
+			#nativeMessagingHosts.packages = [ pkgs.firefoxpwa ];
 		};
 		kdeconnect = {
 			enable = true;
