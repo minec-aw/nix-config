@@ -65,7 +65,7 @@
 			trustedInterfaces = [ "tailscale0" ];
 		};
 	};
-	#systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
+	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
 	zramSwap = {
 		enable = true;
 		swapDevices = 0;
@@ -93,6 +93,11 @@
 			accelerationDevices = [ "/dev/dri/renderD128" ];
 			#mediaLocation = "/media/Storage/immich";
 			openFirewall = true;
+		};
+		syncthing = {
+			enable = true;
+			openDefaultPorts = true;
+			relay.enable = true;
 		};
 		dbus.implementation = "broker";
 		wivrn = {
