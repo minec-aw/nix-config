@@ -218,29 +218,28 @@
 	# $ nix search wget
 	environment = {
 		shells = with pkgs; [bash];
-
 		systemPackages = with pkgs; 
 		let 
 			wsuricons = whitesur-icon-theme.override {
 				alternativeIcons = true;
 				themeVariants = ["red"];
 			};
+			fpwa = (localPackages.firefoxpwa.override {
+				firefoxRuntime = inputs.zen-browser.packages.${system}.zen-browser-unwrapped;
+			});
 		in
 		[
 			jq
 			socat
 			sysstat
 			imagemagick
-
-			#wofi
-			#blueberry
 			(inputs.zen-browser.packages."${system}".default.override {
 				nativeMessagingHosts = [
-					pkgs.firefoxpwa
+					fpwa
 					pkgs.kdePackages.plasma-browser-integration
 				];
 			})
-			firefoxpwa
+			fpwa
 			#hyprpolkitagent
 			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			fastfetch

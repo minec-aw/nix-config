@@ -8,6 +8,9 @@
 		tilp = nixpkgs.legacyPackages.x86_64-linux.callPackage ./tilp {};
 		openssl = nixpkgs.legacyPackages.x86_64-linux.callPackage ./openssl {};
 		macos-hyprcursor = nixpkgs.legacyPackages.x86_64-linux.callPackage ./macos-hyprcursor {};
+		firefoxpwa = nixpkgs.legacyPackages.x86_64-linux.callPackage ./firefoxpwa {
+			firefoxRuntime = nixpkgs.legacyPackages.x86_64-linux.firefox;
+		};
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" ''
 			#!/run/current-system/sw/bin/bash
 			# Commence a pci-rescan to make any sleeping nvidia stuff wake up again
