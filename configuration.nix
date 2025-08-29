@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, pkgs-mesa-pin, inputs, ... }:
+{ config, pkgs, pkgs-mesa-pin, localPackages, inputs, ... }:
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -224,9 +224,6 @@
 				alternativeIcons = true;
 				themeVariants = ["red"];
 			};
-			fpwa = (localPackages.firefoxpwa.override {
-				firefoxRuntime = inputs.zen-browser.packages.${system}.zen-browser-unwrapped;
-			});
 		in
 		[
 			jq
@@ -235,11 +232,9 @@
 			imagemagick
 			(inputs.zen-browser.packages."${system}".default.override {
 				nativeMessagingHosts = [
-					fpwa
 					pkgs.kdePackages.plasma-browser-integration
 				];
 			})
-			fpwa
 			#hyprpolkitagent
 			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			fastfetch
