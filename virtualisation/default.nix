@@ -10,6 +10,7 @@
 		];
 	};
 	virtualisation = {
+		waydroid.enable = true;
 		libvirtd = {
 			onBoot = "ignore";
 			onShutdown = "shutdown";
