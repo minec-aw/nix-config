@@ -65,6 +65,7 @@ in
 			bun
 			r2modman
 			lutris
+			prismlauncher
 			umu-launcher
 			qpwgraph
 			tenacity
