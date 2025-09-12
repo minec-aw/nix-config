@@ -111,14 +111,14 @@
 		playerctld.enable = true;
 		desktopManager.plasma6.enable = true;
 		displayManager = {
-			autoLogin = {
+			/*autoLogin = {
 				enable = true;
 				user = "minec";
-			};
+			};*/
 			sddm = {
 				enable = true;
 				wayland.enable = true;
-				autoLogin.relogin = true;
+				#autoLogin.relogin = true;
 			};
 		};
 		tailscale = {
@@ -278,10 +278,8 @@
 		corectrl.enable = true;
 		obs-studio = {
 			enable = true;
-			package = (pkgs.obs-studio.override {
-				cudaSupport = true;
-			});
 		};
+		hyprland.enable = true;
 		firefox = {
 			enable = true;
 			#nativeMessagingHosts.packages = [ pkgs.firefoxpwa ];
