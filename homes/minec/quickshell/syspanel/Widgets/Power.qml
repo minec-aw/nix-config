@@ -9,12 +9,17 @@ import "../.."
 
 Rectangle {
 	id: power
-	width: 50-(6*2)
-	height: 50-(6*2)
-	radius: 19
+	width: 30
+	anchors {
+        top: parent.top
+        bottom: parent.bottom
+    }
+	bottomLeftRadius: 0
+	topLeftRadius: 0
+	radius: height
 	property bool shown: false
 	clip: true
-	color: Shared.colors.surface_container
+	color: Qt.rgba(0,0,0,0)
 	property Process sleep: Process {
 		command: ["systemctl", "suspend"]
 		running: false
@@ -27,31 +32,35 @@ Rectangle {
 		command: ["systemctl", "reboot"]
 		running: false
 	}
-	property Process hibernate: Process {
-		command: ["systemctl", "hibernate"]
-		running: false
-	}
 
 	states: [
 		State {
 			name: "opened"; when: power.shown
-			PropertyChanges { target: power; width: 190 }
+			PropertyChanges { target: power; width: 30*5; color: Qt.rgba(0,0,0,1) }
 		}
 	]
 	transitions: Transition {
 		to: "opened"; reversible: true
-		PropertyAnimation { 
-			property: "width"; duration: 200
-			easing {
-				type: Easing.OutBack; overshoot: 1
+		ParallelAnimation {
+			PropertyAnimation { 
+				property: "width"; duration: 200
+				easing {
+					type: Easing.OutBack; overshoot: 1
+				}
+			}
+			ColorAnimation {
+				duration: 100
+				easing {
+					type: Easing.InOutCubic
+				}
 			}
 		}
 	}
 
 	MouseArea {
 		id: menuopener
-		width: 38
-		height: 38
+		width: 30
+		height: 30
 		hoverEnabled: true
 		onClicked: () => {
 			power.shown = !power.shown
@@ -60,11 +69,11 @@ Rectangle {
 		
 		Item {
 			id: iconholder
-			height: 20
+			height: 18
 			width: height
 			states: State {
 				name: "hover"; when: menuopener.containsMouse
-				PropertyChanges { target: iconholder; height: 18 }
+				PropertyChanges { target: iconholder; height: 22 }
 			}
 			anchors {
 				verticalCenter: parent.verticalCenter

@@ -20,6 +20,7 @@ Singleton {
 	property color borderColor: Qt.rgba(1,1,1,0.08);
 	property color textColor: Qt.rgba(1,1,1,1);
 	property color subtextColor: Qt.rgba(0.9,0.9,0.9, 1);
+	property var assetsPath: Qt.resolvedUrl("./assets/")
 	property var iconsPath: Qt.resolvedUrl("./assets/icons")
 	// system stats
 	property int ramCapacity: 1
@@ -32,6 +33,7 @@ Singleton {
 	property string downloadRate: "0 B/s"
 	property var dataPrefixes: ["", "Ki", "Mi", "Gi", "Ti", "Pi", "Ei"]
 	property bool overviewVisible: false
+	property int panelHeight: 50
 
 	property string screenshotFilePath: ""
 	property bool screenshotTaken: false
@@ -198,7 +200,7 @@ Singleton {
 		return result;
 	}
 	property double screenyexistence: 0
-	property Process screenshotProcess: Process {
+	/*property Process screenshotProcess: Process {
 		id: screenshot_process
 		command: ["grim", `${screenshotFilePath}`]
 		running: false
@@ -208,7 +210,7 @@ Singleton {
 				console.log(`screenshot taken in ${Date.now() - screenyexistence} ms`)
 			}
 		}
-	}
+	}*/
 	property bool savingScreenshot: false
 	SoundEffect {
         id: shutterSound
@@ -247,17 +249,7 @@ Singleton {
 		savescreenshot.running = true
 	}
 	function screenshotTrigger() {
-		if (screenshotProcess.running) return
-		if (screenshotTaken) {
-			//destroy it
-			screenshotFilePath = ""
-			screenshotTaken = false
-		} else {
-			screenyexistence = Date.now()
-			screenshotFilePath = `/tmp/${randomString(8)}.png`
-			//screenshotProcess.command =  ["grim", `${screenshotFilePath}`]
-			screenshotProcess.running = true
-		}
+		screenshotTaken = !screenshotTaken
 	}
 	IpcHandler {
     	target: "shell"

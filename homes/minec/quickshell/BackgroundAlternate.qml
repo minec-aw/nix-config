@@ -14,6 +14,7 @@ PanelWindow {
 	
 	WlrLayershell.layer: WlrLayer.Background
 	WlrLayershell.namespace: "shell:background"
+	exclusionMode: ExclusionMode.Ignore
 
 	anchors {
 		top: true
@@ -23,7 +24,7 @@ PanelWindow {
 	}
 	
 	AlternateBackgroundObject {
-		animate: false
+		animate: true
 		anchors.fill: parent
 		slidingFactor: Hyprland.focusedWorkspace.id || 0
 	}

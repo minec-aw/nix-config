@@ -223,6 +223,14 @@
 	# $ nix search wget
 	environment = {
 		shells = with pkgs; [bash];
+		sessionVariables = {
+			HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
+				name = "hyprland-plugins";
+				paths = with pkgs.hyprlandPlugins; [
+					hyprgrass
+				];
+			};
+		};
 		systemPackages = with pkgs; 
 		let 
 			wsuricons = whitesur-icon-theme.override {
@@ -266,6 +274,7 @@
 			vlc
 			vicinae
 			gajim
+			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			#ffmpeg
 		];
 	};

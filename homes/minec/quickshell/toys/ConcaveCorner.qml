@@ -4,32 +4,33 @@ import Quickshell.Services.SystemTray
 import QtQuick
 import QtQuick.Layouts
 import QtQuick.Shapes
-import ".."
-import "../.."
 
 Shape {
-    property int orientation: 0
-    property int size: 10
+    property string orientation: "tr"
+    property real size: 10
     width: size
     height: size
-    property color color: Qt.hsva(0, 0, 20/255, 0.5)
-    layer.enabled: true
-    layer.smooth: true
-    layer.samples: 4
+    asynchronous: true
+    preferredRendererType: Shape.CurveRenderer
+    property color color: Qt.hsva(0, 0, 0, 1)
+    //layer.enabled: true
+    //layer.smooth: true
+    //layer.samples: 4
     fillMode: Shape.Stretch
     ShapePath {
         id: cornershaper
         strokeColor: "transparent"
+        strokeWidth: -1
         fillColor: color
-        startX: (orientation == 1) + (orientation == 3)
-        startY: (orientation == 2) + (orientation == 3)
+        startX: (orientation == "tr") + (orientation == "br")
+        startY: (orientation == "bl") + (orientation == "br")
         PathLine {
-            x: (orientation == 0) + (orientation == 1)
+            x: (orientation == "tl") + (orientation == "tr")
             y: cornershaper.startX //same as startX
         }
         PathArc {
             x: cornershaper.startY //same as startY
-            y: (orientation == 0) + (orientation == 2)
+            y: (orientation == "tl") + (orientation == "bl")
             radiusX: 1; radiusY: 1
             useLargeArc: false
             direction: PathArc.Counterclockwise

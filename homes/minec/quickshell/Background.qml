@@ -11,6 +11,7 @@ PanelWindow {
 	id: background
 	color: "black"
 	property var slidingFactor: Hyprland.focusedWorkspace.id
+	exclusionMode: ExclusionMode.Ignore
 
 	WlrLayershell.layer: WlrLayer.Background
 	WlrLayershell.namespace: "shell:background"

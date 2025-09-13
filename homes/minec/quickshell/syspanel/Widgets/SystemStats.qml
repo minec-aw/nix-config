@@ -3,32 +3,59 @@ import Quickshell.Io
 import Quickshell.Services.SystemTray
 import QtQuick
 import QtQuick.Layouts
+import Quickshell.Services.UPower
 import ".."
 import "../.."
 
 Item {
 		id: stats
-        width: 370
+        width: childrenRect.width
         clip: true
-        height: 50
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+        }
         Stat {
             id: memory
-            anchors.verticalCenter: parent.verticalCenter
-            x: 10
+            x: 0
             icon: `${Shared.iconsPath}/memory-stick.svg`
-            text: `${Math.round((Shared.usedRam/Shared.ramCapacity)*100)}%`
+            percentage: Shared.usedRam/Shared.ramCapacity
         }
         Stat {
             id: cpu
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.left: memory.right
             anchors {
-                left: memory.right
-                leftMargin: 6
+                //left: memory.right
+                leftMargin: 2
             }
+            percentage: Shared.cpuUsage/100
             icon: `${Shared.iconsPath}/cpu.svg`
-            text: `${Math.round(Shared.cpuUsage)}%`
         }
         Stat {
+            id: mousestat
+            anchors.top: memory.bottom
+            anchors {
+                //left: memory.right
+                topMargin: 6
+            }
+            percentage: UPower.devices.values.find(device => device.type == UPowerDeviceType.Mouse).percentage || 0
+            icon: `${Shared.iconsPath}/mouse.svg`
+        }
+        Stat {
+            id: headphone
+            anchors.top: cpu.bottom
+            anchors.left: mousestat.right
+            anchors {
+                leftMargin: 2
+                //left: memory.right
+                topMargin: 6
+            }
+            percentage: UPower.devices.values.find(device => device.type == UPowerDeviceType.Headset).percentage || 0
+            icon: `${Shared.iconsPath}/headphones.svg`
+        }
+
+        
+        /*Stat {
             id: download
             anchors.verticalCenter: parent.verticalCenter
             anchors {
@@ -47,5 +74,5 @@ Item {
             }
             icon: `${Shared.iconsPath}/upload.svg`
             text: Shared.uploadRate
-        }
+        }*/
 	}

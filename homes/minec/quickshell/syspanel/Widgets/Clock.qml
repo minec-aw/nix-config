@@ -6,30 +6,29 @@ import Quickshell.Hyprland
 import ".."
 import "../.."
 
-Item {
+Text {
 	id: clock
-    height: 50
-    width: 60
-    Rectangle {
-        width: parent.width + 8*2
-        height: 50-(6*2)
-        radius: 200 //just make it circly
-        color: Shared.colors.surface_container
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.horizontalCenter: parent.horizontalCenter
+
+    function getFormattedTime(time) {
+        let hours = time.getHours();
+        const minutes = time.getMinutes().toString().padStart(2, '0');
+        const ampm = hours >= 12 ? 'PM' : 'AM';
+
+        hours = hours % 12;
+        hours = hours ? hours : 12; // 0 => 12
+
+        return `${hours.toString().padStart(2, '0')}\n${minutes}`;
     }
-    Text {
-        id: smalltime
-        text: `${(Shared.time.getHours()%12).toString().padStart(2, "0")}:${(Shared.time.getMinutes()).toString().padStart(2, "0")}`
-        color: Shared.colors.on_surface
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        anchors.fill: parent
-        font {
-            pointSize: 18
-            family: "Noto Sans"
-            bold: true
-        }
+     anchors.left: parent.left
+    anchors.right: parent.right
+    text: getFormattedTime(Shared.time) //`${(Shared.time.getHours()%12).toString().padStart(2, "0")}:${(Shared.time.getMinutes()).toString().padStart(2, "0")}`
+    color: Shared.colors.on_surface
+    horizontalAlignment: Text.AlignHCenter
+    verticalAlignment: Text.AlignVCenter
+    font {
+        pointSize: 18
+        family: "Noto Sans"
+        bold: true
     }
     /*PanelMouseArea {
         id: togglingarea

@@ -17,6 +17,7 @@ PanelWindow {
     property bool finalAnimation: false
     property var finalDimensions: []
     property HyprlandWorkspace previousWorkspace
+    exclusionMode: ExclusionMode.Ignore
     Component.onCompleted: () => {
         if (this.WlrLayershell != null) {
             this.WlrLayershell.keyboardFocus = WlrKeyboardFocus.Exclusive

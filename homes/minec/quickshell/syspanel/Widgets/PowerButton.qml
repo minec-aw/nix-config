@@ -9,15 +9,15 @@ import "../.."
 
 MouseArea {
     id: mousearea
-    width: 38
+    width: 30
     hoverEnabled: true
-    height: 38
+    height: 30
     property string iconPath: ""
     Image {
         id: icon
         smooth: true
         source: iconPath //`${Shared.iconsPath}/snowflake.svg`
-        height: 20
+        height: 18
         width: height
         anchors {
             verticalCenter: parent.verticalCenter
@@ -30,7 +30,7 @@ MouseArea {
         }
         states: State {
             name: "hover"; when: mousearea.containsMouse
-            PropertyChanges { target: icon; height: 18 }
+            PropertyChanges { target: icon; height: 22 }
         }
         transitions: Transition {
             to: "hover"; reversible: true

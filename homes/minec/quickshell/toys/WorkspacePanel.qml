@@ -17,6 +17,7 @@ Item {
     property var scaleDownY: height/workspace.monitor.height
     property var borderSize: Shared.hyprlandBorderSize*borderScaleDown
     property var cornerRadius: Shared.hyprlandRadius*borderScaleDown
+    property bool isLive: true
     property var borderScaleDown: (width*workspace.monitor.scale)/(workspace.monitor.width)
     Component.onCompleted: () => {
         Hyprland.refreshToplevels()
@@ -54,7 +55,7 @@ Item {
                 ScreencopyView {
                     id: scview
                     captureSource: modelData.wayland
-                    live: true
+                    live: isLive
                     anchors.fill: parent
                 } 
             }

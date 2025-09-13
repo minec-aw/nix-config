@@ -7,21 +7,28 @@ import Quickshell.Wayland
 import Quickshell.Widgets
 import "Widgets"
 import ".."
+import "../toys"
 import Quickshell.Services.Mpris
 import QtQuick.Effects
 
 PanelWindow {
-	id: panel
+	id: panelcarrier
 	property bool pinned: false
 	property bool opened: false
-	property bool hover: false
+	property bool hovered: false
 	property var expandedPanel
 	property bool fullHide: Hyprland.monitorFor(screen).activeWorkspace.hasFullscreen
-	color: "transparent"
+	property var toplevels: Hyprland.monitorFor(screen).activeWorkspace.toplevels
+	property bool transparentBackground: true
+	property real mouseY: 0
+	onToplevelsChanged: () => {
+		transparentBackground = Hyprland.monitorFor(screen).activeWorkspace.toplevels.values.length == 0
+	}
+	color: Qt.rgba(0,0,0,0)
 	
 	HyprlandFocusGrab {
       id: grab
-      windows: [panel]
+      windows: [panelcarrier]
 	  onActiveChanged: () => {
 		if (active == false) {
 			panel.hover = false
@@ -30,10 +37,10 @@ PanelWindow {
 	  }
 	}
 	Component.onCompleted: () => {
-		Shared.panels.push(panel)
+		Shared.panels.push(panelcarrier)
+		console.log(Hyprland.monitorFor(screen).activeWorkspace.toplevels.values.length)
 	}
 	WlrLayershell.layer: WlrLayer.Overlay
-
 	function keybindReveal() {
 		if (opened) {
 			opened = false
@@ -42,262 +49,178 @@ PanelWindow {
 			opened = true
 		}
 	}
-
-	onOpenedChanged: () => {
-		if (opened == true) {
-			grab.active = true
-			panelhitbox.state = "nothovered" //required otherwise doesnt shrink when clicking off
-		} else {
-			grab.active = false
-		}
-	}
-	
 	anchors {
 		right: true
 		bottom: true
+		left: true
+		top: true
 	}
+	exclusionMode: ExclusionMode.Ignore
+	implicitHeight: 200
+
 	Region {
 		id: regin
 		item: panelhitbox
 	}
 	mask: regin
-	MouseArea {
+	Item {
 		id: panelhitbox
-		hoverEnabled: true
-		onClicked: () => {
-			opened = true
-		}
-		onContainsMouseChanged: () => {
-			panel.hover = containsMouse
-		}
 		anchors {
 			right: parent.right
 			bottom: parent.bottom
-			left: parent.left
+			top: parent.top
+			rightMargin: -5
+			bottomMargin: -5
 		}
-		height: 1
-		states: [
-		State {
-			name: "opened"; when: panel.opened
-			AnchorChanges { target: panelhitbox; anchors.right: parent.right; anchors.top: parent.top; anchors.bottom: parent.bottom; anchors.left: parent.left; }
-		},
-		State {
-			name: "hovered"; when: panel.hover
-			PropertyChanges {target: panelhitbox; height: 62}
-		},
-		State { //this is required otherwise it goes crazy ahhgfhghggh and stupid hahahhahahahhhh
-			name: "nothovered"; when: !panel.hover
-			PropertyChanges {target: panelhitbox; height: fullHide? 0: 5}
+		width: panelcarrier.opened? 550: (panelcarrier.hovered? 50: (panelcarrier.fullHide? 0: 10))
+		states: State {
+			name: "hovered"; when: panelcarrier.hovered
+			PropertyChanges {target: panelhitbox; height: Shared.panelHeight+5}
 		}
-		]
+	}
+	MouseArea {
+		id: hoverdetector
+		hoverEnabled: true
+		onClicked: () => {
+			panelcarrier.opened = !panelcarrier.opened
+		}
+		onContainsMouseChanged: () => {
+			panelcarrier.hovered = containsMouse
+			if (containsMouse == true) {
+				panelcarrier.mouseY = mouseY
+			}
+		}
+		anchors {
+			top: parent.top
+			bottom: parent.bottom
+			right: parent.right
+			leftMargin: -5
+			rightMargin: -5
+			bottomMargin: -5
+		}
+		Item {
+			visible: mainpanel.x != hoverdetector.width-5
+			onVisibleChanged: () => Hyprland.refreshToplevels()
+			height: screen.height
+			width: screen.width
+			anchors.right: mainpanel.left
+			anchors.rightMargin: 0
+			AlternateBackgroundObject {
+				anchors.fill: parent
+				animate: false
+				slidingFactor: Hyprland.monitorFor(screen).activeWorkspace.id || 0
+			}
+			WorkspacePanel {
+				anchors.fill: parent
+				isLive: parent.visible
+				workspace: Hyprland.monitorFor(screen).activeWorkspace
+			}
+		}
+		width: 555
+		Rectangle {
+			id: mainpanel
+			anchors {
+				top: parent.top
+				bottom: parent.bottom
+				left: parent.left
+				leftMargin: parent.width-5
+			}
+			color: Qt.rgba(0,0,0,1)
+			width: 500
+			states: State {
+				name: "opened"; when: panelcarrier.opened
+				PropertyChanges {target: mainpanel; anchors.leftMargin: 50}
+			}
+			transitions: Transition {
+				to: "opened"
+				reversible: true
+				ParallelAnimation {
+					NumberAnimation { 
+						properties: "anchors.leftMargin"
+						duration: 300
+						easing {
+							type: Easing.InOutCubic
+						}
+					}                    
+				}
+			}
+
+			Power {}
+
+		}
+		Rectangle {
+			id: hoverpanel
+			anchors {
+				right: mainpanel.left
+				rightMargin: -width
+			}
+			ConcaveCorner {
+				orientation: "br"
+				size: 20
+				y: -19
+				x: 30
+			}
+			ConcaveCorner {
+				orientation: "tr"
+				size: 20
+				y: parent.height-1
+				x: 30
+			}
+			
+			radius: 20
+			color: Qt.rgba(0,0,0,1)
+			y: Math.min(Math.max(panelcarrier.mouseY - (height/2), 16), parent.height - height -16)
+			height: 300
+			bottomRightRadius: 0
+			topRightRadius: 0
+			width: 52
+			states: State {
+				name: "revealed"; when: panelcarrier.hovered || panelcarrier.opened
+				PropertyChanges {target: hoverpanel; anchors.rightMargin: -2}
+			}
+			transitions: Transition {
+				to: "revealed"
+				reversible: true
+				ParallelAnimation {
+					NumberAnimation { 
+						properties: "anchors.rightMargin"
+						duration: 200
+						easing {
+							type: Easing.InOutCubic
+						}
+					}                    
+				}
+			}
+
+			Clock {
+				id: clock
+				anchors {
+					top: parent.top
+					topMargin: 10
+					right: parent.right
+					//horizontalCenter: parent.horizontalCenter
+					left: parent.left
+					rightMargin: 12
+					leftMargin: 10
+				}
+			}
+
+			SystemStats {
+				id: stats
+				anchors {
+					top: clock.bottom
+					topMargin: 10
+					right: parent.right
+					left: parent.left
+					//horizontalCenter: parent.horizontalCenter
+					rightMargin: 8
+					leftMargin: 8
+				}
+			}
+			//Power {}
+
+		}
 	}
 
 	//Notif {}
-
-	property int maxHeight: 600 //the height it expands to
-	Rectangle {
-		id: bigpanel
-		property int margin: 6
-		anchors.bottomMargin: -50
-		x: margin
-		width: panel.width-(margin*2)
-		radius: 25
-		height: 50
-		color: Qt.rgba(Shared.colors.background.r, Shared.colors.background.g, Shared.colors.background.b,0.7)
-		anchors.bottom: panelhitbox.bottom
-		border {
-			width: 1
-			color: Shared.colors.outline
-			pixelAligned: false
-		}
-		states: [
-			State {
-				name: "opened"; when: panel.opened
-				PropertyChanges {target: bigpanel; height: maxHeight; anchors.bottomMargin: margin}
-			},
-			State {
-				name: "hovered"; when: panel.hover
-				PropertyChanges {target: bigpanel; anchors.bottomMargin: margin}
-			}
-		]
-		transitions: [
-			Transition {
-				from: ""; to: "hovered"; reversible: true
-				ParallelAnimation {
-					PropertyAnimation { 
-						property: "anchors.bottomMargin"; duration: 200
-						easing {
-							type: Easing.OutBack; overshoot: 2
-						}
-					}
-				}
-			},
-			Transition {
-				from: ""; to: "opened"
-				SequentialAnimation {
-					PropertyAnimation { 
-						property: "anchors.bottomMargin"; duration: 200
-						easing {
-							type: Easing.OutBack; overshoot: 2
-						}
-					}
-					SequentialAnimation {
-						PropertyAnimation { 
-							property: "height"; duration: 150
-							easing {
-								type: Easing.InQuart
-							}
-						}
-						PropertyAnimation { 
-							property: "anchors.bottomMargin"
-							duration: 100
-							to: bigpanel.margin + 20
-							easing {
-								type: Easing.OutCirc
-							}
-						}
-						PropertyAnimation { 
-							property: "anchors.bottomMargin"
-							duration: 100
-							to: bigpanel.margin
-							easing {
-								type: Easing.OutCirc
-							}
-						}
-					}
-				}
-			},
-			Transition {
-				from: "opened"; to: ""
-				SequentialAnimation {
-					PropertyAnimation { 
-						property: "height"; duration: 150
-						easing {
-							type: Easing.InQuart
-						}
-					}
-					PropertyAnimation { 
-						property: "anchors.bottomMargin"; duration: 200
-						easing {
-							type: Easing.InBack; overshoot: 2
-						}
-					}
-				}
-			},
-			Transition {
-				from: "hovered"; to: "opened"; reversible: true
-				ParallelAnimation {
-					PropertyAnimation { 
-						property: "anchors.bottomMargin"; duration: 200
-						easing {
-							type: Easing.OutBack; overshoot: 2
-						}
-					}
-					SequentialAnimation {
-						PropertyAnimation { 
-							property: "height"; duration: 150
-							easing {
-								type: Easing.InQuart
-							}
-						}
-						PropertyAnimation { 
-							property: "anchors.bottomMargin"
-							duration: 100
-							to: bigpanel.margin + 20
-							easing {
-								type: Easing.OutCirc
-							}
-						}
-						PropertyAnimation { 
-							property: "anchors.bottomMargin"
-							duration: 100
-							to: bigpanel.margin
-							easing {
-								type: Easing.OutCirc
-							}
-						}
-					}
-				}
-			}
-		]
-		ClippingRectangle {
-			//things go in here
-			anchors.fill: parent
-			color: "transparent"
-			radius: parent.radius
-			Item { //the item that contains all the expanded objects
-				anchors {
-					bottom: parent.bottom
-					left: parent.left
-					right: parent.right
-				}
-				height: maxHeight
-				/*Image {
-					anchors.fill: parent
-					source: Mpris.players.values[0].trackArtUrl
-					layer.enabled: true
-					layer.effect: MultiEffect {
-						blur: 1
-						blurMax: 100
-						blurMultiplier: 2
-						colorizationColor: Qt.rgba(0,0,0,0.7)
-						colorization: 1
-						contrast: 1
-						blurEnabled: true
-						autoPaddingEnabled: true
-						//maskSource: bigpanel
-					}
-				}*/
-				
-				Clock {
-					id: clock
-					x: 8+6
-					anchors.bottom: parent.bottom
-				}
-				Item {
-					x: clock.width
-					id: sysstats
-					anchors.left: clock.right
-					anchors.bottom: parent.bottom
-					anchors.leftMargin: 6+8
-					width: 370
-					height: stats.height
-					SystemStats {
-						id: stats
-						anchors.horizontalCenter: parent.horizontalCenter
-					}
-				}
-				Image {
-					id: notificon
-					smooth: true
-					source: `${Shared.iconsPath}/bell.svg`
-					height: 24
-					width: height
-					layer.enabled: true
-					layer.effect: MultiEffect {
-						colorizationColor: Shared.colors.on_surface
-						colorization: 1
-					}
-					anchors {
-						right: parent.right
-						bottom: parent.bottom
-						bottomMargin: (50-24)/2
-						rightMargin: (50-24)/2
-					}
-				}
-				Power {
-					x: 6
-					y: 6
-				}
-				/*ScrollView {
-					width: 200
-					height: 200
-				}*/
-
-			}
-		}
-	}
-	exclusionMode: ExclusionMode.Ignore
-	implicitHeight: screen.height
-	implicitWidth: 520
 }

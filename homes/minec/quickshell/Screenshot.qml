@@ -15,45 +15,43 @@ PanelWindow {
 	WlrLayershell.layer: WlrLayer.Overlay
 	WlrLayershell.namespace: "shell:screenshot"
     exclusionMode: ExclusionMode.Ignore
+    visible: false
     property double existenceStart: 0
     //property point Shared.screenshotInitialPosition: Qt.point(-5000,-5000)
     //property point Shared.screenshotFinalPosition: Qt.point(-5000,-5000)
     property bool showDots: false
     //this is done rather than using the scale property since hyprland rounds the scaling factor when sending it out, funnily enough
     property var screenScale: Hyprland.monitorFor(screen).height / screen.height
+    property string screenshotPath: ""
     Item {
         id: keyboardgrabber
         anchors.fill: parent
         focus: true
         Keys.onReleased: (event) => {
             if (event.key == Qt.Key_Return || event.key == Qt.Key_Enter) {
+                Shared.screenshotFilePath = screenshotPath
                 Shared.saveScreenshot()
             } else if (event.key == Qt.Key_Escape) {
                 Shared.screenshotTrigger()
             }
         }
     }
-
-    /*ScreencopyView {
+    ScreencopyView {
 		id: screencap
-		anchors.fill: parent
-		captureSource: Quickshell.screens[0]
-        property double existenceStarhjt: 0
-        Component.onCompleted: () => {
-            existenceStarhjt = Date.now()
-        }
+        width: parent.width
+        height: parent.height
+		//anchors.fill: parent
+		captureSource: screen
 		onHasContentChanged: () => {
 			if (screencap.hasContent) {
-				console.log("captured screen")
+                screenshotpanel.visible = true
 				screencap.grabToImage(function(result) {
-					console.log(`took ${Date.now() - screenshotpanel.existenceStart} ms to take screenshot with screencopyview`)
-                    console.log(`from beginning of screencopyview, ${Date.now() - existenceStarhjt} ms have passed`)
-                    console.log(result.url)
-                    result.saveToFile("something.png")
-				})
+                    screenshotPath = `/tmp/${Shared.randomString(16)}.png`
+                    result.saveToFile(screenshotPath)
+				}, Qt.size((screen.width*screenScale)/Math.ceil(screenScale), (screen.height*screenScale)/Math.ceil(screenScale)))
 			}
 		}
-	}*/
+	}
     
     property bool screenshotBeingSaved: Shared.savingScreenshot
     onScreenshotBeingSavedChanged: () => {
@@ -68,7 +66,7 @@ PanelWindow {
         existenceStart = Date.now()
     }
 
-    Image {
+    /*Image {
         id: screenfreeze
         source: Shared.screenshotFilePath
         fillMode: Image.PreserveAspectFit
@@ -76,10 +74,10 @@ PanelWindow {
         height: sourceSize.height/screenScale
         x: -screen.x
         y: screen.y
-    }
+    }*/
 	anchors {
 		top: true
-		bottom: true 
+		bottom: true
 		left: true
 		right: true
 	}
