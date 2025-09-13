@@ -16,14 +16,9 @@ PanelWindow {
 	property bool pinned: false
 	property bool opened: false
 	property bool hovered: false
-	property var expandedPanel
 	property bool fullHide: Hyprland.monitorFor(screen).activeWorkspace.hasFullscreen
-	property var toplevels: Hyprland.monitorFor(screen).activeWorkspace.toplevels
 	property bool transparentBackground: true
 	property real mouseY: 0
-	onToplevelsChanged: () => {
-		transparentBackground = Hyprland.monitorFor(screen).activeWorkspace.toplevels.values.length == 0
-	}
 	color: Qt.rgba(0,0,0,0)
 	
 	HyprlandFocusGrab {
@@ -38,7 +33,6 @@ PanelWindow {
 	}
 	Component.onCompleted: () => {
 		Shared.panels.push(panelcarrier)
-		console.log(Hyprland.monitorFor(screen).activeWorkspace.toplevels.values.length)
 	}
 	WlrLayershell.layer: WlrLayer.Overlay
 	function keybindReveal() {
@@ -99,15 +93,15 @@ PanelWindow {
 			bottomMargin: -5
 		}
 		Item {
-			visible: mainpanel.x != hoverdetector.width-5
+			visible: mainpanel.anchors.leftMargin < parent.width-55
 			onVisibleChanged: () => Hyprland.refreshToplevels()
 			height: screen.height
 			width: screen.width
 			anchors.right: mainpanel.left
-			anchors.rightMargin: 0
+			anchors.rightMargin: -50
 			AlternateBackgroundObject {
 				anchors.fill: parent
-				animate: false
+				animate: true
 				slidingFactor: Hyprland.monitorFor(screen).activeWorkspace.id || 0
 			}
 			WorkspacePanel {
@@ -117,107 +111,166 @@ PanelWindow {
 			}
 		}
 		width: 555
-		Rectangle {
+		Item {
 			id: mainpanel
+			property real hoverBarHeight: 300
+			property real hoverBarWidth: 50
+			property real hoverBarY: Math.min(Math.max(panelcarrier.mouseY - (hoverBarHeight/2), 16), parent.height - hoverBarHeight -16)
 			anchors {
 				top: parent.top
 				bottom: parent.bottom
 				left: parent.left
-				leftMargin: parent.width-5
+				leftMargin: panelcarrier.opened? 50: (panelcarrier.hovered? parent.width-55: parent.width-5)
 			}
-			color: Qt.rgba(0,0,0,1)
+			Behavior on anchors.leftMargin { 
+				NumberAnimation { 
+					duration: 240
+					easing {
+						type: Easing.InOutCubic
+					}
+				}
+			 }
 			width: 500
-			states: State {
-				name: "opened"; when: panelcarrier.opened
-				PropertyChanges {target: mainpanel; anchors.leftMargin: 50}
-			}
-			transitions: Transition {
-				to: "opened"
-				reversible: true
-				ParallelAnimation {
-					NumberAnimation { 
-						properties: "anchors.leftMargin"
-						duration: 300
-						easing {
-							type: Easing.InOutCubic
-						}
-					}                    
+			// Background
+
+			Rectangle {
+				color: "black"
+				width: parent.width
+				height: parent.height
+				layer.enabled: true
+				layer.smooth: true
+				layer.samples: 8
+				layer.effect: ShaderEffect {
+					required property Item source
+					readonly property Item maskSource: mask
+
+					fragmentShader: `${Shared.assetsPath}shaders/sidepanelmask.frag.qsb`
 				}
+				/*Rectangle {
+					x: 200
+					y: 60
+					radius: 100
+					width: 70
+					height: 70
+					color: "blue"
+					SequentialAnimation on y {
+						loops: Animation.Infinite
+
+						NumberAnimation {
+							from: 20
+							to: 600
+							duration: 8000
+							easing.type: Easing.InOutSine
+						}
+						NumberAnimation {
+							from: 600
+							to: 20
+							duration: 8000
+							easing.type: Easing.InOutSine
+						}
+					}
+					SequentialAnimation on x {
+						loops: Animation.Infinite
+
+						NumberAnimation {
+							from: 0
+							to: 200
+							duration: 700
+							easing.type: Easing.InOutSine
+						}
+						NumberAnimation {
+							from: 200
+							to: 0
+							duration: 700
+							easing.type: Easing.InOutSine
+						}
+					}
+				}*/
+			}
+			// stole amazing mask from caelestia, thanks
+			Rectangle {
+				property real cornerRadius: 20
+				id: mask
+				color: Qt.rgba(0,0,0,0)
+				anchors.fill: parent
+				layer.enabled: true
+				visible: false
+				layer.smooth: true
+				layer.samples: 4
+				Rectangle {
+					id: toprect
+					width: mainpanel.hoverBarWidth
+					height: mainpanel.hoverBarY
+					bottomRightRadius: mask.cornerRadius
+				}
+				Rectangle {
+					id: bottomrect
+					y: mainpanel.hoverBarY + mainpanel.hoverBarHeight
+					width: mainpanel.hoverBarWidth
+					height: parent.height - mainpanel.hoverBarY + mainpanel.hoverBarHeight
+					topRightRadius: mask.cornerRadius
+				}
+				ConcaveCorner {
+					anchors.top: toprect.bottom
+					anchors.topMargin: -1
+					size: mask.cornerRadius
+					orientation: "tl"
+				}
+				ConcaveCorner {
+					anchors.bottom: bottomrect.top
+					anchors.bottomMargin: -1
+					size: mask.cornerRadius
+					orientation: "bl"
+				}
+				
 			}
 
-			Power {}
-
-		}
-		Rectangle {
-			id: hoverpanel
-			anchors {
-				right: mainpanel.left
-				rightMargin: -width
-			}
-			ConcaveCorner {
-				orientation: "br"
-				size: 20
-				y: -19
-				x: 30
-			}
-			ConcaveCorner {
-				orientation: "tr"
-				size: 20
-				y: parent.height-1
-				x: 30
-			}
+			// Hover bar (the thing visible when hovering over edge)
 			
-			radius: 20
-			color: Qt.rgba(0,0,0,1)
-			y: Math.min(Math.max(panelcarrier.mouseY - (height/2), 16), parent.height - height -16)
-			height: 300
-			bottomRightRadius: 0
-			topRightRadius: 0
-			width: 52
-			states: State {
-				name: "revealed"; when: panelcarrier.hovered || panelcarrier.opened
-				PropertyChanges {target: hoverpanel; anchors.rightMargin: -2}
-			}
-			transitions: Transition {
-				to: "revealed"
-				reversible: true
-				ParallelAnimation {
-					NumberAnimation { 
-						properties: "anchors.rightMargin"
-						duration: 200
-						easing {
-							type: Easing.InOutCubic
-						}
-					}                    
+			Item {
+				id: hoverpanel
+				y: mainpanel.hoverBarY
+				height: mainpanel.hoverBarHeight
+				width: mainpanel.hoverBarWidth
+
+				Clock {
+					id: clock
+					anchors {
+						top: parent.top
+						topMargin: 10
+						right: parent.right
+						//horizontalCenter: parent.horizontalCenter
+						left: parent.left
+						rightMargin: 12
+						leftMargin: 10
+					}
 				}
+
+				SystemStats {
+					id: stats
+					anchors {
+						top: clock.bottom
+						topMargin: 10
+						//right: parent.right
+						//left: parent.left
+						horizontalCenter: parent.horizontalCenter
+						rightMargin: 8
+						leftMargin: 8
+					}
+				}
+				//Power {}
+
 			}
 
-			Clock {
-				id: clock
+			// inner widgets
+			Item {
 				anchors {
-					top: parent.top
-					topMargin: 10
-					right: parent.right
-					//horizontalCenter: parent.horizontalCenter
-					left: parent.left
-					rightMargin: 12
-					leftMargin: 10
+					fill: parent
+					leftMargin: 50
+					rightMargin: 5
 				}
+				Power {}
 			}
-
-			SystemStats {
-				id: stats
-				anchors {
-					top: clock.bottom
-					topMargin: 10
-					right: parent.right
-					left: parent.left
-					//horizontalCenter: parent.horizontalCenter
-					rightMargin: 8
-					leftMargin: 8
-				}
-			}
-			//Power {}
 
 		}
 	}
