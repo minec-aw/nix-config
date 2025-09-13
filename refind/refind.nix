@@ -39,7 +39,7 @@ in
     inherit (pkgs.refind.meta) maintainers;
   };
 
-  options = {
+  options = lib.mkForce {
     boot.loader.refind = {
       enable = mkEnableOption "the rEFInd boot loader";
       extraConfig = lib.mkOption {

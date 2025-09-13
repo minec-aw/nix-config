@@ -82,7 +82,8 @@ in
 			btop
 			slack
 			protonplus
-			stremio
+			blueman
+			#stremio
 			libqalculate
 			(vesktop.override {
 				withMiddleClickScroll = true;

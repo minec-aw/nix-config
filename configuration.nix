@@ -82,9 +82,12 @@
 	i18n.extraLocales = ["en_CA.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
 	users.users.immich.extraGroups = [ "video" "render" ];
 	services = {
-		xserver.xkb = {
-			layout = "us";
-			variant = "";
+		xserver = {
+			videoDrivers = [ "nvidia" "amdgpu" ];
+			xkb = {
+				layout = "us";
+				variant = "";
+			};
 		};
 		immich = {
 			enable = true;
@@ -109,12 +112,25 @@
 			#defaultRuntime = true;
 		};
 		playerctld.enable = true;
-		desktopManager.plasma6.enable = true;
+		#desktopManager.plasma6.enable = true;
+		/*greetd = {
+			enable = true;
+			settings = {
+				initial_session = {
+					command = "${pkgs.hyprland}/bin/Hyprland";
+					user = "minec";
+				};
+				default_session = {
+					command = "$${pkgs.greetd.tuigreet}/bin/tuigreet --greeting ' ' --asterisks --remember --remember-user-session --time -cmd ${pkgs.hyprland}/bin/Hyprland";
+					user = "greeter";
+				};
+			};
+		};*/
 		displayManager = {
-			/*autoLogin = {
+			autoLogin = {
 				enable = true;
 				user = "minec";
-			};*/
+			};
 			sddm = {
 				enable = true;
 				wayland.enable = true;
@@ -126,7 +142,7 @@
 			useRoutingFeatures = "both";
 			openFirewall = true;
 		};
-		xserver.videoDrivers = [ "nvidia" "amdgpu" ];
+		
 		openssh.enable = true;
 		gvfs.enable = true;
 		sunshine = {
@@ -218,6 +234,7 @@
 	security = {
 		polkit.enable = true;
 		rtkit.enable = true;
+		soteria.enable = true;
 	};
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget
@@ -230,6 +247,7 @@
 					hyprgrass
 				];
 			};
+			QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
 		systemPackages = with pkgs; 
 		let 
@@ -249,7 +267,6 @@
 				];
 			})
 			#hyprpolkitagent
-			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			fastfetch
 			flatpak
 			wget
@@ -263,17 +280,20 @@
 			wl-clipboard
 			
 			wsuricons
-			kdePackages.plasma-browser-integration
 
 			darkly-qt5
 			darkly
-			kde-rounded-corners
-			tail-tray
+			#tail-tray
 			wayvr-dashboard
 			wlx-overlay-s
 			vlc
 			vicinae
-			gajim
+
+
+			kdePackages.plasma-browser-integration
+			kdePackages.ark
+			kdePackages.dolphin
+
 			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			#ffmpeg
 		];
@@ -288,7 +308,13 @@
 		obs-studio = {
 			enable = true;
 		};
-		hyprland.enable = true;
+		hyprland = {
+			enable = true;
+			withUWSM = true;
+			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+		};
+		dconf.enable = true;
 		firefox = {
 			enable = true;
 			#nativeMessagingHosts.packages = [ pkgs.firefoxpwa ];
