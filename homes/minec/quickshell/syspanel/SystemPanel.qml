@@ -139,7 +139,7 @@ PanelWindow {
 				height: parent.height
 				layer.enabled: true
 				layer.smooth: true
-				layer.samples: 8
+				layer.samples: 4
 				layer.effect: ShaderEffect {
 					required property Item source
 					readonly property Item maskSource: mask
