@@ -293,8 +293,8 @@
 			kdePackages.plasma-browser-integration
 			kdePackages.ark
 			kdePackages.dolphin
-
-			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
+			quickshell
+			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			#ffmpeg
 		];
 	};
