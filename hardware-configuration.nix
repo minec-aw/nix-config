@@ -42,7 +42,10 @@
   networking = {
     useDHCP = lib.mkDefault true;
     interfaces = {
-      enp42s0.useDHCP = false;
+      enp42s0 = {
+        useDHCP = false;
+        wakeOnLan.enable = true;
+      };
       br0.useDHCP = true;
     };
     bridges.br0.interfaces = [ "enp42s0" ];
