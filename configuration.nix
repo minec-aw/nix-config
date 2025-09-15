@@ -80,7 +80,7 @@
 	i18n.defaultLocale = "en_CA.UTF-8";
 
 	i18n.extraLocales = ["en_CA.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
-	users.users.immich.extraGroups = [ "video" "render" ];
+	#users.users.immich.extraGroups = [ "video" "render" ];
 	services = {
 		xserver = {
 			videoDrivers = [ "nvidia" "amdgpu" ];
@@ -89,14 +89,14 @@
 				variant = "";
 			};
 		};
-		immich = {
+		/*immich = {
 			enable = true;
 			port = 2283;
 			host = "100.70.40.10";
 			accelerationDevices = [ "/dev/dri/renderD128" ];
 			#mediaLocation = "/media/Storage/immich";
 			openFirewall = true;
-		};
+		};*/
 		syncthing = {
 			enable = true;
 			openDefaultPorts = true;
@@ -147,13 +147,16 @@
 		gvfs.enable = true;
 		sunshine = {
 			enable = true;
+			settings = {
+				sunshine_name = "Minec";
+				adapter_name = "/dev/dri/renderD128";
+				capture = "kms";
+				encoder = "vaapi";
+			};
 			/*package = (pkgs.sunshine.override {
 				cudaSupport = true;
 			});*/
 			capSysAdmin = true;
-			settings = {
-				sunshine_name = "Minec";
-			};
 			openFirewall = true;
 			autoStart = true;
 		};
@@ -241,12 +244,12 @@
 	environment = {
 		shells = with pkgs; [bash];
 		sessionVariables = {
-			HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
+			/*HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
 				name = "hyprland-plugins";
 				paths = with pkgs.hyprlandPlugins; [
 					hyprgrass
 				];
-			};
+			};*/
 			QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
 		systemPackages = with pkgs; 
