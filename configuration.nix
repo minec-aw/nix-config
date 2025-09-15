@@ -134,7 +134,7 @@
 			sddm = {
 				enable = true;
 				wayland.enable = true;
-				#autoLogin.relogin = true;
+				autoLogin.relogin = true;
 			};
 		};
 		tailscale = {
@@ -293,8 +293,8 @@
 			kdePackages.plasma-browser-integration
 			kdePackages.ark
 			kdePackages.dolphin
-			quickshell
-			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
+			xorg.xrdb
+			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			#ffmpeg
 		];
 	};
@@ -310,9 +310,8 @@
 		};
 		hyprland = {
 			enable = true;
-			withUWSM = true;
-			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
+			package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
+			portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 		};
 		dconf.enable = true;
 		firefox = {
