@@ -85,9 +85,9 @@ in
 			blueman
 			#stremio
 			libqalculate
-			(vesktop.override {
+			/*(vesktop.override {
 				withMiddleClickScroll = true;
-			})
+			})*/
 			(discord.override {
 				withOpenASAR = true;
 				withMoonlight = true; # can do this here too
