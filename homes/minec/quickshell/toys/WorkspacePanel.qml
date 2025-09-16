@@ -35,8 +35,8 @@ Item {
             color: modelData.activated? Shared.colors.outline: "transparent"
             width: scview.sourceSize.width*scaleDownX + borderSize*2
             height: scview.sourceSize.height*scaleDownY + borderSize*2
-            x: (modelData.lastIpcObject.at[0]*workspace.monitor.scale)*scaleDownX - borderSize
-            y: (modelData.lastIpcObject.at[1]*workspace.monitor.scale)*scaleDownY - borderSize
+            x: ((modelData.lastIpcObject.at[0] || 0)*workspace.monitor.scale)*scaleDownX - borderSize
+            y: ((modelData.lastIpcObject.at[1] || 0)*workspace.monitor.scale)*scaleDownY - borderSize
 
             radius: cornerRadius*canHaveRadius
             ClippingRectangle {

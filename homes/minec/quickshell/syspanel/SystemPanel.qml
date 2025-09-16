@@ -16,7 +16,7 @@ PanelWindow {
 	property bool pinned: false
 	property bool opened: false
 	property bool hovered: false
-	property bool fullHide: Hyprland.monitorFor(screen).activeWorkspace.hasFullscreen
+	property bool fullHide: Hyprland.monitorFor(screen).activeWorkspace? Hyprland.monitorFor(screen).activeWorkspace.hasFullscreen: false
 	property bool transparentBackground: true
 	property real mouseY: 0
 	color: Qt.rgba(0,0,0,0)
@@ -102,7 +102,7 @@ PanelWindow {
 			AlternateBackgroundObject {
 				anchors.fill: parent
 				animate: true
-				slidingFactor: Hyprland.monitorFor(screen).activeWorkspace.id || 0
+				slidingFactor: Hyprland.monitorFor(screen).activeWorkspace? Hyprland.monitorFor(screen).activeWorkspace.id || 0 : 0
 			}
 			WorkspacePanel {
 				anchors.fill: parent
@@ -258,6 +258,7 @@ PanelWindow {
 						leftMargin: 8
 					}
 				}
+
 				//Power {}
 
 			}
@@ -268,8 +269,15 @@ PanelWindow {
 					fill: parent
 					leftMargin: 50
 					rightMargin: 5
+					bottomMargin: 6
 				}
 				Power {}
+				SystemTray {
+					anchors {
+						bottom: parent.bottom
+						horizontalCenter: parent.horizontalCenter
+					}
+				}
 			}
 
 		}

@@ -6,9 +6,10 @@ import QtQuick.Layouts
 import ".."
 import "../.."
 
-WidgetBox {
+Item {
 	id: root
 	width: systrayholder.implicitWidth
+	height: 40
 	//width: childrenRect.width// + 40
 	Behavior on width {
 		PropertyAnimation { 
@@ -22,7 +23,7 @@ WidgetBox {
 	
 	RowLayout {
 		id: systrayholder
-		implicitWidth: childrenRect.implicitWidth
+		//implicitWidth: childrenRect.implicitWidth || 0
 		spacing: 0
 		anchors {
 			top: parent.top
@@ -39,29 +40,6 @@ WidgetBox {
 				width: parent.height
 				Layout.fillWidth: true
 				//readonly property alias menu: modelData.menu;
-				property FloatingWidget tooltip: FloatingWidget {
-					owner: systrayhitbox
-					wantedWidth: text.width + 20
-					wantedHeight: text.height + 10
-					yOffset: root.height + Shared.margin
-					channel: "tooltipBar"
-					WidgetBackground {}
-					//y: systraybutton.mapToItem(hitbox, 0, systraybutton.y).y
-					show: systrayhitbox.containsMouse
-					Text {
-						anchors {
-							horizontalCenter: parent.horizontalCenter
-							verticalCenter: parent.verticalCenter
-						}
-						id: text
-						color: Qt.hsva(7/9,0.1,0.9)
-						font {
-							pointSize: 12
-							family: "SFPro"
-						}
-						text: modelData.tooltipTitle || modelData.title
-					}
-				}
 
 				MouseArea {
 					id: systrayhitbox
