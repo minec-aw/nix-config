@@ -19,14 +19,12 @@ Text {
 
         return `${hours.toString().padStart(2, '0')}\n${minutes}`;
     }
-     anchors.left: parent.left
-    anchors.right: parent.right
     text: getFormattedTime(Shared.time) //`${(Shared.time.getHours()%12).toString().padStart(2, "0")}:${(Shared.time.getMinutes()).toString().padStart(2, "0")}`
     color: Shared.colors.on_surface
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     font {
-        pointSize: 18
+        pointSize: 22
         family: "Noto Sans"
         bold: true
     }

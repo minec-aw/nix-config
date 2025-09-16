@@ -71,16 +71,12 @@ in
 			nodejs
 			bun
 			r2modman
-			lutris
 			prismlauncher
-			umu-launcher
 			qpwgraph
 			tenacity
 			scrcpy
 			krita
-			rquickshare
 			btop
-			slack
 			protonplus
 			blueman
 			#stremio

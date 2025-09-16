@@ -292,7 +292,6 @@
 			vlc
 			vicinae
 
-
 			kdePackages.plasma-browser-integration
 			kdePackages.ark
 			kdePackages.dolphin
@@ -317,10 +316,6 @@
 			portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 		};
 		dconf.enable = true;
-		firefox = {
-			enable = true;
-			#nativeMessagingHosts.packages = [ pkgs.firefoxpwa ];
-		};
 		kdeconnect = {
 			enable = true;
 		};

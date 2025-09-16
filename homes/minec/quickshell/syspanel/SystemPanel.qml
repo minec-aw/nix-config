@@ -66,7 +66,7 @@ PanelWindow {
 			rightMargin: -5
 			bottomMargin: -5
 		}
-		width: panelcarrier.opened? 550: (panelcarrier.hovered? 50: (panelcarrier.fullHide? 0: 10))
+		width: panelcarrier.opened? parent.width: (panelcarrier.hovered? 50: (panelcarrier.fullHide? 0: 10))
 		states: State {
 			name: "hovered"; when: panelcarrier.hovered
 			PropertyChanges {target: panelhitbox; height: Shared.panelHeight+5}
@@ -76,29 +76,32 @@ PanelWindow {
 		id: hoverdetector
 		hoverEnabled: true
 		onClicked: () => {
-			panelcarrier.opened = !panelcarrier.opened
+			if (mouseX < width - mainpanel.width + mainpanel.hoverBarWidth) {
+				panelcarrier.opened = false
+				panelcarrier.hovered = false
+			} else if (panelcarrier.opened != true) {
+				panelcarrier.opened = true
+			}
 		}
 		onContainsMouseChanged: () => {
 			panelcarrier.hovered = containsMouse
-			if (containsMouse == true) {
+			if (containsMouse == true && mainpanel.anchors.rightMargin == -mainpanel.width) {
 				panelcarrier.mouseY = mouseY
 			}
 		}
 		anchors {
-			top: parent.top
-			bottom: parent.bottom
-			right: parent.right
-			leftMargin: -5
-			rightMargin: -5
-			bottomMargin: -5
+			fill: parent
+			leftMargin: -1
+			rightMargin: -1
+			bottomMargin: -1
 		}
 		Item {
-			visible: mainpanel.anchors.leftMargin < parent.width-55
+			visible: mainpanel.anchors.rightMargin > -mainpanel.width + 51
 			onVisibleChanged: () => Hyprland.refreshToplevels()
 			height: screen.height
 			width: screen.width
 			anchors.right: mainpanel.left
-			anchors.rightMargin: -50
+			anchors.rightMargin: -51
 			AlternateBackgroundObject {
 				anchors.fill: parent
 				animate: true
@@ -110,19 +113,19 @@ PanelWindow {
 				workspace: Hyprland.monitorFor(screen).activeWorkspace
 			}
 		}
-		width: 555
 		Item {
 			id: mainpanel
-			property real hoverBarHeight: 300
+			property real hoverBarHeight: 265
 			property real hoverBarWidth: 50
 			property real hoverBarY: Math.min(Math.max(panelcarrier.mouseY - (hoverBarHeight/2), 16), parent.height - hoverBarHeight -16)
 			anchors {
 				top: parent.top
 				bottom: parent.bottom
-				left: parent.left
-				leftMargin: panelcarrier.opened? 50: (panelcarrier.hovered? parent.width-55: parent.width-5)
+				right: parent.right
+				rightMargin: panelcarrier.opened? 1: (panelcarrier.hovered? -width + 51: -width)
+				//leftMargin: panelcarrier.opened? 50: (panelcarrier.hovered? parent.width-55: parent.width-5)
 			}
-			Behavior on anchors.leftMargin { 
+			Behavior on anchors.rightMargin { 
 				NumberAnimation { 
 					duration: 240
 					easing {
@@ -130,7 +133,7 @@ PanelWindow {
 					}
 				}
 			 }
-			width: 500
+			width: 550
 			// Background
 
 			Rectangle {
@@ -228,6 +231,7 @@ PanelWindow {
 			// Hover bar (the thing visible when hovering over edge)
 			
 			Item {
+				//color: Qt.rgba(1,0,0,0.2)
 				id: hoverpanel
 				y: mainpanel.hoverBarY
 				height: mainpanel.hoverBarHeight
@@ -267,16 +271,24 @@ PanelWindow {
 			Item {
 				anchors {
 					fill: parent
-					leftMargin: 50
-					rightMargin: 5
-					bottomMargin: 6
+					leftMargin: 70
+					rightMargin: 20
+					bottomMargin: 20
+					topMargin: 20
 				}
 				Power {}
 				SystemTray {
+					id: systray
 					anchors {
 						bottom: parent.bottom
 						horizontalCenter: parent.horizontalCenter
 					}
+				}
+				SoundPanel {
+					anchors.bottom: systray.top
+					anchors.left: parent.left
+					anchors.right: parent.right
+					anchors.bottomMargin: 10
 				}
 			}
 
