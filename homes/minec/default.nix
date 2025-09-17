@@ -88,6 +88,7 @@ in
 				withOpenASAR = true;
 				withMoonlight = true; # can do this here too
 			})
+			kdePackages.discover
 		];
 	};
 }

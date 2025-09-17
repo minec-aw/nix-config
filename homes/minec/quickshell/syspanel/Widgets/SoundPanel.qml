@@ -8,7 +8,7 @@ import "../.."
 
 Rectangle {
     radius: 20
-    color: Qt.rgba(0.41, 0.21, 0.27, 0.3)
+    color: Qt.rgba(0.45, 0.35, 0.38, 0.1)
 	id: root
 	height: 200
     // Use description to name PWNodes
