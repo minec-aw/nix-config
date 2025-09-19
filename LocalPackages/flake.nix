@@ -84,7 +84,7 @@
 			#virsh nodedev-reattach pci_0000_01_00_0 
 			#virsh nodedev-reattach pci_0000_01_00_1
 
-			modprobe nvidia_drm "modeset=0"
+			modprobe nvidia_drm "modeset=1"
 			modprobe nvidia_modeset
 			modprobe nvidia_uvm
 			modprobe nvidia "NVreg_DynamicPowerManagement=0x02"

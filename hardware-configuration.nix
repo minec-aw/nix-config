@@ -44,7 +44,7 @@
     interfaces = {
       enp42s0 = {
         useDHCP = false;
-        wakeOnLan.enable = true;
+        #wakeOnLan.enable = true;
       };
       br0.useDHCP = true;
     };
