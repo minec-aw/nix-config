@@ -7,7 +7,7 @@ import QtQuick
 import QtQuick.Layouts
 import "syspanel" as SystemPanel
 import Quickshell.Hyprland
-
+import Quickshell
 ShellRoot {
 	id: root
 	Variants {

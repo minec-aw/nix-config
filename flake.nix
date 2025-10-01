@@ -8,10 +8,6 @@
 			url = "path:./LocalPackages";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
-		vicinae = {
-			url = "github:vicinaehq/vicinae";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
 		quickshell = {
 			url = "git+https://git.outfoxxed.me/outfoxxed/quickshell";
 			inputs.nixpkgs.follows = "nixpkgs";
@@ -30,13 +26,17 @@
 		};
 		nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
 	};
+	#nixConfig.extra-substituters = [ "https://vicinae.cachix.org" ];
+	#nixConfig.extra-trusted-public-keys = [ "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc=" ];
 
-	outputs = { self, nixpkgs, localPackages, nixpkgs-xr, ... }@inputs:
+
+	outputs = { self, nixpkgs, localPackages, nixpkgs-mesa-pin, nixpkgs-xr, ... }@inputs:
 	let 
 		system = "x86_64-linux";
-		pkgs = nixpkgs.legacyPackages.${system};
-		vicinae = inputs.vicinae.packages.${system}.default;
-		pkgs-mesa-pin = inputs.nixpkgs-mesa-pin.legacyPackages.${system};
+		pkgs = import nixpkgs {
+			inherit system;
+		};
+		pkgs-mesa-pin = nixpkgs-mesa-pin.legacyPackages.${system};
 	in {
 		nixosConfigurations.minec = nixpkgs.lib.nixosSystem {
 		inherit system;
@@ -44,7 +44,6 @@
 				inherit inputs;
 				inherit localPackages;
 				inherit pkgs-mesa-pin;
-				inherit vicinae;
 			};
 			modules = [
 				inputs.hjem.nixosModules.default

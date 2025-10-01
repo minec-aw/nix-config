@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, pkgs-mesa-pin, vicinae, localPackages, inputs, ... }:
+{ config, pkgs, pkgs-mesa-pin, localPackages, inputs, ... }:
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -63,9 +63,14 @@
 		firewall = {
 			enable = true;
 			trustedInterfaces = [ "tailscale0" ];
+			allowedTCPPorts = [ 3389 ];
 		};
 	};
 	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
+	systemd.services.gnome-remote-desktop = {
+		wantedBy = [ "graphical.target" ];
+	};
+
 	zramSwap = {
 		enable = true;
 		swapDevices = 0;
@@ -89,6 +94,7 @@
 				variant = "";
 			};
 		};
+		gnome.gnome-remote-desktop.enable = true;
 		/*immich = {
 			enable = true;
 			port = 2283;
@@ -110,6 +116,13 @@
 				cudaSupport = true;
 			});
 			#defaultRuntime = true;
+		};
+		desktopManager.gnome = {
+			enable = true;
+			extraGSettingsOverrides = ''
+				[org.gnome.mutter]
+				experimental-features=['scale-monitor-framebuffer', 'autoclose-xwayland']
+			'';
 		};
 		playerctld.enable = true;
 		#desktopManager.plasma6.enable = true;
@@ -237,10 +250,15 @@
 	security = {
 		polkit.enable = true;
 		rtkit.enable = true;
-		soteria.enable = true;
+		#soteria.enable = true;
 	};
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget
+	qt = {
+		enable = true;
+		platformTheme = "gnome"; #qt5ct
+		style = "adwaita-dark";
+	};
 	environment = {
 		shells = with pkgs; [bash];
 		sessionVariables = {
@@ -250,7 +268,9 @@
 					hyprgrass
 				];
 			};*/
-			QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
+			ELECTRON_OZONE_PLATFORM_HINT = "wayland";
+			NIXOS_OZONE_WL = "1";
+			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
 		systemPackages = with pkgs; 
 		let 
@@ -284,22 +304,44 @@
 			
 			wsuricons
 
-			darkly-qt5
-			darkly
+			#darkly-qt5
+			#darkly
 			#tail-tray
 			wayvr-dashboard
 			wlx-overlay-s
-			vlc
-			vicinae
+			#vlc
 
 			kdePackages.plasma-browser-integration
-			kdePackages.ark
-			kdePackages.dolphin
-			xorg.xrdb
-			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
+			#kdePackages.ark
+			#kdePackages.dolphin
+			#xorg.xrdb
+			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			#ffmpeg
+
+			## GNOME
+			gnomeExtensions.appindicator
+			gnome-settings-daemon
+			gnomeExtensions.steal-my-focus-window
+			#gnomeExtensions.unpanel
+			gnomeExtensions.tailscale-qs
+			gnomeExtensions.rounded-window-corners-reborn
+			gnomeExtensions.quick-settings-audio-panel
+			gnome-tweaks
+			gnomeExtensions.pano
+			gnomeExtensions.foresight
+			gnomeExtensions.blur-my-shell
+			gnomeExtensions.custom-hot-corners-extended
+			gnomeExtensions.hide-top-bar
+			gnomeExtensions.just-perfection
+			gnomeExtensions.search-light
+			gnome-randr
+			pulseaudio
 		];
 	};
+	systemd.tmpfiles.rules = [
+		"r! /tmp/my-script-once.flag"
+	];
+
 	nix.settings = {
 		auto-optimise-store = true;
 		experimental-features = [ "nix-command" "flakes" ];
@@ -310,14 +352,16 @@
 		obs-studio = {
 			enable = true;
 		};
-		hyprland = {
+		/*hyprland = {
 			enable = true;
 			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
 			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-		};
+		};*/
+		file-roller.enable = true;
 		dconf.enable = true;
 		kdeconnect = {
 			enable = true;
+			package = pkgs.gnomeExtensions.gsconnect;
 		};
 		adb.enable = true;
 		bash = {
