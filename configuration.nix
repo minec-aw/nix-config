@@ -270,8 +270,8 @@
 	# $ nix search wget
 	qt = {
 		enable = true;
-		platformTheme = "qt5ct"; #gnome
-		style = "kvantum";
+		platformTheme = "gnome"; #gnome
+		style = "adwaita";
 	};
 	environment = {
 		shells = with pkgs; [bash];

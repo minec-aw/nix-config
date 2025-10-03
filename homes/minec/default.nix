@@ -50,7 +50,6 @@ in
 		ColorScheme=*
 		'';
 		
-		".config/Kvantum/KvLibAdwaita".source = ./KvLibadwaita;
 		".config/ghostty/config".text = ''
 		background = 000000
 		cursor-style = bar
