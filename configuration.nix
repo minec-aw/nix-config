@@ -67,9 +67,6 @@
 		};
 	};
 	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
-	systemd.services.gnome-remote-desktop = {
-		wantedBy = [ "graphical.target" ];
-	};
 
 	zramSwap = {
 		enable = true;
@@ -94,7 +91,6 @@
 				variant = "";
 			};
 		};
-		gnome.gnome-remote-desktop.enable = true;
 		syncthing = {
 			enable = true;
 			openDefaultPorts = true;
@@ -274,8 +270,8 @@
 	# $ nix search wget
 	qt = {
 		enable = true;
-		platformTheme = "gnome"; #qt5ct
-		style = "adwaita-dark";
+		platformTheme = "qt5ct"; #gnome
+		style = "kvantum";
 	};
 	environment = {
 		shells = with pkgs; [bash];
