@@ -95,14 +95,6 @@
 			};
 		};
 		gnome.gnome-remote-desktop.enable = true;
-		/*immich = {
-			enable = true;
-			port = 2283;
-			host = "100.70.40.10";
-			accelerationDevices = [ "/dev/dri/renderD128" ];
-			#mediaLocation = "/media/Storage/immich";
-			openFirewall = true;
-		};*/
 		syncthing = {
 			enable = true;
 			openDefaultPorts = true;
@@ -166,6 +158,32 @@
 				capture = "kms";
 				encoder = "vaapi";
 			};
+			applications = {
+				env = {
+					PATH = "$(PATH):$(HOME)/.local/bin";
+				};
+				apps = [
+					{
+						name = "1080p Desktop";
+						prep-cmd = [
+							{
+								# gnome-randr modify HDMI-1 -m 1920x1080@120.000 --scale 1
+								do = "${pkgs.gnome-randr}/bin/gnome-randr modify HDMI-1 -m 1920x1080@120.000 --scale 1";
+								undo = "${pkgs.gnome-randr}/bin/gnome-randr modify HDMI-1 -m 2560x1440@119.998 --scale 1.25";
+							}
+						];
+						exclude-global-prep-cmd = "false";
+						auto-detach = "true";
+					}
+					{
+						name = "Normal Desktop";
+						exclude-global-prep-cmd = "false";
+						auto-detach = "true";
+					}
+					
+				];
+			};
+
 			/*package = (pkgs.sunshine.override {
 				cudaSupport = true;
 			});*/
