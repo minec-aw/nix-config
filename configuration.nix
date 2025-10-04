@@ -271,7 +271,7 @@
 	qt = {
 		enable = true;
 		platformTheme = "gnome"; #gnome
-		style = "adwaita";
+		style = "adwaita-dark";
 	};
 	environment = {
 		shells = with pkgs; [bash];
