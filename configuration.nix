@@ -352,9 +352,6 @@
 			pulseaudio
 		];
 	};
-	systemd.tmpfiles.rules = [
-		"r! /tmp/my-script-once.flag"
-	];
 
 	nix.settings = {
 		auto-optimise-store = true;
