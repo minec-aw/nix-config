@@ -112,6 +112,15 @@
 		'';
 	};
 	services = {
+		keyd = {
+			enable = true;
+			keyboards.default = {
+				ids = ["*"];
+				settings.main = {
+					"super+p" = "f13";
+				};
+			};
+		};
 		spice-vdagentd.enable = true;
 		samba = {
 			enable = true;
