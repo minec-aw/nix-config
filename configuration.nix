@@ -348,6 +348,9 @@
 			gnomeExtensions.hide-top-bar
 			gnomeExtensions.just-perfection
 			gnomeExtensions.search-light
+			gnomeExtensions.adw-gtk3-colorizer
+			adw-gtk3
+
 			gnome-randr
 			pulseaudio
 		];
@@ -359,7 +362,7 @@
 	};
 
 	programs = {
-		corectrl.enable = true;
+		coolercontrol.enable = true;
 		obs-studio = {
 			enable = true;
 		};

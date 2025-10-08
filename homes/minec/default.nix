@@ -42,9 +42,6 @@ in
 		".local/share/icons/WhiteSurIcons-dark".source = "${wsuricons}/share/icons/WhiteSur-red-dark";
 		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-red-light";
 
-		".local/share/icons/Colloid".source = "${pkgs.colloid-icon-theme}/share/icons/Colloid";
-		".local/share/icons/Colloid-dark".source = "${pkgs.colloid-icon-theme}/share/icons/Colloid-Dark";
-		".local/share/icons/Colloid-light".source = "${pkgs.colloid-icon-theme}/share/icons/Colloid-Light";
 		".config/kdeglobals".text = ''
 		[UiSettings]
 		ColorScheme=*
@@ -73,6 +70,7 @@ in
 			easyeffects
 			gnome-disk-utility
 			git
+			nexusmods-app
 			#ungoogled-chromium
 			python3
 			vscode
