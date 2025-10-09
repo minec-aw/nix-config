@@ -83,6 +83,10 @@
 
 	i18n.extraLocales = ["en_CA.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
 	#users.users.immich.extraGroups = [ "video" "render" ];
+	systemd.services.gnome-remote-desktop = {
+		wantedBy = [ "graphical.target" ];
+	};
+	
 	services = {
 		xserver = {
 			videoDrivers = [ "nvidia" "amdgpu" ];
@@ -112,6 +116,8 @@
 				experimental-features=['scale-monitor-framebuffer', 'autoclose-xwayland']
 			'';
 		};
+		gnome.gnome-remote-desktop.enable = true;
+		gnome.gnome-browser-connector.enable = true;
 		playerctld.enable = true;
 		#desktopManager.plasma6.enable = true;
 		/*greetd = {
@@ -301,6 +307,7 @@
 			(inputs.zen-browser.packages."${system}".default.override {
 				nativeMessagingHosts = [
 					pkgs.kdePackages.plasma-browser-integration
+					pkgs.gnome-browser-connector
 				];
 			})
 			#hyprpolkitagent
@@ -349,6 +356,7 @@
 			gnomeExtensions.just-perfection
 			gnomeExtensions.search-light
 			gnomeExtensions.adw-gtk3-colorizer
+			gnomeExtensions.touchup
 			adw-gtk3
 
 			gnome-randr
