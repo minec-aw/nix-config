@@ -276,8 +276,8 @@
 	# $ nix search wget
 	qt = {
 		enable = true;
-		platformTheme = "gnome"; #gnome
-		style = "adwaita-dark";
+		platformTheme = "qt5ct"; #gnome
+		style = "kvantum";
 	};
 	environment = {
 		shells = with pkgs; [bash];
@@ -300,6 +300,8 @@
 			};
 		in
 		[
+			nixd
+			alejandra
 			jq
 			socat
 			sysstat
@@ -363,6 +365,7 @@
 			pulseaudio
 		];
 	};
+	nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
 	nix.settings = {
 		auto-optimise-store = true;

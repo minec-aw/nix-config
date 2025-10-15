@@ -84,6 +84,7 @@ in
 			krita
 			btop
 			protonplus
+			fractal
 			#libsForQt5.qt5ct
 			#qt6ct
 			#stremio
