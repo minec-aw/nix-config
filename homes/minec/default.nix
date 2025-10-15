@@ -1,4 +1,4 @@
-{ config, pkgs, inputs, localPackages, ... }:
+{ pkgs, ... }:
 let
   	wsuricons = pkgs.whitesur-icon-theme.override {
 		alternativeIcons = true;

@@ -1,4 +1,4 @@
-{ config, lib, pkgs, localPackages, pkgs-mesa-pin, modulesPath, ... }:
+{ config, pkgs, localPackages, ... }:
 {
 	boot = {
 		blacklistedKernelModules = [ "nvidia" "nouveau" "nvidia_drm" "nvidia_uvm" "nvidia_modeset" ]; ##passthrough stuff
