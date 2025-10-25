@@ -29,7 +29,7 @@
 				mouse_speed 10
 				mouse_size 22
 				textonly 0
-				resolution 2560 1440
+				resolution 3840 2160
 				scan_driver_dirs drivers,EFI/tools/drivers
 				include themes/rEFInd-minimal/theme.conf
 				dont_scan_dirs efi/nixos
@@ -63,7 +63,7 @@
 		firewall = {
 			enable = true;
 			trustedInterfaces = [ "tailscale0" ];
-			allowedTCPPorts = [ 3389 ];
+			allowedTCPPorts = [ 3389 2234 ];
 		};
 	};
 	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
@@ -113,7 +113,7 @@
 			enable = true;
 			extraGSettingsOverrides = ''
 				[org.gnome.mutter]
-				experimental-features=['scale-monitor-framebuffer', 'autoclose-xwayland']
+				experimental-features=['scale-monitor-framebuffer', 'autoclose-xwayland', 'variable-refresh-rate']
 			'';
 		};
 		gnome.gnome-remote-desktop.enable = true;
@@ -360,6 +360,7 @@
 			gnomeExtensions.adw-gtk3-colorizer
 			gnomeExtensions.touchup
 			adw-gtk3
+			vesktop
 
 			gnome-randr
 			pulseaudio
@@ -373,7 +374,8 @@
 	};
 
 	programs = {
-		coolercontrol.enable = true;
+		corectrl.enable = true;
+		#coolercontrol.enable = true;
 		obs-studio = {
 			enable = true;
 		};

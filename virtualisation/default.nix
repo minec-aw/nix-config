@@ -10,6 +10,7 @@
 		];
 	};
 	virtualisation = {
+		docker.enable = true;
 		waydroid.enable = true;
 		libvirtd = {
 			onBoot = "ignore";
@@ -17,8 +18,8 @@
 			enable = true;
 			qemu = {
 				swtpm.enable = true;
-				ovmf.enable = true;
-				ovmf.packages = [ pkgs.OVMFFull.fd ];
+				#ovmf.enable = true;
+				#ovmf.packages = [ pkgs.OVMFFull.fd ];
 				verbatimConfig = ''
 					namespaces = []
 					cgroup_device_acl = [
