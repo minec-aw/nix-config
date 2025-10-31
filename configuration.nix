@@ -104,9 +104,9 @@
 		wivrn = {
 			enable = true;
 			openFirewall = true;
-			package = (pkgs.wivrn.override {
+			/*package = (pkgs.wivrn.override {
 				cudaSupport = true;
-			});
+			});*/
 			#defaultRuntime = true;
 		};
 		desktopManager.gnome = {
@@ -236,8 +236,8 @@
 		graphics = {
 			enable = true;
 			enable32Bit = true;
-			package = pkgs-mesa-pin.mesa;
-			package32 = pkgs-mesa-pin.driversi686Linux.mesa;
+			#package = pkgs-mesa-pin.mesa;
+			#package32 = pkgs-mesa-pin.driversi686Linux.mesa;
 			extraPackages = with pkgs; [
 				nvidia-vaapi-driver
 			];
@@ -292,6 +292,10 @@
 			NIXOS_OZONE_WL = "1";
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
+		gnome.excludePackages = with pkgs; [
+			gnome-software
+		];
+
 		systemPackages = with pkgs; 
 		let 
 			wsuricons = whitesur-icon-theme.override {
@@ -360,7 +364,7 @@
 			gnomeExtensions.adw-gtk3-colorizer
 			gnomeExtensions.touchup
 			adw-gtk3
-			vesktop
+			dotnet-sdk_9
 
 			gnome-randr
 			pulseaudio
@@ -430,7 +434,7 @@
 		packages = with pkgs; [
 			noto-fonts
 			noto-fonts-cjk-sans
-			noto-fonts-emoji
+			noto-fonts-color-emoji
 			liberation_ttf
 			fira-code
 			fira-code-symbols
@@ -442,7 +446,7 @@
   			nerd-fonts.droid-sans-mono
 			corefonts
 			liberation_ttf
-			vistafonts
+			vista-fonts
 			jetbrains-mono
 			#inputs.apple-fonts.packages.${pkgs.system}.sf-pro
 		];

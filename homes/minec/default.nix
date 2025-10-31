@@ -73,7 +73,7 @@ in
 			nexusmods-app
 			#ungoogled-chromium
 			python3
-			vscode
+			vscode-fhs
 			nodejs
 			bun
 			r2modman
@@ -85,6 +85,7 @@ in
 			btop
 			protonplus
 			fractal
+			resources
 			#libsForQt5.qt5ct
 			#qt6ct
 			#stremio
@@ -93,10 +94,12 @@ in
 				withMiddleClickScroll = true;
 			})*/
 			chromium
-			(discord.override {
+			vesktop
+			tagger
+			/*(discord.override {
 				withOpenASAR = true;
 				withMoonlight = true; # can do this here too
-			})
+			})*/
 
 			#kdePackages.discover
 			#kdePackages.dolphin-plugins
