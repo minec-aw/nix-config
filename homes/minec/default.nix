@@ -41,11 +41,6 @@ in
 		".local/share/icons/WhiteSurIcons".source = "${wsuricons}/share/icons/WhiteSur-red";
 		".local/share/icons/WhiteSurIcons-dark".source = "${wsuricons}/share/icons/WhiteSur-red-dark";
 		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-red-light";
-
-		".config/kdeglobals".text = ''
-		[UiSettings]
-		ColorScheme=*
-		'';
 		
 		".config/ghostty/config".text = ''
 		background = 000000
@@ -70,12 +65,10 @@ in
 			easyeffects
 			gnome-disk-utility
 			git
-			nexusmods-app
 			#ungoogled-chromium
 			python3
 			vscode-fhs
 			nodejs
-			bun
 			r2modman
 			prismlauncher
 			qpwgraph
@@ -84,7 +77,6 @@ in
 			krita
 			btop
 			protonplus
-			fractal
 			resources
 			#libsForQt5.qt5ct
 			#qt6ct
@@ -100,7 +92,8 @@ in
 				withOpenASAR = true;
 				withMoonlight = true; # can do this here too
 			})*/
-
+			kde-rounded-corners
+			faugus-launcher
 			#kdePackages.discover
 			#kdePackages.dolphin-plugins
       		#kdePackages.gwenview

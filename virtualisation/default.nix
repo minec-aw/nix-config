@@ -152,8 +152,8 @@
 
     services.udev.extraRules = ''
       SUBSYSTEM=="kvmfr", OWNER="minec", GROUP="kvm", MODE="0600"
-	  TAG=="seat", ENV{ID_FOR_SEAT}=="drm-pci-0000_2b_00_0", ENV{ID_SEAT}="seat1", TAG-="master-of-seat"
     '';
+		# TAG=="seat", ENV{ID_FOR_SEAT}=="drm-pci-0000_2b_00_0", ENV{ID_SEAT}="seat1", TAG-="master-of-seat"
 
   	#systemd.tmpfiles.rules = ["f /dev/shm/looking-glass 0660 minec qemu-libvirtd -"];
 }

@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, pkgs-mesa-pin, inputs, ... }:
+{ config, pkgs, inputs, ... }:
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -83,10 +83,7 @@
 
 	i18n.extraLocales = ["en_CA.UTF-8/UTF-8" "en_US.UTF-8/UTF-8"];
 	#users.users.immich.extraGroups = [ "video" "render" ];
-	systemd.services.gnome-remote-desktop = {
-		wantedBy = [ "graphical.target" ];
-	};
-	
+
 	services = {
 		xserver = {
 			videoDrivers = [ "nvidia" "amdgpu" ];
@@ -94,6 +91,7 @@
 				layout = "us";
 				variant = "";
 			};
+			desktopManager.lxqt.enable = true;
 		};
 		syncthing = {
 			enable = true;
@@ -104,12 +102,15 @@
 		wivrn = {
 			enable = true;
 			openFirewall = true;
-			/*package = (pkgs.wivrn.override {
+			package = (pkgs.wivrn.override {
 				cudaSupport = true;
-			});*/
+			});
 			#defaultRuntime = true;
 		};
-		desktopManager.gnome = {
+		desktopManager.plasma6 = {
+			enable = true;
+		};
+		/*desktopManager.gnome = {
 			enable = true;
 			extraGSettingsOverrides = ''
 				[org.gnome.mutter]
@@ -117,7 +118,7 @@
 			'';
 		};
 		gnome.gnome-remote-desktop.enable = true;
-		gnome.gnome-browser-connector.enable = true;
+		gnome.gnome-browser-connector.enable = true;*/
 		playerctld.enable = true;
 		#desktopManager.plasma6.enable = true;
 		/*greetd = {
@@ -134,14 +135,17 @@
 			};
 		};*/
 		displayManager = {
-			autoLogin = {
+			sessionPackages = with pkgs; [
+				lxqt.lxqt-wayland-session
+			];
+			/*autoLogin = {
 				enable = true;
 				user = "minec";
-			};
+			};*/
 			sddm = {
 				enable = true;
 				wayland.enable = true;
-				autoLogin.relogin = true;
+				#autoLogin.relogin = true;
 			};
 		};
 		tailscale = {
@@ -166,19 +170,7 @@
 				};
 				apps = [
 					{
-						name = "1080p Desktop";
-						prep-cmd = [
-							{
-								# gnome-randr modify HDMI-1 -m 1920x1080@120.000 --scale 1
-								do = "${pkgs.gnome-randr}/bin/gnome-randr modify HDMI-1 -m 1920x1080@120.000 --scale 1";
-								undo = "${pkgs.gnome-randr}/bin/gnome-randr modify HDMI-1 -m 2560x1440@119.998 --scale 1.25";
-							}
-						];
-						exclude-global-prep-cmd = "false";
-						auto-detach = "true";
-					}
-					{
-						name = "Normal Desktop";
+						name = "Desktop";
 						exclude-global-prep-cmd = "false";
 						auto-detach = "true";
 					}
@@ -263,7 +255,7 @@
 			allowUnfree = true;
 			android_sdk.accept_license = true;
 			permittedInsecurePackages = [
-                 "qtwebengine-5.15.19"
+						"qtwebengine-5.15.19"
         	];
 		};
 	};
@@ -274,11 +266,6 @@
 	};
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget
-	qt = {
-		enable = true;
-		platformTheme = "qt5ct"; #gnome
-		style = "kvantum";
-	};
 	environment = {
 		shells = with pkgs; [bash];
 		sessionVariables = {
@@ -292,9 +279,6 @@
 			NIXOS_OZONE_WL = "1";
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
-		gnome.excludePackages = with pkgs; [
-			gnome-software
-		];
 
 		systemPackages = with pkgs; 
 		let 
@@ -310,10 +294,9 @@
 			socat
 			sysstat
 			imagemagick
-			(inputs.zen-browser.packages."${system}".default.override {
+			(inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
 				nativeMessagingHosts = [
 					pkgs.kdePackages.plasma-browser-integration
-					pkgs.gnome-browser-connector
 				];
 			})
 			#hyprpolkitagent
@@ -331,12 +314,11 @@
 			
 			wsuricons
 
-			#darkly-qt5
-			#darkly
-			#tail-tray
-			wayvr-dashboard
+			darkly-qt5
+			darkly
+			tail-tray
 			wlx-overlay-s
-			#vlc
+			vlc
 
 			kdePackages.plasma-browser-integration
 			#kdePackages.ark
@@ -346,27 +328,8 @@
 			#ffmpeg
 
 			## GNOME
-			gnomeExtensions.appindicator
-			gnome-settings-daemon
-			gnomeExtensions.steal-my-focus-window
-			#gnomeExtensions.unpanel
-			gnomeExtensions.tailscale-qs
-			gnomeExtensions.rounded-window-corners-reborn
-			gnomeExtensions.quick-settings-audio-panel
-			gnome-tweaks
-			gnomeExtensions.pano
-			gnomeExtensions.foresight
-			gnomeExtensions.blur-my-shell
-			gnomeExtensions.custom-hot-corners-extended
-			gnomeExtensions.hide-top-bar
-			gnomeExtensions.just-perfection
-			gnomeExtensions.search-light
-			gnomeExtensions.adw-gtk3-colorizer
-			gnomeExtensions.touchup
 			adw-gtk3
 			dotnet-sdk_9
-
-			gnome-randr
 			pulseaudio
 		];
 	};
@@ -392,7 +355,7 @@
 		dconf.enable = true;
 		kdeconnect = {
 			enable = true;
-			package = pkgs.gnomeExtensions.gsconnect;
+			#package = pkgs.gnomeExtensions.gsconnect;
 		};
 		adb.enable = true;
 		bash = {
@@ -406,7 +369,7 @@
 			#gamescopeSession.enable = true;
 			enable = true;
 			protontricks.enable = true;
-			package = with pkgs; steam.override {
+			/*package = with pkgs; steam.override {
 				extraPkgs = pkgs: [
 					attr
 				];
@@ -422,7 +385,7 @@
 					pkgs.krb5
 					pkgs.keyutils
 				]);
-			};
+			};*/
 			remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
 			#dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
 		};

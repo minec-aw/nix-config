@@ -9,7 +9,7 @@
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		zen-browser = {
-			url = "github:youwen5/zen-browser-flake";
+			url = "github:0xc000022070/zen-browser-flake";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		hjem = {
@@ -25,9 +25,9 @@
 	outputs = { self, nixpkgs, localPackages, nixpkgs-mesa-pin, nixpkgs-xr, ... }@inputs:
 	let 
 		system = "x86_64-linux";
-		pkgs = import nixpkgs {
+		/*pkgs = import nixpkgs {
 			inherit system;
-		};
+		};*/
 		pkgs-mesa-pin = nixpkgs-mesa-pin.legacyPackages.${system};
 	in {
 		nixosConfigurations.minec = nixpkgs.lib.nixosSystem {
