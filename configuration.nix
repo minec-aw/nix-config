@@ -29,7 +29,7 @@
 				mouse_speed 10
 				mouse_size 22
 				textonly 0
-				resolution 3840 2160
+				resolution 2560 1440
 				scan_driver_dirs drivers,EFI/tools/drivers
 				include themes/rEFInd-minimal/theme.conf
 				dont_scan_dirs efi/nixos
@@ -135,17 +135,14 @@
 			};
 		};*/
 		displayManager = {
-			sessionPackages = with pkgs; [
-				lxqt.lxqt-wayland-session
-			];
-			/*autoLogin = {
+			autoLogin = {
 				enable = true;
 				user = "minec";
-			};*/
+			};
 			sddm = {
 				enable = true;
 				wayland.enable = true;
-				#autoLogin.relogin = true;
+				autoLogin.relogin = true;
 			};
 		};
 		tailscale = {
