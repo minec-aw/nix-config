@@ -8,7 +8,7 @@
 		tilp = nixpkgs.legacyPackages.x86_64-linux.callPackage ./tilp {};
 		openssl = nixpkgs.legacyPackages.x86_64-linux.callPackage ./openssl {};
 		macos-hyprcursor = nixpkgs.legacyPackages.x86_64-linux.callPackage ./macos-hyprcursor {};
-
+		pixdecor = nixpkgs.legacyPackages.x86_64-linux.callPackage ./pixdecor {};
 		firefoxpwa = nixpkgs.legacyPackages.x86_64-linux.callPackage ./firefoxpwa {
 			firefoxRuntime = nixpkgs.legacyPackages.x86_64-linux.firefox;
 		};

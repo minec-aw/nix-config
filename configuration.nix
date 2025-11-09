@@ -343,16 +343,16 @@
 		obs-studio = {
 			enable = true;
 		};
-		/*wayfire = {
+		wayfire = {
 			enable = true;
 			plugins = with pkgs.wayfirePlugins; [
 				wcm
 				windecor
 				wf-shell
-				#localPackages.pixdecor
+				localPackages.pixdecor
 				wayfire-plugins-extra
 			];
-		};*/
+		};
 		/*hyprland = {
 			enable = true;
 			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
