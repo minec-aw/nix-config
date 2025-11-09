@@ -4,12 +4,26 @@
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 	};
 	outputs = { self, nixpkgs }:
+	let 
+		callPackage = nixpkgs.legacyPackages.x86_64-linux;
+	in
 	{
-		tilp = nixpkgs.legacyPackages.x86_64-linux.callPackage ./tilp {};
-		openssl = nixpkgs.legacyPackages.x86_64-linux.callPackage ./openssl {};
-		macos-hyprcursor = nixpkgs.legacyPackages.x86_64-linux.callPackage ./macos-hyprcursor {};
-		pixdecor = nixpkgs.legacyPackages.x86_64-linux.callPackage ./pixdecor {};
-		firefoxpwa = nixpkgs.legacyPackages.x86_64-linux.callPackage ./firefoxpwa {
+		tilp = callPackage ./tilp {};
+		openssl = callPackage ./openssl {};
+		macos-hyprcursor = callPackage ./macos-hyprcursor {};
+		wayfire = callPackage ./wayfire/default.nix { };
+		wf-config = callPackage ./wayfire/wf-config.nix { };
+
+		wayfirePlugins = nixpkgs.legacyPackages.x86_64-linux.recurseIntoAttrs (
+			callPackage ./wayfire/plugins.nix { }
+		);
+		wayfire-with-plugins = callPackage ./wayfire/wrapper.nix {
+			plugins = with wayfirePlugins; [
+				wcm
+				wf-shell
+			];
+		};
+		firefoxpwa = callPackage ./firefoxpwa {
 			firefoxRuntime = nixpkgs.legacyPackages.x86_64-linux.firefox;
 		};
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" ''
@@ -58,7 +72,7 @@
 			modprobe vfio_pci
 			modprobe vfio_iommu_type1
 		'';
-		nvidia-unbind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-unbind-vfio" ''
+		nvidia-unbind-vfio = writeShellScriptBin "nvidia-unbind-vfio" ''
 			#!/run/current-system/sw/bin/bash
 
 			MARKER_FILE="/tmp/my-script-once.flag"
