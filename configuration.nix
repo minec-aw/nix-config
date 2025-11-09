@@ -70,7 +70,7 @@
 
 	zramSwap = {
 		enable = true;
-		swapDevices = 0;
+		swapDevices = 1;
 	};
 	# Set your time zone.
 	time = {
@@ -135,14 +135,14 @@
 			};
 		};*/
 		displayManager = {
-			autoLogin = {
+			/*autoLogin = {
 				enable = true;
 				user = "minec";
-			};
+			};*/
 			sddm = {
 				enable = true;
 				wayland.enable = true;
-				autoLogin.relogin = true;
+				#autoLogin.relogin = true;
 			};
 		};
 		tailscale = {
@@ -342,6 +342,15 @@
 		#coolercontrol.enable = true;
 		obs-studio = {
 			enable = true;
+		};
+		wayfire = {
+			enable = true;
+			plugins = with pkgs.wayfirePlugins; [
+				wcm
+				windecor
+				wf-shell
+				wayfire-plugins-extra
+			];
 		};
 		/*hyprland = {
 			enable = true;
