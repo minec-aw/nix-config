@@ -17,9 +17,9 @@ def signal_handler(sig, frame):
 
 def main():
     shaderPath = os.environ.get('ROUNDED_CORNER_SHADER')
-    if len(sys.argv) == 1:
-        print(f"Usage: {sys.argv[0]} /path/to/filters/shader")
-        exit(-1)
+    #if len(sys.argv) == 1:
+    #    print(f"Usage: {sys.argv[0]} /path/to/filters/shader")
+    #    exit(-1)
 
     sock = WayfireSocket()
     wpe = WPE(sock)

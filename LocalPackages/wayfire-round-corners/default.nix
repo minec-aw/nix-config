@@ -15,7 +15,6 @@ buildPythonApplication {
 	src = ./scripts;
   dependencies = [
     pywayfire
-    rounded_corner_shader
   ];
   installPhase = ''install -Dm755 main.py $out/bin/wayfire-round-corners'';
   preFixup = ''
