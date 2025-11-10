@@ -354,6 +354,7 @@
 				wcm
 				#windecor
 				wf-shell
+				#localPackages.wf-info
 				#localPackages.pixdecor
 				wayfire-plugins-extra
 			];

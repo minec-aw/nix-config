@@ -5,7 +5,7 @@
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; #-24.11 #nixos-unstable
 		nixpkgs-mesa-pin.url = "github:NixOS/nixpkgs/a683adc19ff5228af548c6539dbc3440509bfed3";
 		# https://github.com/teatwig/nixpkgs/tree/wayfire-0.10.0
-		nixpkgs-wayfire-new.url = "github:teatwig/nixpkgs/wayfire-0.10.0";
+		nixpkgs-wayfire-new.url = "github:minec-aw/nixpkgs/wayfire-0.10.0";
 		localPackages = {
 			url = "path:./LocalPackages";
 			inputs.nixpkgs.follows = "nixpkgs";
