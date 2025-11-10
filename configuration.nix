@@ -325,15 +325,13 @@
 			#kdePackages.ark
 			#kdePackages.dolphin
 			#xorg.xrdb
-			#(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
+			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
 			#ffmpeg
 
 			## GNOME
 			adw-gtk3
 			dotnet-sdk_9
 			pulseaudio
-
-			localPackages.wayfire-round-corners
 		];
 	};
 	nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];

@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, localPackages, ... }:
 let
   	wsuricons = pkgs.whitesur-icon-theme.override {
 		alternativeIcons = true;
@@ -105,6 +105,7 @@ in
 			#kdePackages.kio-fuse
 			#kdePackages.kimageformats
 			#kdePackages.kdegraphics-thumbnailers
+			localPackages.wayfire-round-corners
 		];
 	};
 }
