@@ -5,24 +5,13 @@
 	};
 	outputs = { self, nixpkgs }:
 	let 
-		callPackage = nixpkgs.legacyPackages.x86_64-linux;
+		callPackage = nixpkgs.legacyPackages.x86_64-linux.callPackage;
 	in
 	{
 		tilp = callPackage ./tilp {};
 		openssl = callPackage ./openssl {};
 		macos-hyprcursor = callPackage ./macos-hyprcursor {};
-		wayfire = callPackage ./wayfire/default.nix { };
-		wf-config = callPackage ./wayfire/wf-config.nix { };
-
-		wayfirePlugins = nixpkgs.legacyPackages.x86_64-linux.recurseIntoAttrs (
-			callPackage ./wayfire/plugins.nix { }
-		);
-		wayfire-with-plugins = callPackage ./wayfire/wrapper.nix {
-			plugins = with wayfirePlugins; [
-				wcm
-				wf-shell
-			];
-		};
+		wf-info = callPackage ./wf-info.nix { };
 		firefoxpwa = callPackage ./firefoxpwa {
 			firefoxRuntime = nixpkgs.legacyPackages.x86_64-linux.firefox;
 		};
@@ -72,7 +61,7 @@
 			modprobe vfio_pci
 			modprobe vfio_iommu_type1
 		'';
-		nvidia-unbind-vfio = writeShellScriptBin "nvidia-unbind-vfio" ''
+		nvidia-unbind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-unbind-vfio" ''
 			#!/run/current-system/sw/bin/bash
 
 			MARKER_FILE="/tmp/my-script-once.flag"

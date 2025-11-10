@@ -125,6 +125,22 @@
         "type": "github"
       }
     },
+    "nixpkgs-wayfire-new": {
+      "locked": {
+        "lastModified": 1762694411,
+        "narHash": "sha256-iZ+UOrSHfVhqEifp2NChOAu/jSLDjGE1bKwj1l2/C6s=",
+        "owner": "teatwig",
+        "repo": "nixpkgs",
+        "rev": "d595d3b51ee33531514af8a3598980c1a1ede9d4",
+        "type": "github"
+      },
+      "original": {
+        "owner": "teatwig",
+        "ref": "wayfire-0.10.0",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
     "nixpkgs-xr": {
       "inputs": {
         "flake-compat": "flake-compat",
@@ -169,6 +185,7 @@
         "localPackages": "localPackages",
         "nixpkgs": "nixpkgs",
         "nixpkgs-mesa-pin": "nixpkgs-mesa-pin",
+        "nixpkgs-wayfire-new": "nixpkgs-wayfire-new",
         "nixpkgs-xr": "nixpkgs-xr",
         "zen-browser": "zen-browser"
       }

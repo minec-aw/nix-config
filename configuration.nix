@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, localPackages, ... }:
+{ config, pkgs, inputs, localPackages, pkgs-wayfire, ... }:
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -252,7 +252,7 @@
 			allowUnfree = true;
 			android_sdk.accept_license = true;
 			permittedInsecurePackages = [
-						"qtwebengine-5.15.19"
+				"qtwebengine-5.15.19"
         	];
 		};
 	};
@@ -265,6 +265,9 @@
 	# $ nix search wget
 	environment = {
 		shells = with pkgs; [bash];
+		variables = {
+			GSETTINGS_SCHEMA_DIR="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
+		}; 
 		sessionVariables = {
 			/*HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
 				name = "hyprland-plugins";
@@ -285,6 +288,7 @@
 			};
 		in
 		[
+			#gsettings-desktop-schemas
 			nixd
 			alejandra
 			jq
@@ -345,11 +349,12 @@
 		};
 		wayfire = {
 			enable = true;
-			plugins = with pkgs.wayfirePlugins; [
+			package = pkgs-wayfire.wayfire;
+			plugins = with pkgs-wayfire.wayfirePlugins; [
 				wcm
-				windecor
+				#windecor
 				wf-shell
-				localPackages.pixdecor
+				#localPackages.pixdecor
 				wayfire-plugins-extra
 			];
 		};
