@@ -6,6 +6,7 @@
 }:
 let
   pywayfire = (callPackage ./pywayfire.nix {});
+  rounded_corner_shader = ./scripts/rounded-corners;
 in
 buildPythonApplication {
   pname = "wfire-round-corners";
@@ -13,10 +14,14 @@ buildPythonApplication {
 	src = ./scripts;
   dependencies = [
     pywayfire
+    rounded_corner_shader
   ];
   installPhase = ''install -Dm755 main.py $out/bin/wayfire-round-corners'';
   preFixup = ''
-    makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ pywayfire ]})
+    makeWrapperArgs+=(
+      --set ROUNDED_CORNER_SHADER "${rounded_corner_shader}"
+      --prefix PATH : ${lib.makeBinPath [ pywayfire ]}
+    )
   '';
 
   pyproject = true;

@@ -16,6 +16,7 @@ def signal_handler(sig, frame):
     exit(0)
 
 def main():
+    shaderPath = os.environ.get('ROUNDED_CORNER_SHADER')
     if len(sys.argv) == 1:
         print(f"Usage: {sys.argv[0]} /path/to/filters/shader")
         exit(-1)
@@ -26,7 +27,7 @@ def main():
         if view["role"] != "toplevel":
             continue
         if view["tiled-edges"] == 0 and view["fullscreen"] == False:
-            wpe.set_view_shader(view["id"], os.path.abspath(str(sys.argv[1])))
+            wpe.set_view_shader(view["id"],  shaderPath)
 
     sock.watch(['view-mapped', 'view-tiled'])
 
@@ -41,12 +42,12 @@ def main():
                 if msg["event"] == "view-mapped":
                     view_id = msg["view"]["id"]
                     if msg["view"]["tiled-edges"] == 0 and msg["view"]["fullscreen"] == False:
-                        wpe.set_view_shader(view_id, os.path.abspath(str(sys.argv[1])))
+                        wpe.set_view_shader(view_id, shaderPath)
                 elif msg["event"] == "view-tiled" and "view" in msg:
                     view_id = msg["view"]["id"]
                     # round them corners when the window floats
                     if msg["view"]["tiled-edges"] == 0 and msg["view"]["fullscreen"] == False:
-                        wpe.set_view_shader(view_id, os.path.abspath(str(sys.argv[1])))
+                        wpe.set_view_shader(view_id, shaderPath)
                     else:
                         # don't round corners if the window is maximized/tiled/fullscreened
                         wpe.unset_view_shader(view_id)
