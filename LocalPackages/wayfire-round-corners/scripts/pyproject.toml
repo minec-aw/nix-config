@@ -11,4 +11,8 @@ dependencies = [
 # define the CLI executable
 # Here, we define the entry point to be the 'main()' function in the module 'app/main.py'
 [project.scripts]
-cli = "app.main:main"
+wayfire-round-corners = "main:main"
+
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"

@@ -6,12 +6,13 @@
 	outputs = { self, nixpkgs }:
 	let 
 		callPackage = nixpkgs.legacyPackages.x86_64-linux.callPackage;
+		pythonCallPackage = nixpkgs.legacyPackages.x86_64-linux.python313Packages.callPackage;
 	in
 	{
 		tilp = callPackage ./tilp {};
 		openssl = callPackage ./openssl {};
 		macos-hyprcursor = callPackage ./macos-hyprcursor {};
-		wayfire-round-corners = callPackage ./wayfire-round-corners {};
+		wayfire-round-corners = pythonCallPackage ./wayfire-round-corners {};
 
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" ''
 			#!/run/current-system/sw/bin/bash

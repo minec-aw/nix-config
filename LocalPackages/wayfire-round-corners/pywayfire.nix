@@ -1,9 +1,8 @@
-# toolz.nix
 {
-  lib,
   buildPythonPackage,
   fetchPypi,
   setuptools,
+  wheel
 }:
 
 buildPythonPackage rec {
@@ -12,7 +11,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = lib.fakeHash;
+    hash = "sha256-3Y4s/A05pEQu2v4VV77dLbBCEEAL+W0JwlwaoFH1Mgc=";
   };
 
   # do not run tests
@@ -22,5 +21,6 @@ buildPythonPackage rec {
   pyproject = true;
   build-system = [
     setuptools
+    wheel
   ];
 }
