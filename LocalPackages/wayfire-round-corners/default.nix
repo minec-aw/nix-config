@@ -3,10 +3,11 @@
   callPackage,
   lib,
   setuptools,
+  writeText,
 }:
 let
   pywayfire = (callPackage ./pywayfire.nix {});
-  rounded_corner_shader = ./scripts/rounded-corners;
+  rounded_corner_shader = writeText "rounded-corners" (builtins.readFile ./rounded-corners);
 in
 buildPythonApplication {
   pname = "wfire-round-corners";

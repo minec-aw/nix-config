@@ -27,7 +27,7 @@ def main():
         if view["role"] != "toplevel":
             continue
         if view["tiled-edges"] == 0 and view["fullscreen"] == False:
-            wpe.set_view_shader(view["id"],  shaderPath)
+            wpe.set_view_shader(view["id"], shaderPath)
 
     sock.watch(['view-mapped', 'view-tiled'])
 
