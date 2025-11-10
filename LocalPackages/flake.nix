@@ -11,10 +11,8 @@
 		tilp = callPackage ./tilp {};
 		openssl = callPackage ./openssl {};
 		macos-hyprcursor = callPackage ./macos-hyprcursor {};
-		wf-info = callPackage ./wf-info.nix { };
-		firefoxpwa = callPackage ./firefoxpwa {
-			firefoxRuntime = nixpkgs.legacyPackages.x86_64-linux.firefox;
-		};
+		pixdecor = callPackage ./pixdecor.nix { };
+		
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" ''
 			#!/run/current-system/sw/bin/bash
 			# Commence a pci-rescan to make any sleeping nvidia stuff wake up again

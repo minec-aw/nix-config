@@ -353,6 +353,7 @@
 			plugins = with pkgs-wayfire.wayfirePlugins; [
 				wcm
 				#windecor
+				localPackages.pixdecor
 				wf-shell
 				#localPackages.wf-info
 				#localPackages.pixdecor
