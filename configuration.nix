@@ -332,6 +332,8 @@
 			adw-gtk3
 			dotnet-sdk_9
 			pulseaudio
+
+			localPackages.wayfire-round-corners
 		];
 	};
 	nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
@@ -357,7 +359,9 @@
 				wf-shell
 				#localPackages.wf-info
 				#localPackages.pixdecor
-				wayfire-plugins-extra
+				(wayfire-plugins-extra.override {
+					withPixdecorPlugin = false;
+				})
 			];
 		};
 		/*hyprland = {

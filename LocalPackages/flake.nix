@@ -11,6 +11,7 @@
 		tilp = callPackage ./tilp {};
 		openssl = callPackage ./openssl {};
 		macos-hyprcursor = callPackage ./macos-hyprcursor {};
+		wayfire-round-corners = callPackage ./wayfire-round-corners {};
 
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" ''
 			#!/run/current-system/sw/bin/bash
