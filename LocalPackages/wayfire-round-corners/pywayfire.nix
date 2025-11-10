@@ -3,6 +3,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -19,4 +20,7 @@ buildPythonPackage rec {
 
   # specific to buildPythonPackage, see its reference
   pyproject = true;
+  build-system = [
+    setuptools
+  ];
 }

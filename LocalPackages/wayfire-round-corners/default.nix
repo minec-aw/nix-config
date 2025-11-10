@@ -1,6 +1,7 @@
 {
 	python3Packages,
-  callPackage
+  callPackage,
+  setuptools
 }:
 python3Packages.buildPythonApplication {
 	pname = "wayfire-round-corners";
@@ -9,5 +10,9 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = [
     (callPackage ./pywayfire.nix {})
+  ];
+  pyproject = true;
+  build-system = [
+    setuptools
   ];
 }
