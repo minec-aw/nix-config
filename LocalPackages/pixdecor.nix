@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "soreau";
     repo = "pixdecor";
     rev = "${finalAttrs.version}";
-    hash = lib.fakeHash;
+    hash = "sha256-+NvnG8tYc0M5zdxaI375+gqeWWWePyqPp+njI07ooXM=";
     fetchSubmodules = true;
   };
 
