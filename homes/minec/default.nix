@@ -33,8 +33,13 @@ in
 			screencopy {
 				allow_token_by_default = true
 			}
+		'';*/
+		".config/quickshell".source = ./quickshell;
+		".config/xdg-desktop-portal/wayfire-portals.conf".text = ''
+[preferred]
+default=luminous
+org.freedesktop.impl.portal.Settings=luminous;gtk
 		'';
-		".config/quickshell".source = ./quickshell;*/
 
 		# Cursors & icons & themes
 		".local/share/icons/macOS-x".source = "${pkgs.apple-cursor}/share/icons/macOS";
@@ -106,6 +111,8 @@ in
 			#kdePackages.kimageformats
 			#kdePackages.kdegraphics-thumbnailers
 			localPackages.wayfire-round-corners
+			bluejay
+			vicinae
 		];
 	};
 }

@@ -14,22 +14,22 @@ ShellRoot {
 		model: Quickshell.screens;
 		Scope {
 			property var modelData
-			SystemPanel.SystemPanel {
+			/*SystemPanel.SystemPanel {
 				id: bar
 				screen: modelData
-			}
+			}*/
 			LazyLoader {
 				active: Shared.screenshotTaken
 				Screenshot {screen: modelData}
 			}
-			BackgroundAlternate {
+			/*BackgroundAlternate {
 				screen: modelData
 			}
 			//Overview {screen: modelData; visible: Shared.overviewVisible && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)}
 			LazyLoader {
 				active: (Shared.overviewVisible == true || Shared.keepShowingOverview == true) && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)
 				Overview {screen: modelData}
-			}
+			}*/
 		}
 	}
 }

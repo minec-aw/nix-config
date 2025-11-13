@@ -13,7 +13,7 @@ uniform vec4 margins;
 void main()
 {
     vec4 c = get_pixel(uvpos);
-    ivec4 m = ivec4(margins);
+    ivec4 m = ivec4(10); // Border margins
     vec4 oc = c;
     ivec2 size = textureSize(in_tex, 0);
     ivec2 uv = ivec2(uvpos.x * float(size.x), uvpos.y * float(size.y));

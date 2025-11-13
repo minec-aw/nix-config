@@ -261,6 +261,9 @@
 		rtkit.enable = true;
 		#soteria.enable = true;
 	};
+	xdg.portal.extraPortals = with pkgs; [
+		xdg-desktop-portal-luminous
+	];
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget
 	environment = {

@@ -3,7 +3,6 @@ pragma Singleton
 import QtQuick
 import Quickshell
 import Quickshell.Io
-import Quickshell.Hyprland
 import Quickshell.Wayland
 import Quickshell.Services.Notifications
 import QtMultimedia
@@ -95,16 +94,6 @@ Singleton {
 	property var colors: colorSchemes.dark
 	
 	property var inlineTopLevels: ToplevelManager.toplevels.values.length
-	onInlineTopLevelsChanged: () => {
-		Hyprland.refreshToplevels()
-	}
-	Connections {
-		target: Hyprland
-		onRawEvent: (event) => {
-			if (event.name != "movewindowv2") {return}
-			Hyprland.refreshToplevels()
-		}
-	}
 	/*Process {
 		id: colorgen
 		command: ["sh","-c", `ssfile=$(mktemp /tmp/ssXXXXXX.png); grim "$ssfile"; matugen image "$ssfile" --dry-run --json rgb; rm "$ssfile"`]
@@ -115,16 +104,6 @@ Singleton {
 			}
 		}
 	}*/
-
-	// organized workspaces by time of focus
-	property var workspacesFocusOrder: Hyprland.workspaces.values.filter((workspace) =>  workspace.id >= 0).sort((workspaceA, workspaceB) => workspacesFocusOrderIds.indexOf(workspaceA.id) - workspacesFocusOrderIds.indexOf(workspaceB.id))
-	property var focusedWorkspace: Hyprland.focusedWorkspace
-	property var workspacesFocusOrderIds: Hyprland.workspaces.values.filter((workspace) =>  workspace.id >= 0).sort((workspaceA, workspaceB) => workspaceA.id - workspaceB.id).map((workspace) => workspace.id)
-	property var nextWorkspaceIndex: 0
-	onFocusedWorkspaceChanged: () => {
-		//const newWorkspaces = Hyprland.workspaces.values.filter((workspace) =>  workspace.id >= 0 && workspace.id != focusedWorkspace.id)
-		workspacesFocusOrderIds = [focusedWorkspace.id, ...workspacesFocusOrderIds]
-	}
 	
 	//stats commands
 	Process {
@@ -240,7 +219,7 @@ Singleton {
 		if (savingScreenshot) return
 		shutterSound.play()
 		savingScreenshot = true
-		const firstScreenScale = Hyprland.monitorFor(Quickshell.screens[0]).height / Quickshell.screens[0].height
+		const firstScreenScale = 1
 		const width = Math.abs(screenshotWidth)*firstScreenScale
 		const height = Math.abs(screenshotHeight)*firstScreenScale
 		const x = screenshotInitialPosition.x*firstScreenScale
@@ -264,7 +243,6 @@ Singleton {
 		}
 		function overview() {
 			if (Shared.overviewVisible == false) {
-				Hyprland.refreshToplevels()
 				nextWorkspaceIndex = workspacesFocusOrder.length > 1? 1: 0
 				timeOverviewClose.stop()
 				keepShowingOverview = false
@@ -278,7 +256,7 @@ Singleton {
 		}
 		function overviewClose() {
 			Shared.overviewVisible = false
-			Hyprland.dispatch("workspace "+workspacesFocusOrder[nextWorkspaceIndex].id)
+			//Hyprland.dispatch("workspace "+workspacesFocusOrder[nextWorkspaceIndex].id)
 		}
 	}
 	property bool keepShowingOverview: false

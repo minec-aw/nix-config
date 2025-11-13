@@ -127,11 +127,11 @@
     },
     "nixpkgs-wayfire-new": {
       "locked": {
-        "lastModified": 1762789737,
-        "narHash": "sha256-Jdiin10MkHhFItZL+vG2rsAdjeiYrHxlSFkqW7708c4=",
+        "lastModified": 1762998649,
+        "narHash": "sha256-qbrxoqNfR1W9fnkEC+6oY+nXtsUVj3LrXwmSbL+K92k=",
         "owner": "minec-aw",
         "repo": "nixpkgs",
-        "rev": "7f5a5fbe0d995cbecc038478bdc734742a66ab08",
+        "rev": "069b82b2aaac5488603af86bfa2dc91908666896",
         "type": "github"
       },
       "original": {
