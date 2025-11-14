@@ -47,251 +47,36 @@ PanelWindow {
 		right: true
 		bottom: true
 		left: true
-		top: true
 	}
 	exclusionMode: ExclusionMode.Ignore
 	implicitHeight: 200
-
-	Region {
-		id: regin
-		item: panelhitbox
-	}
-	mask: regin
-	Item {
-		id: panelhitbox
-		anchors {
-			right: parent.right
-			bottom: parent.bottom
-			top: parent.top
-			rightMargin: -5
-			bottomMargin: -5
-		}
-		width: panelcarrier.opened? parent.width: (panelcarrier.hovered? 50: (panelcarrier.fullHide? 0: 10))
-		states: State {
-			name: "hovered"; when: panelcarrier.hovered
-			PropertyChanges {target: panelhitbox; height: Shared.panelHeight+5}
-		}
-	}
-	MouseArea {
-		id: hoverdetector
-		hoverEnabled: true
-		onClicked: () => {
-			if (mouseX < width - mainpanel.width + mainpanel.hoverBarWidth) {
-				panelcarrier.opened = false
-				panelcarrier.hovered = false
-			} else if (panelcarrier.opened != true) {
-				panelcarrier.opened = true
-			}
-		}
-		onContainsMouseChanged: () => {
-			panelcarrier.hovered = containsMouse
-			if (containsMouse == true && mainpanel.anchors.rightMargin == -mainpanel.width) {
-				panelcarrier.mouseY = mouseY
-			}
-		}
-		anchors {
-			fill: parent
-			leftMargin: -1
-			rightMargin: -1
-			bottomMargin: -1
-		}
-		Item {
-			visible: mainpanel.anchors.rightMargin > -mainpanel.width + 51
-			onVisibleChanged: () => Hyprland.refreshToplevels()
-			height: screen.height
-			width: screen.width
-			anchors.right: mainpanel.left
-			anchors.rightMargin: -51
-			AlternateBackgroundObject {
-				anchors.fill: parent
-				animate: true
-				slidingFactor: Hyprland.monitorFor(screen).activeWorkspace? Hyprland.monitorFor(screen).activeWorkspace.id || 0 : 0
-			}
-			WorkspacePanel {
-				anchors.fill: parent
-				isLive: parent.visible
-				workspace: Hyprland.monitorFor(screen).activeWorkspace
-			}
-		}
-		Item {
-			id: mainpanel
-			property real hoverBarHeight: 265
-			property real hoverBarWidth: 50
-			property real hoverBarY: Math.min(Math.max(panelcarrier.mouseY - (hoverBarHeight/2), 16), parent.height - hoverBarHeight -16)
-			anchors {
-				top: parent.top
-				bottom: parent.bottom
-				right: parent.right
-				rightMargin: panelcarrier.opened? 1: (panelcarrier.hovered? -width + 51: -width)
-				//leftMargin: panelcarrier.opened? 50: (panelcarrier.hovered? parent.width-55: parent.width-5)
-			}
-			Behavior on anchors.rightMargin { 
-				NumberAnimation { 
-					duration: 240
-					easing {
-						type: Easing.InOutCubic
-					}
-				}
-			 }
-			width: 550
-			// Background
-
-			Rectangle {
-				color: "black"
-				width: parent.width
-				height: parent.height
-				layer.enabled: true
-				layer.smooth: true
-				layer.samples: 4
-				layer.effect: ShaderEffect {
-					required property Item source
-					readonly property Item maskSource: mask
-
-					fragmentShader: `${Shared.assetsPath}shaders/sidepanelmask.frag.qsb`
-				}
-				/*Rectangle {
-					x: 200
-					y: 60
-					radius: 100
-					width: 70
-					height: 70
-					color: "blue"
-					SequentialAnimation on y {
-						loops: Animation.Infinite
-
-						NumberAnimation {
-							from: 20
-							to: 600
-							duration: 8000
-							easing.type: Easing.InOutSine
+	Rectangle {
+		width: 600
+		height: 60
+		color: Qt.rgba(0,0,0,1)
+		radius: 15
+		Row {
+			spacing: 5
+			Repeater {
+				model: ToplevelManager.toplevels
+				Item {
+					width: 60
+					height: 60
+					required property int index
+					required property Toplevel modelData
+					property DesktopEntry desktopEntry: DesktopEntries.byId(modelData.appId)
+					Image {
+						width: 50
+						height: 50
+						Component.onCompleted: () => {
+							console.log("App!!", modelData.title, modelData.appId, desktopEntry != null? desktopEntry.name: "no name")
 						}
-						NumberAnimation {
-							from: 600
-							to: 20
-							duration: 8000
-							easing.type: Easing.InOutSine
-						}
+						anchors.horizontalCenter: parent.horizontalCenter
+						anchors.verticalCenter: parent.verticalCenter
+						source: Quickshell.iconPath(desktopEntry.icon)
 					}
-					SequentialAnimation on x {
-						loops: Animation.Infinite
-
-						NumberAnimation {
-							from: 0
-							to: 200
-							duration: 700
-							easing.type: Easing.InOutSine
-						}
-						NumberAnimation {
-							from: 200
-							to: 0
-							duration: 700
-							easing.type: Easing.InOutSine
-						}
-					}
-				}*/
-			}
-			// stole amazing mask from caelestia, thanks
-			Rectangle {
-				property real cornerRadius: 20
-				id: mask
-				color: Qt.rgba(0,0,0,0)
-				anchors.fill: parent
-				layer.enabled: true
-				visible: false
-				layer.smooth: true
-				layer.samples: 4
-				Rectangle {
-					id: toprect
-					width: mainpanel.hoverBarWidth
-					height: mainpanel.hoverBarY
-					bottomRightRadius: mask.cornerRadius
-				}
-				Rectangle {
-					id: bottomrect
-					y: mainpanel.hoverBarY + mainpanel.hoverBarHeight
-					width: mainpanel.hoverBarWidth
-					height: parent.height - mainpanel.hoverBarY + mainpanel.hoverBarHeight
-					topRightRadius: mask.cornerRadius
-				}
-				ConcaveCorner {
-					anchors.top: toprect.bottom
-					anchors.topMargin: -1
-					size: mask.cornerRadius
-					orientation: "tl"
-				}
-				ConcaveCorner {
-					anchors.bottom: bottomrect.top
-					anchors.bottomMargin: -1
-					size: mask.cornerRadius
-					orientation: "bl"
-				}
-				
-			}
-
-			// Hover bar (the thing visible when hovering over edge)
-			
-			Item {
-				//color: Qt.rgba(1,0,0,0.2)
-				id: hoverpanel
-				y: mainpanel.hoverBarY
-				height: mainpanel.hoverBarHeight
-				width: mainpanel.hoverBarWidth
-
-				Clock {
-					id: clock
-					anchors {
-						top: parent.top
-						topMargin: 10
-						right: parent.right
-						//horizontalCenter: parent.horizontalCenter
-						left: parent.left
-						rightMargin: 12
-						leftMargin: 10
-					}
-				}
-
-				SystemStats {
-					id: stats
-					anchors {
-						top: clock.bottom
-						topMargin: 10
-						//right: parent.right
-						//left: parent.left
-						horizontalCenter: parent.horizontalCenter
-						rightMargin: 8
-						leftMargin: 8
-					}
-				}
-
-				//Power {}
-
-			}
-
-			// inner widgets
-			Item {
-				anchors {
-					fill: parent
-					leftMargin: 70
-					rightMargin: 20
-					bottomMargin: 20
-					topMargin: 20
-				}
-				Power {}
-				SystemTray {
-					id: systray
-					anchors {
-						bottom: parent.bottom
-						horizontalCenter: parent.horizontalCenter
-					}
-				}
-				SoundPanel {
-					anchors.bottom: systray.top
-					anchors.left: parent.left
-					anchors.right: parent.right
-					anchors.bottomMargin: 10
 				}
 			}
-
 		}
 	}
 

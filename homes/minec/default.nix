@@ -28,18 +28,18 @@ in
 				"version" : 1
 			}
 		'';
-		/*".config/hypr/hyprland.conf".source = ./hyprland.conf;
+		".config/hypr/hyprland.conf".source = ./hyprland.conf;
 		".config/hypr/xdph.conf".text = ''
 			screencopy {
 				allow_token_by_default = true
 			}
-		'';*/
+		'';
 		".config/quickshell".source = ./quickshell;
-		".config/xdg-desktop-portal/wayfire-portals.conf".text = ''
+		/*".config/xdg-desktop-portal/wayfire-portals.conf".text = ''
 [preferred]
 default=luminous
 org.freedesktop.impl.portal.Settings=luminous;gtk
-		'';
+		'';*/
 
 		# Cursors & icons & themes
 		".local/share/icons/macOS-x".source = "${pkgs.apple-cursor}/share/icons/macOS";
@@ -112,6 +112,7 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 			#kdePackages.kdegraphics-thumbnailers
 			localPackages.wayfire-round-corners
 			bluejay
+			crystal-dock
 			vicinae
 		];
 	};

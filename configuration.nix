@@ -272,12 +272,12 @@
 			GSETTINGS_SCHEMA_DIR="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
 		}; 
 		sessionVariables = {
-			/*HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
+			HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
 				name = "hyprland-plugins";
 				paths = with pkgs.hyprlandPlugins; [
-					hyprgrass
+					hyprbars
 				];
-			};*/
+			};
 			ELECTRON_OZONE_PLATFORM_HINT = "wayland";
 			NIXOS_OZONE_WL = "1";
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
@@ -350,7 +350,7 @@
 		obs-studio = {
 			enable = true;
 		};
-		wayfire = {
+		/*wayfire = {
 			enable = true;
 			package = pkgs-wayfire.wayfire;
 			plugins = with pkgs-wayfire.wayfirePlugins; [
@@ -358,18 +358,19 @@
 				#windecor
 				pixdecor
 				wf-shell
+				wf-info
 				#localPackages.wf-info
 				#localPackages.pixdecor
 				(wayfire-plugins-extra.override {
 					withPixdecorPlugin = false;
 				})
 			];
-		};
-		/*hyprland = {
+		};*/
+		hyprland = {
 			enable = true;
 			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
 			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-		};*/
+		};
 		file-roller.enable = true;
 		dconf.enable = true;
 		kdeconnect = {
