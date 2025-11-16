@@ -15,8 +15,52 @@ Item {
     property var floatMargin: 10
     required property string appId
     property DesktopEntry desktopEntry: DesktopEntries.byId(appId)
+    property var hyprlandToplevels: Hyprland.toplevels.values.filter(toplevel => toplevel.wayland? toplevel.wayland.appId == appId: false)
     property var toplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == appId)
     property var onEnter
+    property var icon: Quickshell.iconPath(desktopEntry.icon)
+    Timer {
+        id: iconFallbackTimer
+        interval: 5
+        onTriggered: {
+            
+            console.log("Fallback icon time for", appId)
+            const pid = hyprlandToplevels[0].lastIpcObject.pid
+            if (pid) {
+                iconFallback.command = [
+                    "sh", "-c",
+                    `
+                    WINE_PATH=$(cat /proc/${pid}/cmdline | tr '\\0' '\\n' | grep -m 1 '\\.exe$')
+                    if [[ -z "$WINE_PATH" ]]; then
+                        exit 1
+                    fi
+                    LINUX_PATH_1=\${WINE_PATH//\\\\//}
+                    LINUX_EXE_PATH=\${LINUX_PATH_1:2}
+                    BASE64_DATA=$(wrestool -x -t14 "$LINUX_EXE_PATH" | magick ICO:-[0] PNG:- | base64 -w 0)
+                    echo "data:image/png;base64,$BASE64_DATA"
+                    `
+                ]
+                iconFallback.running = true
+            }
+        }
+    }
+    Process {
+        id: iconFallback
+        command: [ "sh", "-c" ]
+        stdout: StdioCollector {
+            
+            onStreamFinished: {
+                icon = this.text
+
+            }
+        }
+    }
+    Component.onCompleted: {
+        if (hyprlandToplevels.length > 0 && !icon) {
+            Hyprland.refreshToplevels()
+            iconFallbackTimer.start()  
+        }
+    }
     Rectangle {
         id: activeHighlight
         anchors {
@@ -44,12 +88,9 @@ Item {
             fill: parent
             margins: 12
         }
-        Component.onCompleted: () => {
-            console.log("App!!", appId)
-        }
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
-        source: Quickshell.iconPath(desktopEntry.icon)
+        source: icon
     }
     MouseArea {
         anchors.fill: parent

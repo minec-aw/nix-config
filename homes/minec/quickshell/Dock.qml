@@ -18,7 +18,7 @@ PanelWindow {
 	property bool transparentBackground: true
 	property real mouseY: 0
     property var floatMargin: 10
-    property var pinnedApps: ["zen-beta", "vesktop"];
+    property var pinnedApps: ["zen-beta", "org.kde.dolphin", "vesktop", "com.mitchellh.ghostty"];
     property var dockWidth: 0
     property var dockHeight: 68
     property string hoveredClass

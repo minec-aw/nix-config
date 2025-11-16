@@ -115,6 +115,7 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 			crystal-dock
 			waveterm
 			vicinae
+			icoutils
 		];
 	};
 }
