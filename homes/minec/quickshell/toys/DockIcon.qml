@@ -98,7 +98,6 @@ Item {
         anchors.bottomMargin: -floatMargin
         onClicked: () => {
             if (toplevels.length > 0) {
-                console.log(toplevels)
                 if (toplevels.includes(ToplevelManager.activeToplevel)) {
                     const toplevelIndex = toplevels.indexOf(ToplevelManager.activeToplevel)+1
                     if (toplevelIndex+1 > toplevels.length-1) {

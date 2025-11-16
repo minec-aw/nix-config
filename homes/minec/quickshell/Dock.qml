@@ -14,12 +14,12 @@ PanelWindow {
 	property bool pinned: false
 	property bool opened: false
 	property bool hovered: false
-	property bool fullHide: Hyprland.monitorFor(screen).activeWorkspace? Hyprland.monitorFor(screen).activeWorkspace.hasFullscreen: false
+    property HyprlandWorkspace activeWorkspace: Hyprland.active
+	property bool fullHide: ToplevelManager.activeToplevel.fullscreen
 	property bool transparentBackground: true
 	property real mouseY: 0
     property var floatMargin: 10
     property var pinnedApps: ["zen-beta", "org.kde.dolphin", "vesktop", "com.mitchellh.ghostty"];
-    property var dockWidth: 0
     property var dockHeight: 68
     property string hoveredClass
     property var hoveredToplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == hoveredClass)
@@ -39,29 +39,14 @@ PanelWindow {
             triggerTLView.stop()
         } 
     }
-	
-	HyprlandFocusGrab {
-      id: grab
-      windows: [dock]
-	  onActiveChanged: () => {
-		if (active == false) {
-			panel.hover = false
-			panel.opened = false
-		}
-	  }
-	}
+    onFullHideChanged: {
+        dock.visible = !fullHide
+    }
+
 	Component.onCompleted: () => {
 		Shared.panels.push(dock)
 	}
 	WlrLayershell.layer: WlrLayer.Overlay
-	function keybindReveal() {
-		if (opened) {
-			opened = false
-			hover = false
-		} else if (Hyprland.focusedMonitor == Hyprland.monitorFor(screen)) {
-			opened = true
-		}
-	}
 	anchors {
 		right: true
 		bottom: true
