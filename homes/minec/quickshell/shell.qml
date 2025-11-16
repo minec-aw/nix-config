@@ -5,7 +5,6 @@ import Quickshell
 import Quickshell.Io
 import QtQuick
 import QtQuick.Layouts
-import "syspanel" as SystemPanel
 import Quickshell.Hyprland
 import Quickshell
 ShellRoot {
@@ -14,19 +13,19 @@ ShellRoot {
 		model: Quickshell.screens;
 		Scope {
 			property var modelData
-			/*SystemPanel.SystemPanel {
+			Dock {
 				id: bar
 				screen: modelData
-			}*/
+			}
 			LazyLoader {
 				active: Shared.screenshotTaken
 				Screenshot {screen: modelData}
 			}
-			/*BackgroundAlternate {
+			BackgroundAlternate {
 				screen: modelData
 			}
 			//Overview {screen: modelData; visible: Shared.overviewVisible && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)}
-			LazyLoader {
+			/*LazyLoader {
 				active: (Shared.overviewVisible == true || Shared.keepShowingOverview == true) && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)
 				Overview {screen: modelData}
 			}*/

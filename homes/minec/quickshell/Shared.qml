@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Services.Notifications
+import Quickshell.Hyprland
 import QtMultimedia
 
 Singleton {
@@ -37,7 +38,7 @@ Singleton {
 	property string screenshotFilePath: ""
 	property bool screenshotTaken: false
 	property int hyprlandRadius: 10
-	property int hyprlandBorderSize: 2
+	property int hyprlandBorderSize: 0
 
 	NotificationServer {
 		onNotification: (notification) => {
@@ -219,11 +220,12 @@ Singleton {
 		if (savingScreenshot) return
 		shutterSound.play()
 		savingScreenshot = true
-		const firstScreenScale = 1
+		const firstScreenScale = Hyprland.monitors.values[0].scale
 		const width = Math.abs(screenshotWidth)*firstScreenScale
 		const height = Math.abs(screenshotHeight)*firstScreenScale
 		const x = screenshotInitialPosition.x*firstScreenScale
 		const y = screenshotInitialPosition.y*firstScreenScale
+		console.log(`screenshot! ${width}x${height} @ ${x}, ${y}`)
 		savescreenshot.command = ["sh", "-c", `magick ${screenshotFilePath} -crop ${width}x${height}+${x}+${y} - | wl-copy`]
 		savescreenshot.running = true
 	}

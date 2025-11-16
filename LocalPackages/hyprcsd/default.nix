@@ -22,7 +22,7 @@ mkHyprlandPlugin {
     runHook preInstall
 
     mkdir -p $out/lib
-    mv out/csd-titlebar-move.so $out/lib/libcsd-titlebar-move.so
+    mv csd-titlebar-move.so $out/lib/libcsd-titlebar-move.so
 
     runHook postInstall
   '';

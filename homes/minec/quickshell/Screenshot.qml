@@ -1,7 +1,7 @@
 import Quickshell
 import Quickshell.Io
 import Quickshell.Wayland
-
+import Quickshell.Hyprland
 import QtQuick
 import QtQuick.Layouts
 import "toys"
@@ -20,7 +20,7 @@ PanelWindow {
     //property point Shared.screenshotFinalPosition: Qt.point(-5000,-5000)
     property bool showDots: false
     //this is done rather than using the scale property since hyprland rounds the scaling factor when sending it out, funnily enough
-    property var screenScale: 1
+    property var screenScale: Hyprland.monitorFor(screen).scale
 
     property string screenshotPath: ""
     Item {

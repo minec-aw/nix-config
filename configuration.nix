@@ -276,6 +276,7 @@
 				name = "hyprland-plugins";
 				paths = with pkgs.hyprlandPlugins; [
 					hyprbars
+					localPackages.csd-titlebar-move
 				];
 			};
 			ELECTRON_OZONE_PLATFORM_HINT = "wayland";

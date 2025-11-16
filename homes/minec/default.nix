@@ -113,6 +113,7 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 			localPackages.wayfire-round-corners
 			bluejay
 			crystal-dock
+			waveterm
 			vicinae
 		];
 	};

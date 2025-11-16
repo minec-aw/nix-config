@@ -7,12 +7,14 @@
 	let 
 		callPackage = nixpkgs.legacyPackages.x86_64-linux.callPackage;
 		pythonCallPackage = nixpkgs.legacyPackages.x86_64-linux.python313Packages.callPackage;
+		mkHyprlandPlugin = nixpkgs.legacyPackages.x86_64-linux.hyprlandPlugins.mkHyprlandPlugin;
 	in
 	{
 		tilp = callPackage ./tilp {};
 		openssl = callPackage ./openssl {};
 		macos-hyprcursor = callPackage ./macos-hyprcursor {};
 		wayfire-round-corners = pythonCallPackage ./wayfire-round-corners {};
+		csd-titlebar-move = callPackage ./hyprcsd { inherit mkHyprlandPlugin; };
 
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" ''
 			#!/run/current-system/sw/bin/bash
