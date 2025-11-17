@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, localPackages, pkgs-wayfire, ... }:
+{ config, pkgs, inputs, localPackages, ... }:
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -351,22 +351,6 @@
 		obs-studio = {
 			enable = true;
 		};
-		/*wayfire = {
-			enable = true;
-			package = pkgs-wayfire.wayfire;
-			plugins = with pkgs-wayfire.wayfirePlugins; [
-				wcm
-				#windecor
-				pixdecor
-				wf-shell
-				wf-info
-				#localPackages.wf-info
-				#localPackages.pixdecor
-				(wayfire-plugins-extra.override {
-					withPixdecorPlugin = false;
-				})
-			];
-		};*/
 		hyprland = {
 			enable = true;
 			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;

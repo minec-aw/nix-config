@@ -110,7 +110,6 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 			#kdePackages.kio-fuse
 			#kdePackages.kimageformats
 			#kdePackages.kdegraphics-thumbnailers
-			localPackages.wayfire-round-corners
 			bluejay
 			crystal-dock
 			waveterm
