@@ -151,9 +151,10 @@
 	networking.firewall.allowPing = true;
 
     services.udev.extraRules = ''
-      SUBSYSTEM=="kvmfr", OWNER="minec", GROUP="minec", MODE="0600"
-			TAG=="seat", ENV{ID_FOR_SEAT}=="drm-pci-0000_2b_00_0", ENV{ID_SEAT}="seat1", TAG-="master-of-seat"
+		SUBSYSTEM=="kvmfr", ACTION=="add", RUN+="${pkgs.coreutils-full}/bin/chown minec:kvm /dev/kvmfr0", RUN+="${pkgs.coreutils-full}/bin/chmod 0660 /dev/kvmfr0"
+		TAG=="seat", ENV{ID_FOR_SEAT}=="drm-pci-0000_2b_00_0", ENV{ID_SEAT}="seat1", TAG-="master-of-seat"
     '';
+		# SUBSYSTEM=="kvmfr", OWNER="minec", GROUP="kvm", MODE="0660", TAG+="uaccess"
 		# TAG=="seat", ENV{ID_FOR_SEAT}=="drm-pci-0000_2b_00_0", ENV{ID_SEAT}="seat1", TAG-="master-of-seat"
 
   	#systemd.tmpfiles.rules = ["f /dev/shm/looking-glass 0660 minec qemu-libvirtd -"];

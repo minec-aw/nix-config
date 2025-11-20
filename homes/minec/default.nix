@@ -115,6 +115,7 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 			waveterm
 			vicinae
 			icoutils
+			localPackages.hyprfreeze
 		];
 	};
 }
