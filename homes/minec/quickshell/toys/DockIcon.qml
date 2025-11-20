@@ -18,7 +18,9 @@ Item {
     property var hyprlandToplevels: Hyprland.toplevels.values.filter(toplevel => toplevel.wayland? toplevel.wayland.appId == appId: false)
     property var toplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == appId)
     property var onEnter
-    property var icon: Quickshell.iconPath(desktopEntry.icon)
+    property var onExit
+    property Toplevel activeToplevel: ToplevelManager.activeToplevel
+    property var icon: desktopEntry? Quickshell.iconPath(desktopEntry.icon): ""
     Timer {
         id: iconFallbackTimer
         interval: 5
@@ -68,7 +70,7 @@ Item {
             margins: 4
         }
         states: State {
-            name: "active"; when: ToplevelManager.activeToplevel.appId == appId && toplevels.length > 0
+            name: "active"; when: activeToplevel && activeToplevel.appId == appId && toplevels.length > 0
             PropertyChanges { target: activeHighlight; color: Qt.rgba(1,1,1,0.05)}
         }
         transitions: Transition {
@@ -98,8 +100,8 @@ Item {
         anchors.bottomMargin: -floatMargin
         onClicked: () => {
             if (toplevels.length > 0) {
-                if (toplevels.includes(ToplevelManager.activeToplevel)) {
-                    const toplevelIndex = toplevels.indexOf(ToplevelManager.activeToplevel)+1
+                if (activeToplevel && toplevels.includes(activeToplevel)) {
+                    const toplevelIndex = toplevels.indexOf(activeToplevel)+1
                     if (toplevelIndex+1 > toplevels.length-1) {
                         toplevels[0].activate()
                     } else {
@@ -115,6 +117,9 @@ Item {
         }
         onEntered: {
             dockItem.onEnter()
+        }
+        onExited: {
+            dockItem.onExit()
         }
     }
     // process dots
@@ -135,7 +140,7 @@ Item {
                 radius: 3
                 color: Qt.rgba(1,1,1,0.3)
                 states: State {
-                    name: "active"; when: ToplevelManager.activeToplevel.appId == appId
+                    name: "active"; when: activeToplevel && activeToplevel.appId == appId
                     PropertyChanges { target: appDot; color: Qt.rgba(0.94, 0.18, 0.33)}
                 }
                 transitions: Transition {

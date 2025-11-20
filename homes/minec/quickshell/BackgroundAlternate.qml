@@ -26,6 +26,6 @@ PanelWindow {
 	AlternateBackgroundObject {
 		animate: true
 		anchors.fill: parent
-		slidingFactor: Hyprland.focusedWorkspace.id || 0
+		slidingFactor: Hyprland.focusedWorkspace? Hyprland.focusedWorkspace.id: 0
 	}
 }

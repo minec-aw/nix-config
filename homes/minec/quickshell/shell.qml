@@ -1,6 +1,3 @@
-
-
-//the first line is required for screencopyview to work
 import Quickshell
 import Quickshell.Io
 import QtQuick

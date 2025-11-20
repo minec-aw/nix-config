@@ -329,7 +329,9 @@
 			#kdePackages.ark
 			#kdePackages.dolphin
 			#xorg.xrdb
-			(inputs.quickshell.packages.x86_64-linux.default.withModules [ kdePackages.qtmultimedia ])
+			(quickshell.overrideAttrs (oldAttrs: {
+				buildInputs = oldAttrs.buildInputs ++ [pkgs.kdePackages.qtmultimedia];
+			}))
 			#ffmpeg
 
 			## GNOME

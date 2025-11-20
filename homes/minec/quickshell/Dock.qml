@@ -14,8 +14,7 @@ PanelWindow {
 	property bool pinned: false
 	property bool opened: false
 	property bool hovered: false
-    property HyprlandWorkspace activeWorkspace: Hyprland.active
-	property bool fullHide: ToplevelManager.activeToplevel.fullscreen
+	property bool fullHide: ToplevelManager.activeToplevel? ToplevelManager.activeToplevel.fullscreen: false
 	property bool transparentBackground: true
 	property real mouseY: 0
     property var floatMargin: 10
@@ -27,7 +26,7 @@ PanelWindow {
     property bool tlviewVisible: false
     Timer {
         id: triggerTLView
-        interval: 1000
+        interval: 600
         onTriggered: {
             tlviewVisible = true
         }
@@ -123,7 +122,7 @@ PanelWindow {
         Rectangle {
             id: toplevelViews
             clip: true
-            width: childrenRect.width+20
+            width: toplevelRow.width+20
             radius: 20
             height: hoveredToplevels.length > 0? 220: 0
             x: Math.max(hoveredXCenter - (width/2), floatMargin)
@@ -151,6 +150,7 @@ PanelWindow {
             }
 
             Row {
+                id: toplevelRow
                 anchors {
                     horizontalCenter: parent.horizontalCenter
                 }
@@ -201,7 +201,38 @@ PanelWindow {
             radius: 15
             x: floatMargin
             clip: false
+            MouseArea {
+                width: 68+floatMargin
+                height: 68+floatMargin
+                x: -floatMargin
+                onPressed: () => {
+                    console.log("AAAAA")
+                }
+                Rectangle {
+                    anchors {
+                        fill: parent
+                        leftMargin: floatMargin+6
+                        bottomMargin: floatMargin+6
+                        topMargin: 6
+                        rightMargin: 6
+                    }
+                    radius: 9
+                    color: Qt.rgba(1,1,1,0.1)
+                }
+                Image {
+                    anchors {
+                        fill: parent
+                        leftMargin: floatMargin+8
+                        bottomMargin: floatMargin+8
+                        topMargin: 8
+                        rightMargin: 8
+                    }
+                    // css.gg icon
+                    source: `${Shared.iconsPath}/menu-grid-o.svg`
+                }
+            }
             Row {
+                x: 68
                 spacing: 0
                 // non pinned apps
                 Repeater {
@@ -209,9 +240,9 @@ PanelWindow {
                         values: pinnedApps
                     }
                     DockIcon {
+                        required property string modelData
                         id: icon
                         floatMargin: dock.floatMargin + 1
-                        required property string modelData
                         appId: modelData
                         onEnter: () => {
                             hoveredClass = appId
@@ -229,9 +260,9 @@ PanelWindow {
                         ).filter(appId => !pinnedApps.includes(appId))
                     }
                     DockIcon {
+                        required property string modelData
                         id: icon
                         floatMargin: dock.floatMargin + 1
-                        required property string modelData
                         appId: modelData
                         onEnter: () => {
                             hoveredClass = appId
