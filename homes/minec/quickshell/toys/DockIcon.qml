@@ -1,22 +1,18 @@
 import Quickshell
 import Quickshell.Io
 import QtQuick
-import QtQuick.Layouts
 import Quickshell.Hyprland
 import Quickshell.Wayland
-import Quickshell.Widgets
-import Quickshell.Services.Mpris
-import QtQuick.Effects
 
 Item {
     id: dockItem
     width: 68
     height: 68
-    property var floatMargin: 10
+    property double floatMargin: 10
     required property string appId
     property DesktopEntry desktopEntry: DesktopEntries.byId(appId)
-    property var hyprlandToplevels: Hyprland.toplevels.values.filter(toplevel => toplevel.wayland? toplevel.wayland.appId == appId: false)
-    property var toplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == appId)
+    property list<HyprlandToplevel> hyprlandToplevels: Hyprland.toplevels.values.filter(toplevel => toplevel.wayland ? toplevel.wayland.appId == appId : false)
+    property list<Toplevel> toplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == appId)
     property var onEnter
     property var onExit
     property Toplevel activeToplevel: ToplevelManager.activeToplevel
@@ -25,13 +21,10 @@ Item {
         id: iconFallbackTimer
         interval: 5
         onTriggered: {
-            
-            console.log("Fallback icon for", appId)
-            const pid = hyprlandToplevels[0].lastIpcObject.pid
+            console.log("Fallback icon for", dockItem.appId);
+            const pid = dockItem.hyprlandToplevels[0].lastIpcObject.pid;
             if (pid) {
-                iconFallback.command = [
-                    "sh", "-c",
-                    `
+                iconFallback.command = ["sh", "-c", `
                     WINE_PATH=$(cat /proc/${pid}/cmdline | tr '\\0' '\\n' | grep -m 1 '\\.exe$')
                     if [[ -z "$WINE_PATH" ]]; then
                         exit 1
@@ -40,36 +33,33 @@ Item {
                     LINUX_EXE_PATH=\${LINUX_PATH_1:2}
                     BASE64_DATA=$(wrestool -x -t14 "$LINUX_EXE_PATH" | magick ICO:-[0] PNG:- | base64 -w 0)
                     echo "data:image/png;base64,$BASE64_DATA"
-                    `
-                ]
-                iconFallback.running = true
+                    `];
+                iconFallback.running = true;
             }
         }
     }
     Process {
         id: iconFallback
-        command: [ "sh", "-c" ]
+        command: ["sh", "-c"]
         stdout: StdioCollector {
-            
+
             onStreamFinished: {
                 if (this.text.startsWith("data:image/png;base64,")) {
-                    icon = this.text
+                    icon = this.text;
+                } else {
+                    icon = Quickshell.iconPath("application-x-executable");
                 }
-                else {
-                    icon = Quickshell.iconPath("application-x-executable")
-                }
-
             }
         }
     }
 
     function iconExists(iconName) {
-        if (!iconName || iconName.length == 0) return false;
-        return (Quickshell.iconPath(iconName, true).length > 0) 
-            && !iconName.includes("image-missing");
+        if (!iconName || iconName.length == 0)
+            return false;
+        return (Quickshell.iconPath(iconName, true).length > 0) && !iconName.includes("image-missing");
     }
     function getReverseDomainNameAppName(str) {
-        return str.split('.').slice(-1)[0]
+        return str.split('.').slice(-1)[0];
     }
 
     function getKebabNormalizedAppName(str) {
@@ -81,31 +71,38 @@ Item {
     }
 
     function guessIcon(str) {
-        if (!str || str.length == 0) return "image-missing";
+        if (!str || str.length == 0)
+            return "image-missing";
 
         // Quickshell's desktop entry lookup
         const entry = DesktopEntries.byId(str);
-        if (entry) return entry.icon;
+        if (entry)
+            return entry.icon;
 
         // Icon exists -> return as is
-        if (iconExists(str)) return str;
-
+        if (iconExists(str))
+            return str;
 
         // Simple guesses
         const lowercased = str.toLowerCase();
-        if (iconExists(lowercased)) return lowercased;
+        if (iconExists(lowercased))
+            return lowercased;
 
         const reverseDomainNameAppName = getReverseDomainNameAppName(str);
-        if (iconExists(reverseDomainNameAppName)) return reverseDomainNameAppName;
+        if (iconExists(reverseDomainNameAppName))
+            return reverseDomainNameAppName;
 
         const lowercasedDomainNameAppName = reverseDomainNameAppName.toLowerCase();
-        if (iconExists(lowercasedDomainNameAppName)) return lowercasedDomainNameAppName;
+        if (iconExists(lowercasedDomainNameAppName))
+            return lowercasedDomainNameAppName;
 
         const kebabNormalizedGuess = getKebabNormalizedAppName(str);
-        if (iconExists(kebabNormalizedGuess)) return kebabNormalizedGuess;
+        if (iconExists(kebabNormalizedGuess))
+            return kebabNormalizedGuess;
 
         const undescoreToKebabGuess = getUndescoreToKebabAppName(str);
-        if (iconExists(undescoreToKebabGuess)) return undescoreToKebabGuess;
+        if (iconExists(undescoreToKebabGuess))
+            return undescoreToKebabGuess;
 
         // Search in desktop entries
         /*const iconSearchResults = Fuzzy.go(str, preppedIcons, {
@@ -119,10 +116,11 @@ Item {
             if (iconExists(guess)) return guess;
         }*/
         const heuristicEntry = DesktopEntries.heuristicLookup(str);
-        if (heuristicEntry) return heuristicEntry.icon;
+        if (heuristicEntry)
+            return heuristicEntry.icon;
         if (hyprlandToplevels.length > 0 && !icon) {
-            Hyprland.refreshToplevels()
-            iconFallbackTimer.start()  
+            Hyprland.refreshToplevels();
+            iconFallbackTimer.start();
         }
         return "";
     }
@@ -133,19 +131,25 @@ Item {
             margins: 4
         }
         states: State {
-            name: "active"; when: activeToplevel && activeToplevel.appId == appId && toplevels.length > 0
-            PropertyChanges { target: activeHighlight; color: Qt.rgba(1,1,1,0.05)}
+            name: "active"
+            when: activeToplevel && activeToplevel.appId == appId && toplevels.length > 0
+            PropertyChanges {
+                target: activeHighlight
+                color: Qt.rgba(1, 1, 1, 0.05)
+            }
         }
         transitions: Transition {
-            to: "active"; reversible: true
-            ColorAnimation { 
+            to: "active"
+            reversible: true
+            ColorAnimation {
                 duration: 100
                 easing {
-                    type: Easing.OutBack; overshoot: 0
+                    type: Easing.OutBack
+                    overshoot: 0
                 }
             }
         }
-        color: Qt.rgba(1,1,1,0)
+        color: Qt.rgba(1, 1, 1, 0)
         radius: 15 - anchors.margins
     }
     Image {
@@ -156,37 +160,50 @@ Item {
         }
         states: [
             State {
-                name: "click"; when: mouseArea.containsPress == true
-                PropertyChanges { target: iconImage; anchors.margins: 16}
+                name: "click"
+                when: mouseArea.containsPress == true
+                PropertyChanges {
+                    target: iconImage
+                    anchors.margins: 16
+                }
             },
             State {
-                name: "hover"; when: mouseArea.containsMouse == true
-                PropertyChanges { target: iconImage; anchors.margins: 8}
+                name: "hover"
+                when: mouseArea.containsMouse == true
+                PropertyChanges {
+                    target: iconImage
+                    anchors.margins: 8
+                }
             }
         ]
         transitions: [
             Transition {
-                to: "click"; reversible: false
+                to: "click"
+                reversible: false
                 PropertyAnimation {
                     property: "anchors.margins"
                     duration: 100
                     easing {
-                        type: Easing.OutBack; overshoot: 0
+                        type: Easing.OutBack
+                        overshoot: 0
                     }
                 }
             },
             Transition {
-                from: "click"; reversible: false
+                from: "click"
+                reversible: false
                 PropertyAnimation {
                     property: "anchors.margins"
                     duration: 150
                     easing {
-                        type: Easing.OutBack; overshoot: 5
+                        type: Easing.OutBack
+                        overshoot: 5
                     }
                 }
             },
             Transition {
-                to: "hover"; reversible: true
+                to: "hover"
+                reversible: true
                 PropertyAnimation {
                     property: "anchors.margins"
                     duration: 100
@@ -205,28 +222,28 @@ Item {
         onClicked: () => {
             if (toplevels.length > 0) {
                 if (activeToplevel && toplevels.includes(activeToplevel)) {
-                    const toplevelIndex = toplevels.indexOf(activeToplevel)+1
-                    if (toplevelIndex+1 > toplevels.length-1) {
-                        toplevels[0].activate()
+                    const toplevelIndex = toplevels.indexOf(activeToplevel) + 1;
+                    if (toplevelIndex + 1 > toplevels.length - 1) {
+                        toplevels[0].activate();
                     } else {
-                        toplevels[toplevelIndex+1].activate()
+                        toplevels[toplevelIndex + 1].activate();
                     }
                 } else {
-                    toplevels[0].activate()
+                    toplevels[0].activate();
                 }
-                toplevels[0].activate()
+                toplevels[0].activate();
             } else if (desktopEntry) {
-                desktopEntry.execute()
+                desktopEntry.execute();
             }
         }
         onEntered: {
             if (onEnter) {
-                dockItem.onEnter()
+                dockItem.onEnter();
             }
         }
         onExited: {
             if (onExit) {
-                dockItem.onExit()
+                dockItem.onExit();
             }
         }
     }
@@ -246,22 +263,27 @@ Item {
                 width: 6
                 height: 6
                 radius: 3
-                color: Qt.rgba(1,1,1,0.3)
+                color: Qt.rgba(1, 1, 1, 0.3)
                 states: State {
-                    name: "active"; when: activeToplevel && activeToplevel.appId == appId
-                    PropertyChanges { target: appDot; color: Qt.rgba(0.94, 0.18, 0.33)}
+                    name: "active"
+                    when: activeToplevel && activeToplevel.appId == appId
+                    PropertyChanges {
+                        target: appDot
+                        color: Qt.rgba(0.94, 0.18, 0.33)
+                    }
                 }
                 transitions: Transition {
-                    to: "active"; reversible: true
-                    ColorAnimation { 
+                    to: "active"
+                    reversible: true
+                    ColorAnimation {
                         duration: 100
                         easing {
-                            type: Easing.OutBack; overshoot: 0
+                            type: Easing.OutBack
+                            overshoot: 0
                         }
                     }
                 }
             }
         }
-
     }
 }
