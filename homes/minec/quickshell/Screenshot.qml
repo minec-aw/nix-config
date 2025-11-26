@@ -82,7 +82,8 @@ PanelWindow {
 		left: true
 		right: true
 	}
-
+    property var overlayColor: Qt.rgba(0,0,0,0.5)
+    property var overlayFadeInDuration: 100
 	Rectangle {
         anchors {
             left: parent.left
@@ -90,7 +91,12 @@ PanelWindow {
             top: parent.top
             bottom: parent.bottom
         }
-        color: Qt.rgba(0, 0, 0, 0.5)
+        color: Qt.rgba(0, 0, 0, 0)
+        ColorAnimation on color {
+            to: overlayColor
+            duration: overlayFadeInDuration
+        }
+        
     }
     Rectangle {
         anchors {
@@ -99,7 +105,11 @@ PanelWindow {
             top: parent.top
             bottom: selection.top
         }
-        color: Qt.rgba(0, 0, 0, 0.5)
+        color: Qt.rgba(0, 0, 0, 0)
+        ColorAnimation on color {
+            to: overlayColor
+            duration: overlayFadeInDuration
+        }
     }
     Rectangle {
         anchors {
@@ -108,7 +118,11 @@ PanelWindow {
             top: selection.bottom
             bottom: parent.bottom
         }
-        color: Qt.rgba(0, 0, 0, 0.5)
+        color: Qt.rgba(0, 0, 0, 0)
+        ColorAnimation on color {
+            to: overlayColor
+            duration: overlayFadeInDuration
+        }
     }
     Rectangle {
         anchors {
@@ -117,7 +131,11 @@ PanelWindow {
             top: parent.top
             bottom: parent.bottom
         }
-        color: Qt.rgba(0, 0, 0, 0.5)
+        color: Qt.rgba(0, 0, 0, 0)
+        ColorAnimation on color {
+            to: overlayColor
+            duration: overlayFadeInDuration
+        }
     }
     property point screenshotPosInitial: Shared.screenshotInitialPosition
     property point screenshotPosFinal: Shared.screenshotInitialPosition

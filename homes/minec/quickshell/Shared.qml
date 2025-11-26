@@ -39,6 +39,7 @@ Singleton {
 	property bool screenshotTaken: false
 	property int hyprlandRadius: 10
 	property int hyprlandBorderSize: 0
+	
 
 	NotificationServer {
 		onNotification: (notification) => {
@@ -244,17 +245,7 @@ Singleton {
 			screenshotTrigger()
 		}
 		function overview() {
-			if (Shared.overviewVisible == false) {
-				nextWorkspaceIndex = workspacesFocusOrder.length > 1? 1: 0
-				timeOverviewClose.stop()
-				keepShowingOverview = false
-				Shared.overviewVisible = true
-				
-				//Hyprland.dispatch("workspace e+1")
-			} else {
-				nextWorkspaceIndex = nextWorkspaceIndex == workspacesFocusOrder.length-1? 0: nextWorkspaceIndex+1
-				//Hyprland.dispatch("workspace e+1")
-			}
+			Shared.overviewVisible = true
 		}
 		function overviewClose() {
 			Shared.overviewVisible = false

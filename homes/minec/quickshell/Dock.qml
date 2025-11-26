@@ -24,6 +24,7 @@ PanelWindow {
     property var hoveredToplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == hoveredClass)
     property var hoveredXCenter: 0
     property bool tlviewVisible: false
+
     Timer {
         id: triggerTLView
         interval: 600
@@ -50,6 +51,7 @@ PanelWindow {
 		right: true
 		bottom: true
 		left: true
+        top: true
 	}
 	exclusionMode: ExclusionMode.Ignore
 	implicitHeight: 300
@@ -57,6 +59,33 @@ PanelWindow {
         item: region1
         Region {
             item: region2
+        }
+        Region {
+            item: overviewRegion
+        }
+    }
+
+    Overview {
+        id: overview
+        isActive: false
+        containerParent: dock.contentItem
+        aspectRatio: screen.width/screen.height
+    }
+    function keybindReveal() {
+        if (Hyprland.focusedMonitor == Hyprland.monitorFor(screen)) {
+            overview.isActive = !overview.isActive
+        }
+    }
+    Item {
+        id: overviewRegion
+        states: State {
+            name: "overview"; when: overview.active == true
+            PropertyChanges { target: overviewRegion; height: overviewRegion.parent.height}
+        }
+        anchors {
+            left: parent.left
+            right: parent.right
+            top: parent.top
         }
     }
     Item {
@@ -89,9 +118,11 @@ PanelWindow {
         id: dockHitbox
         hoverEnabled: true
         anchors {
-            fill: parent
+            bottom: parent.bottom
             bottomMargin: -1
         }
+        width: childrenRect.width
+        height: childrenRect.height
         onEntered: {
             dock.hovered = true
         }
@@ -105,7 +136,7 @@ PanelWindow {
                 bottomMargin: -dockPanel.height
             }
             states: State {
-                name: "hover"; when: dock.hovered == true
+                name: "hover"; when: dock.hovered == true || overview.active == true
                 PropertyChanges { target: dockAnchor; anchors.bottomMargin: floatMargin+1}
             }
             transitions: Transition {
@@ -124,6 +155,8 @@ PanelWindow {
             clip: true
             width: toplevelRow.width+20
             radius: 20
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: dockHeight + floatMargin + 10
             height: hoveredToplevels.length > 0? 220: 0
             x: Math.max(hoveredXCenter - (width/2), floatMargin)
             color: Qt.rgba(0.05,0.05,0.05,1)
@@ -206,7 +239,7 @@ PanelWindow {
                 height: 68+floatMargin
                 x: -floatMargin
                 onPressed: () => {
-                    console.log("AAAAA")
+                    overview.isActive = !overview.isActive
                 }
                 Rectangle {
                     anchors {

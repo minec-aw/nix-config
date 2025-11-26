@@ -40,11 +40,12 @@
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
   networking = {
+    firewall.allowedUDPPorts = [ 7 9 ];
     useDHCP = lib.mkDefault true;
     interfaces = {
       enp42s0 = {
         useDHCP = false;
-        #wakeOnLan.enable = true;
+        wakeOnLan.enable = true;
       };
       br0.useDHCP = true;
     };

@@ -19,7 +19,10 @@ Item {
     property var cornerRadius: Shared.hyprlandRadius*borderScaleDown
     property bool isLive: true
     property var borderScaleDown: (width*workspace.monitor.scale)/(workspace.monitor.width)
+
+    property var maxReady: workspace.toplevels.values.length
     Component.onCompleted: () => {
+        timeou = Date.now()
         Hyprland.refreshToplevels()
     }
     onWorkspaceChanged: () => {

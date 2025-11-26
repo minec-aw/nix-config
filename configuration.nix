@@ -55,7 +55,7 @@
 			theme = "bgrt";
 			extraConfig = "DeviceScale=1";
 		};
-		kernelPackages = pkgs.linuxPackages_latest;
+		kernelPackages = pkgs.linuxPackages_cachyos;
 	};
 	networking = {
 		hostName = "minec";
@@ -85,13 +85,16 @@
 	#users.users.immich.extraGroups = [ "video" "render" ];
 
 	services = {
+		scx = {
+			enable = true;
+			scheduler = "scx_lavd";
+		};
 		xserver = {
 			videoDrivers = [ "nvidia" "amdgpu" ];
 			xkb = {
 				layout = "us";
 				variant = "";
 			};
-			desktopManager.lxqt.enable = true;
 		};
 		syncthing = {
 			enable = true;
@@ -159,6 +162,7 @@
 				sunshine_name = "Minec";
 				adapter_name = "/dev/dri/renderD128";
 				capture = "kms";
+				native_pen_touch = false;
 				encoder = "vaapi";
 			};
 			applications = {
@@ -338,6 +342,7 @@
 			adw-gtk3
 			dotnet-sdk_9
 			pulseaudio
+			inputs.nix-alien.packages.${system}.nix-alien
 		];
 	};
 	nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
@@ -358,7 +363,6 @@
 			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
 			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 		};
-		file-roller.enable = true;
 		dconf.enable = true;
 		kdeconnect = {
 			enable = true;

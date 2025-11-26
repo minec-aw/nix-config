@@ -20,13 +20,13 @@ Item {
     property var onEnter
     property var onExit
     property Toplevel activeToplevel: ToplevelManager.activeToplevel
-    property var icon: desktopEntry? Quickshell.iconPath(desktopEntry.icon): ""
+    property var icon: Quickshell.iconPath(guessIcon(appId)) ?? ""
     Timer {
         id: iconFallbackTimer
         interval: 5
         onTriggered: {
             
-            console.log("Fallback icon time for", appId)
+            console.log("Fallback icon for", appId)
             const pid = hyprlandToplevels[0].lastIpcObject.pid
             if (pid) {
                 iconFallback.command = [
@@ -52,16 +52,79 @@ Item {
         stdout: StdioCollector {
             
             onStreamFinished: {
-                icon = this.text
+                if (this.text.startsWith("data:image/png;base64,")) {
+                    icon = this.text
+                }
+                else {
+                    icon = Quickshell.iconPath("application-x-executable")
+                }
 
             }
         }
     }
-    Component.onCompleted: {
+
+    function iconExists(iconName) {
+        if (!iconName || iconName.length == 0) return false;
+        return (Quickshell.iconPath(iconName, true).length > 0) 
+            && !iconName.includes("image-missing");
+    }
+    function getReverseDomainNameAppName(str) {
+        return str.split('.').slice(-1)[0]
+    }
+
+    function getKebabNormalizedAppName(str) {
+        return str.toLowerCase().replace(/\s+/g, "-");
+    }
+
+    function getUndescoreToKebabAppName(str) {
+        return str.toLowerCase().replace(/_/g, "-");
+    }
+
+    function guessIcon(str) {
+        if (!str || str.length == 0) return "image-missing";
+
+        // Quickshell's desktop entry lookup
+        const entry = DesktopEntries.byId(str);
+        if (entry) return entry.icon;
+
+        // Icon exists -> return as is
+        if (iconExists(str)) return str;
+
+
+        // Simple guesses
+        const lowercased = str.toLowerCase();
+        if (iconExists(lowercased)) return lowercased;
+
+        const reverseDomainNameAppName = getReverseDomainNameAppName(str);
+        if (iconExists(reverseDomainNameAppName)) return reverseDomainNameAppName;
+
+        const lowercasedDomainNameAppName = reverseDomainNameAppName.toLowerCase();
+        if (iconExists(lowercasedDomainNameAppName)) return lowercasedDomainNameAppName;
+
+        const kebabNormalizedGuess = getKebabNormalizedAppName(str);
+        if (iconExists(kebabNormalizedGuess)) return kebabNormalizedGuess;
+
+        const undescoreToKebabGuess = getUndescoreToKebabAppName(str);
+        if (iconExists(undescoreToKebabGuess)) return undescoreToKebabGuess;
+
+        // Search in desktop entries
+        /*const iconSearchResults = Fuzzy.go(str, preppedIcons, {
+            all: true,
+            key: "name"
+        }).map(r => {
+            return r.obj.entry
+        });
+        if (iconSearchResults.length > 0) {
+            const guess = iconSearchResults[0].icon
+            if (iconExists(guess)) return guess;
+        }*/
+        const heuristicEntry = DesktopEntries.heuristicLookup(str);
+        if (heuristicEntry) return heuristicEntry.icon;
         if (hyprlandToplevels.length > 0 && !icon) {
             Hyprland.refreshToplevels()
             iconFallbackTimer.start()  
         }
+        return "";
     }
     Rectangle {
         id: activeHighlight
@@ -86,15 +149,56 @@ Item {
         radius: 15 - anchors.margins
     }
     Image {
+        id: iconImage
         anchors {
             fill: parent
             margins: 12
         }
+        states: [
+            State {
+                name: "click"; when: mouseArea.containsPress == true
+                PropertyChanges { target: iconImage; anchors.margins: 16}
+            },
+            State {
+                name: "hover"; when: mouseArea.containsMouse == true
+                PropertyChanges { target: iconImage; anchors.margins: 8}
+            }
+        ]
+        transitions: [
+            Transition {
+                to: "click"; reversible: false
+                PropertyAnimation {
+                    property: "anchors.margins"
+                    duration: 100
+                    easing {
+                        type: Easing.OutBack; overshoot: 0
+                    }
+                }
+            },
+            Transition {
+                from: "click"; reversible: false
+                PropertyAnimation {
+                    property: "anchors.margins"
+                    duration: 150
+                    easing {
+                        type: Easing.OutBack; overshoot: 5
+                    }
+                }
+            },
+            Transition {
+                to: "hover"; reversible: true
+                PropertyAnimation {
+                    property: "anchors.margins"
+                    duration: 100
+                }
+            }
+        ]
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.verticalCenter: parent.verticalCenter
         source: icon
     }
     MouseArea {
+        id: mouseArea
         anchors.fill: parent
         hoverEnabled: true
         anchors.bottomMargin: -floatMargin
@@ -116,10 +220,14 @@ Item {
             }
         }
         onEntered: {
-            dockItem.onEnter()
+            if (onEnter) {
+                dockItem.onEnter()
+            }
         }
         onExited: {
-            dockItem.onExit()
+            if (onExit) {
+                dockItem.onExit()
+            }
         }
     }
     // process dots
