@@ -153,7 +153,7 @@
 			useRoutingFeatures = "both";
 			openFirewall = true;
 		};
-		
+
 		openssh.enable = true;
 		gvfs.enable = true;
 		sunshine = {
@@ -175,7 +175,7 @@
 						exclude-global-prep-cmd = "false";
 						auto-detach = "true";
 					}
-					
+
 				];
 			};
 
@@ -195,7 +195,7 @@
 			jack.enable = true;
 		};
 	};
-	
+
 	hardware = {
 		i2c.enable = true;
 		display = {
@@ -210,7 +210,7 @@
 						mkdir -p "$out/lib/firmware/edid"
 						cp "${./edidFiles/Empty}" $out/lib/firmware/edid/ignored.bin
 					'')
-					
+
 				];
 			};
 			/*outputs."HDMI-A-2" = {
@@ -274,7 +274,7 @@
 		shells = with pkgs; [bash];
 		variables = {
 			GSETTINGS_SCHEMA_DIR="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
-		}; 
+		};
 		sessionVariables = {
 			HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
 				name = "hyprland-plugins";
@@ -288,8 +288,8 @@
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
 
-		systemPackages = with pkgs; 
-		let 
+		systemPackages = with pkgs;
+		let
 			wsuricons = whitesur-icon-theme.override {
 				alternativeIcons = true;
 				themeVariants = ["red"];
@@ -320,7 +320,7 @@
 			lsof
 			psmisc
 			wl-clipboard
-			
+
 			wsuricons
 
 			darkly-qt5
@@ -343,6 +343,8 @@
 			dotnet-sdk_9
 			pulseaudio
 			inputs.nix-alien.packages.${system}.nix-alien
+			zed-editor
+			kdePackages.qtdeclarative
 		];
 	};
 	nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
@@ -374,7 +376,7 @@
 			blesh.enable = true;
 		};
 		nh = {
-			enable = true;	
+			enable = true;
 		};
 		steam = {
 			#gamescopeSession.enable = true;
@@ -417,7 +419,7 @@
 			proggyfonts
 			#nerdfonts
 			nerd-fonts.fira-code
-  			nerd-fonts.droid-sans-mono
+  		nerd-fonts.droid-sans-mono
 			corefonts
 			liberation_ttf
 			vista-fonts

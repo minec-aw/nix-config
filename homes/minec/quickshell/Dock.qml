@@ -1,24 +1,20 @@
 import Quickshell
-import Quickshell.Io
 import QtQuick
-import QtQuick.Layouts
 import Quickshell.Hyprland
 import Quickshell.Wayland
 import Quickshell.Widgets
 import "toys"
-import Quickshell.Services.Mpris
-import QtQuick.Effects
 
 PanelWindow {
-	id: dock
-	property bool pinned: false
-	property bool opened: false
-	property bool hovered: false
-	property bool fullHide: ToplevelManager.activeToplevel? ToplevelManager.activeToplevel.fullscreen: false
-	property bool transparentBackground: true
-	property real mouseY: 0
+    id: dock
+    property bool pinned: false
+    property bool opened: false
+    property bool hovered: false
+    property bool fullHide: ToplevelManager.activeToplevel ? ToplevelManager.activeToplevel.fullscreen : false
+    property bool transparentBackground: true
+    property real mouseY: 0
     property var floatMargin: 10
-    property var pinnedApps: ["zen-beta", "org.kde.dolphin", "vesktop", "com.mitchellh.ghostty"];
+    property var pinnedApps: ["zen-beta", "org.kde.dolphin", "vesktop", "com.mitchellh.ghostty"]
     property var dockHeight: 68
     property string hoveredClass
     property var hoveredToplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == hoveredClass)
@@ -29,32 +25,32 @@ PanelWindow {
         id: triggerTLView
         interval: 600
         onTriggered: {
-            tlviewVisible = true
+            tlviewVisible = true;
         }
     }
-	color: Qt.rgba(0,0,0,0)
+    color: Qt.rgba(0, 0, 0, 0)
     onHoveredChanged: {
         if (hovered == false) {
-            tlviewVisible = false
-            triggerTLView.stop()
-        } 
+            tlviewVisible = false;
+            triggerTLView.stop();
+        }
     }
     onFullHideChanged: {
-        dock.visible = !fullHide
+        dock.visible = !fullHide;
     }
 
-	Component.onCompleted: () => {
-		Shared.panels.push(dock)
-	}
-	WlrLayershell.layer: WlrLayer.Overlay
-	anchors {
-		right: true
-		bottom: true
-		left: true
+    Component.onCompleted: () => {
+        Shared.panels.push(dock);
+    }
+    WlrLayershell.layer: WlrLayer.Overlay
+    anchors {
+        right: true
+        bottom: true
+        left: true
         top: true
-	}
-	exclusionMode: ExclusionMode.Ignore
-	implicitHeight: 300
+    }
+    exclusionMode: ExclusionMode.Ignore
+    implicitHeight: 300
     mask: Region {
         item: region1
         Region {
@@ -69,18 +65,23 @@ PanelWindow {
         id: overview
         isActive: false
         containerParent: dock.contentItem
-        aspectRatio: screen.width/screen.height
+        aspectRatio: screen.width / screen.height
+        screen: dock.screen
     }
     function keybindReveal() {
         if (Hyprland.focusedMonitor == Hyprland.monitorFor(screen)) {
-            overview.isActive = !overview.isActive
+            overview.isActive = !overview.isActive;
         }
     }
     Item {
         id: overviewRegion
         states: State {
-            name: "overview"; when: overview.active == true
-            PropertyChanges { target: overviewRegion; height: overviewRegion.parent.height}
+            name: "overview"
+            when: overview.active == true
+            PropertyChanges {
+                target: overviewRegion
+                height: overviewRegion.parent.height
+            }
         }
         anchors {
             left: parent.left
@@ -91,8 +92,12 @@ PanelWindow {
     Item {
         id: region1
         states: State {
-            name: "hover"; when: dock.hovered == true
-            PropertyChanges { target: region1; height: dockHeight+floatMargin}
+            name: "hover"
+            when: dock.hovered == true
+            PropertyChanges {
+                target: region1
+                height: dockHeight + floatMargin
+            }
         }
         anchors {
             bottom: parent.bottom
@@ -104,8 +109,12 @@ PanelWindow {
     Item {
         id: region2
         states: State {
-            name: "hover"; when: tlviewVisible == true && hoveredToplevels.length > 0
-            PropertyChanges { target: region2; height: 225}
+            name: "hover"
+            when: tlviewVisible == true && hoveredToplevels.length > 0
+            PropertyChanges {
+                target: region2
+                height: 225
+            }
         }
         anchors {
             bottom: region1.top
@@ -124,10 +133,10 @@ PanelWindow {
         width: childrenRect.width
         height: childrenRect.height
         onEntered: {
-            dock.hovered = true
+            dock.hovered = true;
         }
         onExited: {
-            dock.hovered = false
+            dock.hovered = false;
         }
         Item {
             id: dockAnchor
@@ -136,16 +145,22 @@ PanelWindow {
                 bottomMargin: -dockPanel.height
             }
             states: State {
-                name: "hover"; when: dock.hovered == true || overview.active == true
-                PropertyChanges { target: dockAnchor; anchors.bottomMargin: floatMargin+1}
+                name: "hover"
+                when: dock.hovered == true || overview.active == true
+                PropertyChanges {
+                    target: dockAnchor
+                    anchors.bottomMargin: floatMargin + 1
+                }
             }
             transitions: Transition {
-                to: "hover"; reversible: true
+                to: "hover"
+                reversible: true
                 PropertyAnimation {
                     property: "anchors.bottomMargin"
                     duration: 150
                     easing {
-                        type: Easing.OutBack; overshoot: 1
+                        type: Easing.OutBack
+                        overshoot: 1
                     }
                 }
             }
@@ -153,20 +168,25 @@ PanelWindow {
         Rectangle {
             id: toplevelViews
             clip: true
-            width: toplevelRow.width+20
+            width: toplevelRow.width + 20
             radius: 20
             anchors.bottom: parent.bottom
             anchors.bottomMargin: dockHeight + floatMargin + 10
-            height: hoveredToplevels.length > 0? 220: 0
-            x: Math.max(hoveredXCenter - (width/2), floatMargin)
-            color: Qt.rgba(0.05,0.05,0.05,1)
+            height: hoveredToplevels.length > 0 ? 220 : 0
+            x: Math.max(hoveredXCenter - (width / 2), floatMargin)
+            color: Qt.rgba(0.05, 0.05, 0.05, 1)
             opacity: 0
             states: State {
-                name: "visible"; when: tlviewVisible == true && hoveredToplevels.length > 0
-                PropertyChanges { target: toplevelViews; opacity: 1}
+                name: "visible"
+                when: tlviewVisible == true && hoveredToplevels.length > 0
+                PropertyChanges {
+                    target: toplevelViews
+                    opacity: 1
+                }
             }
             transitions: Transition {
-                to: "visible"; reversible: true
+                to: "visible"
+                reversible: true
                 PropertyAnimation {
                     property: "opacity"
                     duration: 200
@@ -174,10 +194,11 @@ PanelWindow {
             }
 
             Behavior on x {
-                NumberAnimation { 
+                NumberAnimation {
                     duration: 100
                     easing {
-                        type: Easing.OutBack; overshoot: 0
+                        type: Easing.OutBack
+                        overshoot: 0
                     }
                 }
             }
@@ -191,9 +212,11 @@ PanelWindow {
                 height: parent.height
                 spacing: 10
                 Repeater {
-                    model: ScriptModel {values: toplevelViews.opacity > 0? hoveredToplevels: []}
+                    model: ScriptModel {
+                        values: toplevelViews.opacity > 0 ? hoveredToplevels : []
+                    }
                     ClippingRectangle {
-                        color: Qt.rgba(0.05,0.05,0.05,0)
+                        color: Qt.rgba(0.05, 0.05, 0.05, 0)
                         radius: 10
                         required property Toplevel modelData
                         width: toplevelView.width
@@ -204,8 +227,8 @@ PanelWindow {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                modelData.activate()
-                                hovered = false
+                                modelData.activate();
+                                hovered = false;
                             }
                         }
                         ScreencopyView {
@@ -216,13 +239,13 @@ PanelWindow {
                             }
                             live: true
                             captureSource: modelData
-                            constraintSize: Qt.size(200*(16/9),200)
+                            constraintSize: Qt.size(200 * (16 / 9), 200)
                         }
                     }
                 }
             }
         }
-        
+
         Rectangle {
             id: dockPanel
             anchors {
@@ -230,33 +253,33 @@ PanelWindow {
             }
             width: Math.max(childrenRect.width, 50)
             height: dockHeight
-            color: Qt.rgba(0,0,0,1)
+            color: Qt.rgba(0, 0, 0, 1)
             radius: 15
             x: floatMargin
             clip: false
             MouseArea {
-                width: 68+floatMargin
-                height: 68+floatMargin
+                width: 68 + floatMargin
+                height: 68 + floatMargin
                 x: -floatMargin
                 onPressed: () => {
-                    overview.isActive = !overview.isActive
+                    overview.isActive = !overview.isActive;
                 }
                 Rectangle {
                     anchors {
                         fill: parent
-                        leftMargin: floatMargin+6
-                        bottomMargin: floatMargin+6
+                        leftMargin: floatMargin + 6
+                        bottomMargin: floatMargin + 6
                         topMargin: 6
                         rightMargin: 6
                     }
                     radius: 9
-                    color: Qt.rgba(1,1,1,0.1)
+                    color: Qt.rgba(1, 1, 1, 0.1)
                 }
                 Image {
                     anchors {
                         fill: parent
-                        leftMargin: floatMargin+8
-                        bottomMargin: floatMargin+8
+                        leftMargin: floatMargin + 8
+                        bottomMargin: floatMargin + 8
                         topMargin: 8
                         rightMargin: 8
                     }
@@ -273,34 +296,30 @@ PanelWindow {
                         values: pinnedApps
                     }
                     DockIcon {
-                        required property string modelData
                         id: icon
+                        required property string modelData
                         floatMargin: dock.floatMargin + 1
                         appId: modelData
                         onEnter: () => {
-                            hoveredClass = appId
-                            hoveredXCenter = icon.x + (icon.width/2)
-                            triggerTLView.restart()
+                            hoveredClass = appId;
+                            hoveredXCenter = icon.x + (icon.width / 2);
+                            triggerTLView.restart();
                         }
                     }
                 }
                 Repeater {
                     model: ScriptModel {
-                        values: Array.from(
-                            new Set(
-                                ToplevelManager.toplevels.values.map(toplevel => toplevel.appId)
-                            )
-                        ).filter(appId => !pinnedApps.includes(appId))
+                        values: Array.from(new Set(ToplevelManager.toplevels.values.map(toplevel => toplevel.appId))).filter(appId => !pinnedApps.includes(appId))
                     }
                     DockIcon {
-                        required property string modelData
                         id: icon
+                        required property string modelData
                         floatMargin: dock.floatMargin + 1
                         appId: modelData
                         onEnter: () => {
-                            hoveredClass = appId
-                            hoveredXCenter = icon.x + (icon.width/2)
-                            triggerTLView.restart()
+                            hoveredClass = appId;
+                            hoveredXCenter = icon.x + (icon.width / 2);
+                            triggerTLView.restart();
                         }
                     }
                 }
@@ -308,5 +327,5 @@ PanelWindow {
         }
     }
 
-	//Notif {}
+    //Notif {}
 }
