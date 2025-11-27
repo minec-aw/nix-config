@@ -14,9 +14,11 @@ LazyLoader {
     property var activeWorkspace: hyprlandScreen.activeWorkspace
     required property bool isActive
     property var closeFunc
+    property var openFunc
     onIsActiveChanged: {
         if (isActive == true) {
             active = isActive;
+            openFunc();
         } else {
             closeFunc();
         }
@@ -70,15 +72,21 @@ LazyLoader {
         function animateZoom(from, to) {
             overview.visible = true;
             overviewZoomer.visible = true;
-            numanim.from = from;
-            numanim.to = to;
-            numanim.start();
+            if (numanim.running) {
+                numanim.pause();
+                numanim.to = to;
+                numanim.resume();
+            } else {
+                numanim.from = from;
+                numanim.to = to;
+                numanim.start();
+            }
         }
         function open() {
             closeTimer.stop();
-            openTimer.start();
             animateZoom(1, workspacesFlickable.height / screen.height);
         }
+
         function close() {
             const nearestIndex = Math.round(workspacesFlickable.contentX / (workspacesFlickable.height * aspectRatio));
             //hyprSwitchWorkspaces.command = ["hyprctl", "dispatch", "workspace", nearestIndex+1]
@@ -90,6 +98,7 @@ LazyLoader {
         }
         Component.onCompleted: {
             overviewLoader.closeFunc = close;
+            overviewLoader.openFunc = open;
         }
 
         Timer {
@@ -97,7 +106,7 @@ LazyLoader {
             running: true
             interval: 10
             onTriggered: {
-                animateZoom(1, workspacesFlickable.height / screen.height);
+                open();
             }
         }
         Rectangle {
