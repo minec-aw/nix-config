@@ -131,7 +131,7 @@ PanelWindow {
             bottomMargin: -1
         }
         width: childrenRect.width
-        height: childrenRect.height
+        height: dock.hovered == true || overview.active == true ? toplevelViews.height+10+floatMargin+dockHeight: 5
         onEntered: {
             dock.hovered = true;
         }

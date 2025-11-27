@@ -10,17 +10,13 @@ LazyLoader {
     required property var aspectRatio
     required property var containerParent
     required property ShellScreen screen
-    property var hyprlandScreen: Hyprland.monitorFor(screen)
+    property var hyprlandScreen: Hyprland.monitorFor(overviewLoader.screen)
     property var activeWorkspace: hyprlandScreen.activeWorkspace
     required property bool isActive
     property var closeFunc
-    property var openFunc
     onIsActiveChanged: {
         if (isActive == true) {
             active = isActive;
-            openFunc();
-        } else {
-            closeFunc();
         }
     }
     Item {
@@ -30,114 +26,106 @@ LazyLoader {
         visible: false
         anchors.fill: parent
 
-        property var initialScalingFactor: 1
-        /*Process {
-            id: hyprAnimCancel
-            command: ["hyprctl", "keyword", "animation", "workspaces,0"]
-            onExited: {
-                hyprSwitchWorkspaces.running = true
-            }
-        }
-        Process {
-            id: hyprSwitchWorkspaces
-            command: ["hyprctl", "dispatch", "workspace", "1"]
-            onExited: {
-                hyprRestoreAnim.running = true
-            }
-        }
-        Process {
-            id: hyprRestoreAnim
-            command: ["hyprctl", "reload"]
-        }*/
-
-        NumberAnimation {
-            id: numanim
-            target: overview
-            property: "initialScalingFactor"
-            duration: 200
-            easing.type: Easing.OutCubic
-            from: 1
-            to: workspacesFlickable.height / screen.height
-            onFinished: {
-                overviewZoomer.visible = false;
-            }
-        }
+        property double initialScalingFactor: 1
         Timer {
-            id: closeTimer
-            interval: numanim.duration
-            onTriggered: {
-                overviewLoader.active = false;
-            }
-        }
-        function animateZoom(from, to) {
-            overview.visible = true;
-            overviewZoomer.visible = true;
-            if (numanim.running) {
-                numanim.pause();
-                numanim.to = to;
-                numanim.resume();
-            } else {
-                numanim.from = from;
-                numanim.to = to;
-                numanim.start();
-            }
-        }
-        function open() {
-            closeTimer.stop();
-            animateZoom(1, workspacesFlickable.height / screen.height);
-        }
-
-        function close() {
-            const nearestIndex = Math.round(workspacesFlickable.contentX / (workspacesFlickable.height * aspectRatio));
-            //hyprSwitchWorkspaces.command = ["hyprctl", "dispatch", "workspace", nearestIndex+1]
-            //hyprAnimCancel.running = true
-            //Hyprland.dispatch(`workspace ${nearestIndex+1}`)
-            openTimer.stop();
-            animateZoom(workspacesFlickable.height / screen.height, 1);
-            closeTimer.start();
-        }
-        Component.onCompleted: {
-            overviewLoader.closeFunc = close;
-            overviewLoader.openFunc = open;
-        }
-
-        Timer {
-            id: openTimer
-            running: true
             interval: 10
+            running: true
             onTriggered: {
-                open();
+                overview.visible = true;
             }
         }
+        states: State {
+            name: "visible"
+            when: overview.visible == true && overviewLoader.isActive == true
+            PropertyChanges {
+                overview.initialScalingFactor: workspacesFlickable.height / overviewLoader.screen.height
+            }
+        }
+        transitions: [
+            Transition {
+                to: "visible"
+                reversible: false
+                SequentialAnimation {
+                    PropertyAnimation {
+                        target: overviewZoomer
+                        property: "visible"
+                        from: false
+                        to: true
+                        duration: 0
+                    }
+                    PropertyAnimation {
+                        property: "initialScalingFactor"
+                        duration: 200
+                        easing.type: Easing.OutCubic
+                    }
+                    PropertyAnimation {
+                        target: overviewZoomer
+                        property: "visible"
+                        from: true
+                        to: false
+                        duration: 0
+                    }
+                }
+            },
+            Transition {
+                from: "visible"
+                reversible: false
+                SequentialAnimation {
+                    PropertyAnimation {
+                        target: overviewZoomer
+                        property: "visible"
+                        to: true
+                        duration: 0
+                    }
+                    PropertyAnimation {
+                        property: "initialScalingFactor"
+                        duration: 200
+                        easing.type: Easing.OutCubic
+                    }
+                    PropertyAnimation {
+                        target: overviewZoomer
+                        property: "visible"
+                        to: false
+                        duration: 0
+                    }
+                    PropertyAnimation {
+                        target: overviewLoader
+                        property: "active"
+                        to: false
+                        duration: 0
+                    }
+                }
+            }
+        ]
         Rectangle {
             anchors.fill: parent
             color: Qt.rgba(0.1, 0, 0.1, 1)
         }
         ClippingRectangle {
             id: overviewZoomer
-            visible: false
+            visible: true
             parent: overview
             z: 1
-            width: screen.width
-            height: screen.height
+            width: overviewLoader.screen.width
+            height: overviewLoader.screen.height
             contentUnderBorder: true
             transform: [
                 Scale {
-                    xScale: initialScalingFactor
-                    yScale: initialScalingFactor
+                    xScale: overview.initialScalingFactor
+                    yScale: overview.initialScalingFactor
                 }
             ]
-            x: (parent.width - (width * initialScalingFactor)) / 2
-            y: (parent.height - (height * initialScalingFactor)) / 2
+            x: (parent.width - (width * overview.initialScalingFactor)) / 2
+            y: (parent.height - (height * overview.initialScalingFactor)) / 2
             color: Qt.rgba(1, 1, 0, 0.3)
             radius: 40
             AlternateBackgroundObject {
                 animate: false
                 anchors.fill: parent
-                slidingFactor: activeWorkspace.id || 0
+                slidingFactor: overviewLoader.activeWorkspace.id || 0
             }
             WorkspacePanel {
-                workspace: activeWorkspace
+                workspace: overviewLoader.activeWorkspace
                 anchors.fill: parent
             }
         }
@@ -166,9 +154,9 @@ LazyLoader {
                 if (beingFlicked == true && Math.abs(horizontalVelocity) < 2000) {
                     const direction = horizontalVelocity > 0 ? 1 : -1;
                     const estimatedX = workspacesFlickable.contentX + direction * (workspacesFlickable.horizontalVelocity ^ 2) / (workspacesFlickable.flickDeceleration);
-                    const nearestIndex = Math.round(estimatedX / (workspacesFlickable.height * aspectRatio));
-                    const nearestWorkspaceX = nearestIndex * height * aspectRatio;
-                    flickAnimation.to = nearestIndex * height * aspectRatio;
+                    const nearestIndex = Math.round(estimatedX / (workspacesFlickable.height * overviewLoader.aspectRatio));
+                    const nearestWorkspaceX = nearestIndex * height * overviewLoader.aspectRatio;
+                    flickAnimation.to = nearestIndex * height * overviewLoader.aspectRatio;
                     flickAnimation.start();
                     beingFlicked = false;
                     Hyprland.dispatch(`workspace ${nearestIndex + 1}`);
@@ -178,12 +166,12 @@ LazyLoader {
                 beingFlicked = true;
                 contentXOnFlick = contentX;
             }
-            contentX: (activeWorkspace.id - 1) * height * aspectRatio
+            contentX: (overviewLoader.activeWorkspace.id - 1) * height * overviewLoader.aspectRatio
             height: parent.height - 300
             clip: true
             Row {
                 id: workspacesRow
-                x: workspacesFlickable.width / 2 - (height * aspectRatio / 2)
+                x: workspacesFlickable.width / 2 - (height * overviewLoader.aspectRatio / 2)
                 anchors {
                     top: parent.top
                     bottom: parent.bottom
@@ -193,39 +181,40 @@ LazyLoader {
                     model: 10
                     MouseArea {
                         id: container
-                        width: height * aspectRatio
+                        width: height * overviewLoader.aspectRatio
                         height: parent.height
-                        required property var index
-                        property var workspace: Hyprland.workspaces.values.find(workspace => workspace.id == index + 1)
-                        property var distanceFromCenter: Math.abs((workspacesRow.x + container.x + container.width / 2) - (workspacesFlickable.contentX + workspacesFlickable.width / 2))
-                        property var marginFactor: 0.9 + 0.1 * Math.max(0, -(1 / 500) * Math.abs(distanceFromCenter) + 1)
-                        property var scalingFactor: (height / screen.height) * marginFactor
+                        required property int index
+                        property int id: index + 1
+                        property HyprlandWorkspace workspace: Hyprland.workspaces.values.find(workspace => workspace.id == id) ?? null
+                        property double distanceFromCenter: Math.abs((workspacesRow.x + container.x + container.width / 2) - (workspacesFlickable.contentX + workspacesFlickable.width / 2))
+                        property double marginFactor: 0.9 + 0.1 * Math.max(0, -(1 / 500) * Math.abs(distanceFromCenter) + 1)
+                        property double scalingFactor: (height / overviewLoader.screen.height) * marginFactor
                         onClicked: {
                             if (marginFactor < 0.99) {
                                 flickAnimation.to = container.x; // somehow this works?
                                 flickAnimation.start();
                                 Hyprland.dispatch(`workspace ${index + 1}`);
                             } else {
-                                close();
+                                overviewLoader.isActive = false;
                             }
                         }
                         ClippingRectangle {
-                            width: screen.width
-                            height: screen.height
+                            width: overviewLoader.screen.width
+                            height: overviewLoader.screen.height
                             contentUnderBorder: true
                             transform: [
                                 Scale {
-                                    xScale: scalingFactor
-                                    yScale: scalingFactor
+                                    xScale: container.scalingFactor
+                                    yScale: container.scalingFactor
                                 }
                             ]
                             AlternateBackgroundObject {
                                 animate: false
                                 anchors.fill: parent
-                                slidingFactor: workspace.id || 0
+                                slidingFactor: container.id
                             }
-                            x: (parent.width - (width * scalingFactor)) / 2
-                            y: (parent.height - (height * scalingFactor)) / 2
+                            x: (parent.width - (width * container.scalingFactor)) / 2
+                            y: (parent.height - (height * container.scalingFactor)) / 2
                             color: Qt.rgba(1, 1, 0, 0.3)
                             radius: 40
                             WorkspacePanel {

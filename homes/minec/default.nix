@@ -35,25 +35,20 @@ in
 			}
 		'';
 		".config/quickshell".source = ./quickshell;
-		/*".config/xdg-desktop-portal/wayfire-portals.conf".text = ''
-[preferred]
-default=luminous
-org.freedesktop.impl.portal.Settings=luminous;gtk
-		'';*/
 
 		# Cursors & icons & themes
 		".local/share/icons/macOS-x".source = "${pkgs.apple-cursor}/share/icons/macOS";
 		".local/share/icons/WhiteSurIcons".source = "${wsuricons}/share/icons/WhiteSur-red";
 		".local/share/icons/WhiteSurIcons-dark".source = "${wsuricons}/share/icons/WhiteSur-red-dark";
 		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-red-light";
-		
+
 		".config/ghostty/config".text = ''
 		background = 000000
 		cursor-style = bar
 		cursor-style-blink = true
 		'';
 		".blerc".source = ./blesh-config.sh;
-		
+
 		".local/share/dev.mandre.rquickshare/.settings.json".text = ''{"port": "45978"}'';
 	};
 	users.users.minec = {
@@ -61,7 +56,8 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 		description = "Minec";
 		extraGroups = [ "networkmanager" "wheel" "adbusers" "kvm" "dialout" "flashrom" "corectrl" ];
 		packages = with pkgs; [
-      		ghostty
+      # Apps
+		  ghostty
 			element-desktop
 			#nautilus
 			pwvucontrol
@@ -69,36 +65,28 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 			kdiskmark
 			easyeffects
 			gnome-disk-utility
-			git
-			#ungoogled-chromium
-			python3
 			vscode-fhs
-			nodejs
-			r2modman
 			prismlauncher
+			protonplus
+			krita
+			r2modman
 			qpwgraph
 			tenacity
 			scrcpy
-			krita
-			btop
-			protonplus
 			resources
-			#libsForQt5.qt5ct
-			#qt6ct
-			#stremio
-			libqalculate
-			/*(vesktop.override {
-				withMiddleClickScroll = true;
-			})*/
+			btop
 			chromium
 			vesktop
-			tagger
-			/*(discord.override {
-				withOpenASAR = true;
-				withMoonlight = true; # can do this here too
-			})*/
-			kde-rounded-corners
 			faugus-launcher
+			bluejay
+			vicinae
+
+			# Tools
+			git
+			python3
+			nodejs
+			libqalculate
+			kde-rounded-corners
 			#kdePackages.discover
 			#kdePackages.dolphin-plugins
       		#kdePackages.gwenview
@@ -110,12 +98,14 @@ org.freedesktop.impl.portal.Settings=luminous;gtk
 			#kdePackages.kio-fuse
 			#kdePackages.kimageformats
 			#kdePackages.kdegraphics-thumbnailers
-			bluejay
-			crystal-dock
-			waveterm
-			vicinae
+
+			# Theming
+			libsForQt5.qt5ct
+			kdePackages.qt6ct
+			# For quickshell
 			icoutils
 			localPackages.hyprfreeze
+
 		];
 	};
 }

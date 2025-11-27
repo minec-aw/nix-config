@@ -10,16 +10,14 @@ Item {
     width: 320
     height: 180
     clip: true
-    property var scaleDownX: width / workspace.monitor.width
-    property var scaleDownY: height / workspace.monitor.height
+    property var scaleDownX: workspace? width / workspace.monitor.width: width
+    property var scaleDownY: workspace? height / workspace.monitor.height: height
     property var borderSize: Shared.hyprlandBorderSize * borderScaleDown
     property var cornerRadius: Shared.hyprlandRadius * borderScaleDown
     property bool isLive: true
-    property var borderScaleDown: (width * workspace.monitor.scale) / (workspace.monitor.width)
+    property var borderScaleDown: workspace? (width * workspace.monitor.scale) / (workspace.monitor.width): width
 
-    property var maxReady: workspace.toplevels.values.length
     Component.onCompleted: () => {
-        timeou = Date.now();
         Hyprland.refreshToplevels();
     }
     onWorkspaceChanged: () => {
@@ -27,7 +25,7 @@ Item {
     }
     Repeater {
         id: toplevels
-        model: workspace.toplevels
+        model: workspace? workspace.toplevels : []
         Rectangle {
             id: scviewborder
             required property var modelData

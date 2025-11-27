@@ -296,21 +296,14 @@
 			};
 		in
 		[
-			#gsettings-desktop-schemas
+			# Tools
 			nixd
 			alejandra
 			jq
 			socat
 			sysstat
 			imagemagick
-			(inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
-				nativeMessagingHosts = [
-					pkgs.kdePackages.plasma-browser-integration
-				];
-			})
-			#hyprpolkitagent
 			fastfetch
-			flatpak
 			wget
 			lshw
 			unrar
@@ -320,31 +313,31 @@
 			lsof
 			psmisc
 			wl-clipboard
+			kdePackages.plasma-browser-integration
+			pulseaudio
+			inputs.nix-alien.packages.${system}.nix-alien
+			kdePackages.qtdeclarative
+			dotnet-sdk_9
 
-			wsuricons
-
-			darkly-qt5
-			darkly
+			# Apps
+			(inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
+				nativeMessagingHosts = [
+					pkgs.kdePackages.plasma-browser-integration
+				];
+			})
 			tail-tray
 			wlx-overlay-s
 			vlc
-
-			kdePackages.plasma-browser-integration
-			#kdePackages.ark
-			#kdePackages.dolphin
-			#xorg.xrdb
+			flatpak
 			(quickshell.overrideAttrs (oldAttrs: {
 				buildInputs = oldAttrs.buildInputs ++ [pkgs.kdePackages.qtmultimedia];
 			}))
-			#ffmpeg
-
-			## GNOME
-			adw-gtk3
-			dotnet-sdk_9
-			pulseaudio
-			inputs.nix-alien.packages.${system}.nix-alien
 			zed-editor
-			kdePackages.qtdeclarative
+			# Theming
+			wsuricons
+			darkly-qt5
+			darkly
+			adw-gtk3
 		];
 	};
 	nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
@@ -356,7 +349,6 @@
 
 	programs = {
 		corectrl.enable = true;
-		#coolercontrol.enable = true;
 		obs-studio = {
 			enable = true;
 		};
@@ -368,7 +360,6 @@
 		dconf.enable = true;
 		kdeconnect = {
 			enable = true;
-			#package = pkgs.gnomeExtensions.gsconnect;
 		};
 		adb.enable = true;
 		bash = {
