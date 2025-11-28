@@ -67,6 +67,13 @@ PanelWindow {
         containerParent: dock.contentItem
         aspectRatio: screen.width / screen.height
         screen: dock.screen
+        onIsActiveChanged: {
+            if (isActive == true) {
+                dock.WlrLayershell.keyboardFocus = WlrKeyboardFocus.OnDemand;
+            } else {
+                dock.WlrLayershell.keyboardFocus = WlrKeyboardFocus.None;
+            }
+        }
     }
     function keybindReveal() {
         if (Hyprland.focusedMonitor == Hyprland.monitorFor(screen)) {
@@ -131,7 +138,7 @@ PanelWindow {
             bottomMargin: -1
         }
         width: childrenRect.width
-        height: dock.hovered == true || overview.active == true ? toplevelViews.height+10+floatMargin+dockHeight: 5
+        height: dock.hovered == true || overview.active == true ? toplevelViews.height + 10 + floatMargin + dockHeight : 5
         onEntered: {
             dock.hovered = true;
         }

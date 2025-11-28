@@ -4,16 +4,17 @@ import Quickshell.Hyprland
 import QtQuick
 import "toys"
 import Quickshell.Widgets
+import QtQuick.Effects
 
 LazyLoader {
     id: overviewLoader
     required property var aspectRatio
     required property var containerParent
     required property ShellScreen screen
-    property var hyprlandScreen: Hyprland.monitorFor(overviewLoader.screen)
-    property var activeWorkspace: hyprlandScreen.activeWorkspace
+    property HyprlandMonitor hyprlandScreen: Hyprland.monitorFor(overviewLoader.screen)
+    property HyprlandWorkspace activeWorkspace: hyprlandScreen.activeWorkspace ?? null
     required property bool isActive
-    property var closeFunc
+
     onIsActiveChanged: {
         if (isActive == true) {
             active = isActive;
@@ -25,6 +26,12 @@ LazyLoader {
         z: -1
         visible: false
         anchors.fill: parent
+        property bool isActive: overviewLoader.isActive
+        onIsActiveChanged: {
+            if (isActive == false) {
+                Hyprland.dispatch(`workspace ${workspacesFlickable.targettedWorkspaceId}`);
+            }
+        }
 
         property double initialScalingFactor: 1
         Timer {
@@ -79,7 +86,7 @@ LazyLoader {
                     }
                     PropertyAnimation {
                         property: "initialScalingFactor"
-                        duration: 200
+                        duration: 310
                         easing.type: Easing.OutCubic
                     }
                     PropertyAnimation {
@@ -99,7 +106,27 @@ LazyLoader {
         ]
         Rectangle {
             anchors.fill: parent
-            color: Qt.rgba(0.1, 0, 0.1, 1)
+            color: "black"
+        }
+        AlternateBackgroundObject {
+            id: background
+            animate: false
+            anchors.fill: parent
+            slidingFactor: 0
+            layer.enabled: true
+
+            layer.effect: MultiEffect {
+                saturation: 0.5
+                blurEnabled: true
+                autoPaddingEnabled: true
+                blurMax: 64
+                blur: 1
+                blurMultiplier: 3
+            }
+        }
+        Rectangle {
+            anchors.fill: parent
+            color: Qt.rgba(0, 0, 0, 0.6)
         }
         ClippingRectangle {
             id: overviewZoomer
@@ -122,10 +149,10 @@ LazyLoader {
             AlternateBackgroundObject {
                 animate: false
                 anchors.fill: parent
-                slidingFactor: overviewLoader.activeWorkspace.id || 0
+                slidingFactor: workspacesFlickable.targettedWorkspaceId || 0
             }
             WorkspacePanel {
-                workspace: overviewLoader.activeWorkspace
+                workspace: Hyprland.workspaces.values.find(workspace => workspace.id == workspacesFlickable.targettedWorkspaceId)
                 anchors.fill: parent
             }
         }
@@ -136,12 +163,16 @@ LazyLoader {
             maximumFlickVelocity: 15000
             flickDeceleration: 10000
             contentHeight: height
+            property int targettedWorkspaceId: 0
+            Component.onCompleted: {
+                targettedWorkspaceId = overviewLoader.activeWorkspace.id;
+                contentX = (targettedWorkspaceId - 1) * height * overviewLoader.aspectRatio;
+            }
             anchors {
                 left: parent.left
                 right: parent.right
                 verticalCenter: parent.verticalCenter
             }
-            property var contentXOnFlick: 0
             NumberAnimation {
                 id: flickAnimation
                 target: workspacesFlickable
@@ -149,24 +180,57 @@ LazyLoader {
                 duration: 300
                 easing.type: Easing.OutCubic
             }
+            focus: true
+            Keys.onPressed: event => {
+                if (event.key == Qt.Key_Left) {
+                    const id = targettedWorkspaceId;
+                    if (id - 1 <= 0) {
+                        flickAnimation.stop();
+                        workspacesFlickable.flick(2000, 0);
+                    } else {
+                        targettedWorkspaceId = id - 1;
+                        flickAnimation.stop();
+                        flickAnimation.to = (id - 2) * height * overviewLoader.aspectRatio;
+                        flickAnimation.start();
+                    }
+                    event.accepted = true;
+                } else if (event.key == Qt.Key_Right) {
+                    const id = targettedWorkspaceId;
+                    if (id >= 10) {
+                        flickAnimation.stop();
+                        workspacesFlickable.flick(-2000, 0);
+                    } else {
+                        targettedWorkspaceId = id + 1;
+                        flickAnimation.stop();
+                        flickAnimation.to = (id) * height * overviewLoader.aspectRatio;
+                        flickAnimation.start();
+                    }
+                    event.accepted = true;
+                }
+            }
             property var beingFlicked: false
             onHorizontalVelocityChanged: {
                 if (beingFlicked == true && Math.abs(horizontalVelocity) < 2000) {
+                    workspacesFlickable.cancelFlick();
                     const direction = horizontalVelocity > 0 ? 1 : -1;
                     const estimatedX = workspacesFlickable.contentX + direction * (workspacesFlickable.horizontalVelocity ^ 2) / (workspacesFlickable.flickDeceleration);
                     const nearestIndex = Math.round(estimatedX / (workspacesFlickable.height * overviewLoader.aspectRatio));
                     const nearestWorkspaceX = nearestIndex * height * overviewLoader.aspectRatio;
+                    flickAnimation.stop();
                     flickAnimation.to = nearestIndex * height * overviewLoader.aspectRatio;
                     flickAnimation.start();
                     beingFlicked = false;
-                    Hyprland.dispatch(`workspace ${nearestIndex + 1}`);
+                    targettedWorkspaceId = nearestIndex + 1;
                 }
             }
             onDragEnded: {
                 beingFlicked = true;
-                contentXOnFlick = contentX;
             }
-            contentX: (overviewLoader.activeWorkspace.id - 1) * height * overviewLoader.aspectRatio
+
+            onDragStarted: {
+                flickAnimation.stop();
+            }
+
             height: parent.height - 300
             clip: true
             Row {
@@ -193,7 +257,7 @@ LazyLoader {
                             if (marginFactor < 0.99) {
                                 flickAnimation.to = container.x; // somehow this works?
                                 flickAnimation.start();
-                                Hyprland.dispatch(`workspace ${index + 1}`);
+                                workspacesFlickable.targettedWorkspaceId = index + 1;
                             } else {
                                 overviewLoader.isActive = false;
                             }

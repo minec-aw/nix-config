@@ -12,6 +12,7 @@ PanelWindow {
     WlrLayershell.layer: WlrLayer.Overlay
     WlrLayershell.namespace: "shell:screenshot"
     exclusionMode: ExclusionMode.Ignore
+    WlrLayershell.keyboardFocus: WlrKeyboardFocus.None
     visible: false
     property double existenceStart: 0
     //property point Shared.screenshotInitialPosition: Qt.point(-5000,-5000)

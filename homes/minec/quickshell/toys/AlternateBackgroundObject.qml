@@ -7,6 +7,7 @@ Item {
 
     // in dead cells the "resolution" is 640x360
     property var scalingFactor: height / 360
+    property var animationSpeed: animate ? 300 : 0
     //math should be done in terms of the original resolution
     Image {
         smooth: false
@@ -39,7 +40,7 @@ Item {
         y: 64 * background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -60,7 +61,7 @@ Item {
         y: 64 * background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -82,7 +83,7 @@ Item {
         //y: -300*background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -104,7 +105,7 @@ Item {
         //y: -300*background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -127,7 +128,7 @@ Item {
         y: 96 * background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -149,7 +150,7 @@ Item {
         //y: -300*background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -171,7 +172,7 @@ Item {
         //y: -300*background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -194,7 +195,7 @@ Item {
         y: 96 * background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -216,7 +217,7 @@ Item {
         y: -300 * background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -237,7 +238,7 @@ Item {
         y: 160 * background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
@@ -258,7 +259,7 @@ Item {
         //y: 160*background.scalingFactor
         Behavior on x {
             WorkspaceAnimation {
-                duration: animate ? 400 : 0
+                duration: background.animationSpeed
             }
         }
         Repeater {
