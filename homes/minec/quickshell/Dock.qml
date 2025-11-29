@@ -2,6 +2,7 @@ import Quickshell
 import QtQuick
 import Quickshell.Hyprland
 import Quickshell.Wayland
+import Quickshell.Io
 import Quickshell.Widgets
 import "toys"
 
@@ -13,12 +14,13 @@ PanelWindow {
     property bool fullHide: ToplevelManager.activeToplevel ? ToplevelManager.activeToplevel.fullscreen : false
     property bool transparentBackground: true
     property real mouseY: 0
-    property var floatMargin: 10
-    property var pinnedApps: ["zen-beta", "org.kde.dolphin", "vesktop", "com.mitchellh.ghostty"]
-    property var dockHeight: 68
+    property double floatMargin: 10
+    property list<string> pinnedApps: ["zen-beta", "org.kde.dolphin", "vesktop", "com.mitchellh.ghostty"]
+    property double dockHeight: 68
     property string hoveredClass
-    property var hoveredToplevels: ToplevelManager.toplevels.values.filter(toplevel => toplevel.appId == hoveredClass)
-    property var hoveredXCenter: 0
+    property var hoveredToplevels: Hyprland.toplevels.values.filter(toplevel => toplevel.wayland ? toplevel.wayland.appId == hoveredClass : false)
+    property double hoveredXCenter: 0
+    property double aspectRatio: screen.width / screen.height
     property bool tlviewVisible: false
 
     Timer {
@@ -65,7 +67,7 @@ PanelWindow {
         id: overview
         isActive: false
         containerParent: dock.contentItem
-        aspectRatio: screen.width / screen.height
+        aspectRatio: dock.aspectRatio
         screen: dock.screen
         onIsActiveChanged: {
             if (isActive == true) {
@@ -86,8 +88,7 @@ PanelWindow {
             name: "overview"
             when: overview.active == true
             PropertyChanges {
-                target: overviewRegion
-                height: overviewRegion.parent.height
+                overviewRegion.height: overviewRegion.parent.height
             }
         }
         anchors {
@@ -102,8 +103,7 @@ PanelWindow {
             name: "hover"
             when: dock.hovered == true
             PropertyChanges {
-                target: region1
-                height: dockHeight + floatMargin
+                region1.height: dockHeight + floatMargin
             }
         }
         anchors {
@@ -119,8 +119,7 @@ PanelWindow {
             name: "hover"
             when: tlviewVisible == true && hoveredToplevels.length > 0
             PropertyChanges {
-                target: region2
-                height: 225
+                region2.height: 225
             }
         }
         anchors {
@@ -187,8 +186,7 @@ PanelWindow {
                 name: "visible"
                 when: tlviewVisible == true && hoveredToplevels.length > 0
                 PropertyChanges {
-                    target: toplevelViews
-                    opacity: 1
+                    toplevelViews.opacity: 1
                 }
             }
             transitions: Transition {
@@ -225,7 +223,7 @@ PanelWindow {
                     ClippingRectangle {
                         color: Qt.rgba(0.05, 0.05, 0.05, 0)
                         radius: 10
-                        required property Toplevel modelData
+                        required property HyprlandToplevel modelData
                         width: toplevelView.width
                         anchors {
                             verticalCenter: parent.verticalCenter
@@ -234,7 +232,7 @@ PanelWindow {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                modelData.activate();
+                                modelData.wayland.activate();
                                 hovered = false;
                             }
                         }
@@ -245,8 +243,33 @@ PanelWindow {
                                 verticalCenter: parent.verticalCenter
                             }
                             live: true
-                            captureSource: modelData
-                            constraintSize: Qt.size(200 * (16 / 9), 200)
+                            captureSource: modelData.wayland
+                            constraintSize: Qt.size(200 * dock.aspectRatio, 200)
+                        }
+                        TopViewIcon {
+                            id: closeButton
+                            onClicked: {
+                                modelData.wayland.close();
+                            }
+                            hoverColor: Qt.rgba(1, 0.2, 0.2, 1)
+                            iconSource: `${Shared.iconsPath}/x.svg`
+                            anchors.right: parent.right
+                        }
+                        Process {
+                            id: hyprfreeze
+                        }
+                        TopViewIcon {
+                            id: hibernateButton
+                            onClicked: {
+                                if (modelData.lastIpcObject && modelData.lastIpcObject.pid) {
+                                    hibernateButton.active = !hibernateButton.active;
+                                    hyprfreeze.exec(["hyprfreeze", "-p", modelData.lastIpcObject.pid]);
+                                }
+                            }
+                            hoverColor: Qt.rgba(0.4, 0.69, 1, 1)
+                            activeColor: Qt.rgba(0, 0.4, 0.8, 1)
+                            iconSource: `${Shared.iconsPath}/snowflake.svg`
+                            anchors.right: closeButton.left
                         }
                     }
                 }

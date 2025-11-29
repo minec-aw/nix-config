@@ -1,8 +1,4 @@
-import Quickshell
-import Quickshell.Io
-import Quickshell.Services.SystemTray
 import QtQuick
-import QtQuick.Layouts
 import QtQuick.Shapes
 
 Shape {
@@ -31,7 +27,8 @@ Shape {
         PathArc {
             x: cornershaper.startY //same as startY
             y: (orientation == "tl") + (orientation == "bl")
-            radiusX: 1; radiusY: 1
+            radiusX: 1
+            radiusY: 1
             useLargeArc: false
             direction: PathArc.Counterclockwise
         }
@@ -40,8 +37,7 @@ Shape {
             y: cornershaper.startY //same as startY
         }
     } // All orientations combined into 1
-    
-    
+
     /*onPaint: {
         var ctx = getContext("2d");
         ctx.fillStyle = color;
@@ -68,7 +64,7 @@ Shape {
             ctx.arcTo(width,height,width,0,size);
             ctx.lineTo(width,height);
         }
-        
+
         ctx.closePath();
         ctx.fill();
     }*/

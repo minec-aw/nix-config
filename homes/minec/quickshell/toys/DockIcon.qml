@@ -197,7 +197,7 @@ Item {
                     duration: 150
                     easing {
                         type: Easing.OutBack
-                        overshoot: 5
+                        overshoot: 7
                     }
                 }
             },
