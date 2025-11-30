@@ -59,6 +59,7 @@ in
       # Apps
 		  ghostty
 			element-desktop
+			#jellyfin-media-player
 			#nautilus
 			pwvucontrol
 			isoimagewriter

@@ -7,7 +7,7 @@ import ".."
 import "../.."
 
 Text {
-	id: clock
+    id: clock
 
     function getFormattedTime(time) {
         let hours = time.getHours();
@@ -17,14 +17,14 @@ Text {
         hours = hours % 12;
         hours = hours ? hours : 12; // 0 => 12
 
-        return `${hours.toString().padStart(2, '0')}\n${minutes}`;
+        return `${Shared.days[time.getDay()]} ${time.getDate()} ${Shared.months[time.getMonth()]}, ${time.getFullYear()} - ${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
     }
     text: getFormattedTime(Shared.time) //`${(Shared.time.getHours()%12).toString().padStart(2, "0")}:${(Shared.time.getMinutes()).toString().padStart(2, "0")}`
     color: Shared.colors.on_surface
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     font {
-        pointSize: 22
+        pointSize: 16
         family: "Noto Sans"
         bold: true
     }
@@ -32,7 +32,7 @@ Text {
         id: togglingarea
 		anchors.fill: parent
 		onClicked: bar.expandPanel(parent)
-        
+
         Item {
             id: expanded
             anchors.fill: parent
@@ -44,12 +44,12 @@ Text {
             }
             transitions: Transition {
                 to: "showme"; reversible: true
-                PropertyAnimation { 
+                PropertyAnimation {
                     property: "opacity"; duration: 300
                     easing {
                         type: Easing.InOutQuart
                     }
-                }  
+                }
             }
             Text {
                 x: 10

@@ -37,9 +37,6 @@ PanelWindow {
             triggerTLView.stop();
         }
     }
-    onFullHideChanged: {
-        dock.visible = !fullHide;
-    }
 
     Component.onCompleted: () => {
         Shared.panels.push(dock);
@@ -137,7 +134,7 @@ PanelWindow {
             bottomMargin: -1
         }
         width: childrenRect.width
-        height: dock.hovered == true || overview.active == true ? toplevelViews.height + 10 + floatMargin + dockHeight : 5
+        height: dock.hovered == true || overview.active == true ? toplevelViews.height + 10 + floatMargin + dockHeight : (fullHide ? 0 : 5)
         onEntered: {
             dock.hovered = true;
         }
@@ -262,12 +259,10 @@ PanelWindow {
                             id: hibernateButton
                             onClicked: {
                                 if (modelData.lastIpcObject && modelData.lastIpcObject.pid) {
-                                    hibernateButton.active = !hibernateButton.active;
                                     hyprfreeze.exec(["hyprfreeze", "-p", modelData.lastIpcObject.pid]);
                                 }
                             }
                             hoverColor: Qt.rgba(0.4, 0.69, 1, 1)
-                            activeColor: Qt.rgba(0, 0.4, 0.8, 1)
                             iconSource: `${Shared.iconsPath}/snowflake.svg`
                             anchors.right: closeButton.left
                         }

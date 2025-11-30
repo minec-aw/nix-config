@@ -290,5 +290,14 @@ LazyLoader {
                 }
             }
         }
+
+        // Clock
+        Clock {
+            anchors {
+                top: parent.top
+                horizontalCenter: parent.horizontalCenter
+                topMargin: 4
+            }
+        }
     }
 }
