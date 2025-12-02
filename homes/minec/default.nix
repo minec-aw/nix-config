@@ -9,7 +9,7 @@ in
 	# Define a user account. Don't forget to set a password with ‘passwd’.
 	hjem.users.minec.files = {
 		#".config/openxr/1/active_runtime.json".source = "${pkgs.wivrn}/share/openxr/1/openxr_wivrn.json";
-		".config/openvr/openvrpaths.vrpath".text = ''
+		/*".config/openvr/openvrpaths.vrpath".text = ''
 			{
 				"config" :
 				[
@@ -27,7 +27,7 @@ in
 				],
 				"version" : 1
 			}
-		'';
+			'';*/
 		".config/hypr/hyprland.conf".source = ./hyprland.conf;
 		".config/hypr/xdph.conf".text = ''
 			screencopy {
@@ -59,6 +59,8 @@ in
       # Apps
 		  ghostty
 			element-desktop
+			davinci-resolve
+			kdePackages.kdenlive
 			#jellyfin-media-player
 			#nautilus
 			pwvucontrol

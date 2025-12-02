@@ -357,6 +357,10 @@
 			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
 			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 		};
+		alvr = {
+		  enable = true;
+				openFirewall = true;
+		};
 		dconf.enable = true;
 		kdeconnect = {
 			enable = true;
@@ -369,10 +373,26 @@
 		nh = {
 			enable = true;
 		};
-		steam = {
+		steam =
+		let
+      patchedBwrap = pkgs.bubblewrap.overrideAttrs (o: {
+        patches = (o.patches or []) ++ [
+          ./bwrap.patch
+        ];
+      });
+    in
+    {
 			#gamescopeSession.enable = true;
 			enable = true;
 			protontricks.enable = true;
+			package = pkgs.steam.override {
+        buildFHSEnv = (args: ((pkgs.buildFHSEnv.override {
+          bubblewrap = patchedBwrap;
+        }) (args // {
+          extraBwrapArgs = (args.extraBwrapArgs or []) ++ [ "--cap-add ALL" ];
+        })));
+      };
+
 			/*package = with pkgs; steam.override {
 				extraPkgs = pkgs: [
 					attr
