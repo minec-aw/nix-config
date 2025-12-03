@@ -6,7 +6,6 @@ import Quickshell.Io
 import Quickshell.Wayland
 import Quickshell.Services.Notifications
 import Quickshell.Hyprland
-import QtQuick3D.Xr
 
 //import QtMultimedia
 
@@ -285,19 +284,6 @@ Singleton {
         onTriggered: () => {
             getcurrentram.running = true;
             getcurrentcpu.running = true;
-        }
-    }
-    XrView {
-        referenceSpace: XrView.ReferenceSpaceLocal
-        xrOrigin: XrOrigin {
-            XrController {
-                id: rightController
-                controller: XrController.ControllerRight
-            }
-            XrController {
-                id: leftController
-                controller: XrController.ControllerLeft
-            }
         }
     }
 }

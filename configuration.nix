@@ -56,6 +56,7 @@
 			extraConfig = "DeviceScale=1";
 		};
 		kernelPackages = pkgs.linuxPackages_cachyos;
+
 	};
 	networking = {
 		hostName = "minec";
@@ -108,7 +109,7 @@
 			package = (pkgs.wivrn.override {
 				cudaSupport = true;
 			});
-			#defaultRuntime = true;
+			defaultRuntime = true;
 		};
 		desktopManager.plasma6 = {
 			enable = true;
@@ -233,6 +234,8 @@
 			#package32 = pkgs-mesa-pin.driversi686Linux.mesa;
 			extraPackages = with pkgs; [
 				nvidia-vaapi-driver
+				vulkan-loader
+				vulkan-tools
 			];
 		};
 		nvidia = {
@@ -330,7 +333,11 @@
 			vlc
 			flatpak
 			(quickshell.overrideAttrs (oldAttrs: {
-				buildInputs = oldAttrs.buildInputs ++ [pkgs.kdePackages.qtmultimedia];
+				buildInputs = oldAttrs.buildInputs ++ (with pkgs.kdePackages; [
+				  qtmultimedia
+					qtquick3d
+					qtquick3dphysics
+				]);
 			}))
 			zed-editor
 			# Theming
@@ -373,26 +380,10 @@
 		nh = {
 			enable = true;
 		};
-		steam =
-		let
-      patchedBwrap = pkgs.bubblewrap.overrideAttrs (o: {
-        patches = (o.patches or []) ++ [
-          ./bwrap.patch
-        ];
-      });
-    in
-    {
+		steam = {
 			#gamescopeSession.enable = true;
 			enable = true;
 			protontricks.enable = true;
-			package = pkgs.steam.override {
-        buildFHSEnv = (args: ((pkgs.buildFHSEnv.override {
-          bubblewrap = patchedBwrap;
-        }) (args // {
-          extraBwrapArgs = (args.extraBwrapArgs or []) ++ [ "--cap-add ALL" ];
-        })));
-      };
-
 			/*package = with pkgs; steam.override {
 				extraPkgs = pkgs: [
 					attr
