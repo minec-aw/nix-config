@@ -109,7 +109,7 @@
 			package = (pkgs.wivrn.override {
 				cudaSupport = true;
 			});
-			defaultRuntime = true;
+			#defaultRuntime = true;
 		};
 		desktopManager.plasma6 = {
 			enable = true;
@@ -333,10 +333,14 @@
 			vlc
 			flatpak
 			(quickshell.overrideAttrs (oldAttrs: {
-				buildInputs = oldAttrs.buildInputs ++ (with pkgs.kdePackages; [
-				  qtmultimedia
-					qtquick3d
-					qtquick3dphysics
+				buildInputs = oldAttrs.buildInputs ++ (with pkgs; [
+				  kdePackages.qtmultimedia
+					kdePackages.qtquick3d
+					kdePackages.qtquick3dphysics
+					openxr-loader
+          vulkan-headers
+          vulkan-loader
+          glib
 				]);
 			}))
 			zed-editor
