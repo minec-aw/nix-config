@@ -15,7 +15,7 @@ PanelWindow {
     property bool transparentBackground: true
     property real mouseY: 0
     property double floatMargin: 10
-    property list<string> pinnedApps: ["zen-beta", "org.kde.dolphin", "vesktop", "com.mitchellh.ghostty"]
+    property list<string> pinnedApps: ["zen-beta", "org.gnome.Nautilus", "vesktop", "com.mitchellh.ghostty"]
     property double dockHeight: 68
     property string hoveredClass
     property var hoveredToplevels: Hyprland.toplevels.values.filter(toplevel => toplevel.wayland ? toplevel.wayland.appId == hoveredClass : false)

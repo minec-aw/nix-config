@@ -14,9 +14,6 @@
 	hjem.clobberByDefault = true;
 	boot = {
 		kernelParams = ["quiet" "splash" "loglevel=3"];
-		kernel.sysctl = {
-			"vm.swappiness" = 20;
-		};
 		/*extraModprobeConfig = ''
 			options nvidia NVreg_UsePageAttributeTable=1 NVreg_InitializeSystemMemoryAllocations=0 NVreg_EnableStreamMemOPs=1 NVreg_EnableGpuFirmware=0
 		'';*/
@@ -107,21 +104,8 @@
 			});
 			#defaultRuntime = true;
 		};
-		desktopManager.plasma6 = {
-			enable = true;
-		};
-		/*desktopManager.gnome = {
-			enable = true;
-			extraGSettingsOverrides = ''
-				[org.gnome.mutter]
-				experimental-features=['scale-monitor-framebuffer', 'autoclose-xwayland', 'variable-refresh-rate']
-			'';
-		};
-		gnome.gnome-remote-desktop.enable = true;
-		gnome.gnome-browser-connector.enable = true;*/
 		playerctld.enable = true;
-		#desktopManager.plasma6.enable = true;
-		/*greetd = {
+		greetd = {
 			enable = true;
 			settings = {
 				initial_session = {
@@ -133,18 +117,18 @@
 					user = "greeter";
 				};
 			};
-		};*/
-		displayManager = {
+		};
+		/*displayManager = {
 			/*autoLogin = {
 				enable = true;
 				user = "minec";
-			};*/
+			};
 			sddm = {
 				enable = true;
 				wayland.enable = true;
 				#autoLogin.relogin = true;
 			};
-		};
+		};*/
 		tailscale = {
 			enable = true;
 			useRoutingFeatures = "both";
@@ -172,7 +156,6 @@
 						exclude-global-prep-cmd = "false";
 						auto-detach = "true";
 					}
-
 				];
 			};
 

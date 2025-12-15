@@ -1,9 +1,11 @@
 { pkgs, localPackages, ... }:
 let
-  	wsuricons = pkgs.whitesur-icon-theme.override {
+  wsuricons = pkgs.whitesur-icon-theme.override {
 		alternativeIcons = true;
 		themeVariants = ["red"];
 	};
+	gtk-theme = "${pkgs.orchis-theme}/share/themes/Orchis-Red-Dark";
+
 in
 {
 	# Define a user account. Don't forget to set a password with ‘passwd’.
@@ -41,6 +43,16 @@ in
 		".local/share/icons/WhiteSurIcons".source = "${wsuricons}/share/icons/WhiteSur-red";
 		".local/share/icons/WhiteSurIcons-dark".source = "${wsuricons}/share/icons/WhiteSur-red-dark";
 		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-red-light";
+		".config/gtk-3.0/settings.ini".source = ./gtk-3.0;
+			".config/gtk-4.0/settings.ini".source = ./gtk-4.0;
+			".config/gtk-4.0/gtk.css".source = "${gtk-theme}/gtk-4.0/gtk.css";
+			".config/gtk-4.0/gtk-dark.css".source = "${gtk-theme}/gtk-4.0/gtk-dark.css";
+			".config/gtk-4.0/assets".source = "${gtk-theme}/gtk-4.0/assets";
+			".themes/Orchis-Red".source = gtk-theme;
+			#".themes/Orchis-Red-dark".source = "${gtk-theme}-Dark";
+			
+
+			".gtkrc-2.0".source = ./.gtkrc-2.0;
 
 		".config/ghostty/config".text = ''
 		background = 000000
@@ -59,15 +71,11 @@ in
       # Apps
 		  ghostty
 			element-desktop
-			davinci-resolve
 			kdePackages.kdenlive
 			#jellyfin-media-player
-			#nautilus
-			pwvucontrol
 			kdePackages.isoimagewriter
 			kdiskmark
 			easyeffects
-			gnome-disk-utility
 			vscode-fhs
 			prismlauncher
 			protonplus
@@ -76,7 +84,6 @@ in
 			qpwgraph
 			tenacity
 			scrcpy
-			resources
 			btop
 			chromium
 			vesktop
@@ -85,23 +92,22 @@ in
 			vicinae
 			blender
 
-			# Tools
+			# Tools for a decent computer experience
+			nautilus
+			pwvucontrol
+			kdePackages.ark
+			resources
+			loupe
+			showtime
+			gnome-text-editor
+			decibels
+			gnome-disk-utility
+
+			# Tools for other stuff
 			git
 			python3
 			nodejs
 			libqalculate
-			kde-rounded-corners
-			#kdePackages.discover
-			#kdePackages.dolphin-plugins
-      #kdePackages.gwenview
-			#kdePackages.kservice
-			#kdePackages.kde-cli-tools
-			#kdePackages.ffmpegthumbs
-			#kdePackages.kio
-			#kdePackages.kio-extras
-			#kdePackages.kio-fuse
-			#kdePackages.kimageformats
-			#kdePackages.kdegraphics-thumbnailers
 
 			# Theming
 			libsForQt5.qt5ct
