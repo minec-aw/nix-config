@@ -1,4 +1,5 @@
 import QtQuick
+import ".."
 
 Item {
     id: background
@@ -273,4 +274,31 @@ Item {
             }
         }
     }
+    /*Item {
+        id: anchorItem
+        width: 100
+        height: 100
+        x: -background.slidingFactor * parent.width
+
+        Behavior on x {
+            WorkspaceAnimation {
+                duration: background.animationSpeed
+            }
+        }
+        Rectangle {
+            x: Shared.boatFactor * background.width + background.width / 2 - width / 2
+            Behavior on x {
+                SequentialAnimation {
+                    PauseAnimation {
+                        duration: 1000
+                    }
+                    WorkspaceAnimation {
+                        duration: 600
+                    }
+                }
+            }
+            width: 200
+            height: 200
+        }
+        }*/
 }

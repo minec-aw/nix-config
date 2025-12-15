@@ -41,6 +41,8 @@ Singleton {
     property int hyprlandRadius: 10
     property int hyprlandBorderSize: 0
 
+    property real boatFactor: 0
+
     NotificationServer {
         onNotification: notification => {
             console.log("Notification recieved!", notification.appName, notification.body, notification.summary);

@@ -7,7 +7,10 @@ import "toys"
 PanelWindow {
     id: background
     color: "black"
-
+    property int focusedWorkspaceId: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id - 1 : 0
+    onFocusedWorkspaceIdChanged: {
+        Shared.boatFactor = focusedWorkspaceId;
+    }
     WlrLayershell.layer: WlrLayer.Background
     WlrLayershell.namespace: "shell:background"
     exclusionMode: ExclusionMode.Ignore
@@ -22,6 +25,6 @@ PanelWindow {
     AlternateBackgroundObject {
         animate: true
         anchors.fill: parent
-        slidingFactor: Hyprland.focusedWorkspace ? Hyprland.focusedWorkspace.id : 0
+        slidingFactor: background.focusedWorkspaceId
     }
 }

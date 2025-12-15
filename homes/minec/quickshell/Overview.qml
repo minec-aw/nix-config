@@ -149,7 +149,7 @@ LazyLoader {
             AlternateBackgroundObject {
                 animate: false
                 anchors.fill: parent
-                slidingFactor: workspacesFlickable.targettedWorkspaceId || 0
+                slidingFactor: workspacesFlickable.targettedWorkspaceId - 1 || 0
             }
             WorkspacePanel {
                 workspace: Hyprland.workspaces.values.find(workspace => workspace.id == workspacesFlickable.targettedWorkspaceId)
@@ -164,6 +164,9 @@ LazyLoader {
             flickDeceleration: 10000
             contentHeight: height
             property int targettedWorkspaceId: 0
+            onTargettedWorkspaceIdChanged: {
+                Shared.boatFactor = targettedWorkspaceId - 1;
+            }
             Component.onCompleted: {
                 targettedWorkspaceId = overviewLoader.activeWorkspace.id;
                 contentX = (targettedWorkspaceId - 1) * height * overviewLoader.aspectRatio;
@@ -275,7 +278,7 @@ LazyLoader {
                             AlternateBackgroundObject {
                                 animate: false
                                 anchors.fill: parent
-                                slidingFactor: container.id
+                                slidingFactor: container.id - 1
                             }
                             x: (parent.width - (width * container.scalingFactor)) / 2
                             y: (parent.height - (height * container.scalingFactor)) / 2

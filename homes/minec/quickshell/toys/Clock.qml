@@ -24,9 +24,9 @@ Text {
     horizontalAlignment: Text.AlignHCenter
     verticalAlignment: Text.AlignVCenter
     font {
-        pointSize: 16
+        pointSize: 14
         family: "Noto Sans"
-        bold: true
+        bold: false
     }
     /*PanelMouseArea {
         id: togglingarea

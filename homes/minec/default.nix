@@ -83,6 +83,7 @@ in
 			faugus-launcher
 			bluejay
 			vicinae
+			blender
 
 			# Tools
 			git
