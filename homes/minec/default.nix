@@ -64,7 +64,7 @@ in
 			#jellyfin-media-player
 			#nautilus
 			pwvucontrol
-			isoimagewriter
+			kdePackages.isoimagewriter
 			kdiskmark
 			easyeffects
 			gnome-disk-utility
@@ -93,7 +93,7 @@ in
 			kde-rounded-corners
 			#kdePackages.discover
 			#kdePackages.dolphin-plugins
-      		#kdePackages.gwenview
+      #kdePackages.gwenview
 			#kdePackages.kservice
 			#kdePackages.kde-cli-tools
 			#kdePackages.ffmpegthumbs
