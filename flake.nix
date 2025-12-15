@@ -20,7 +20,7 @@
 			url = "github:feel-co/hjem";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
-		chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+		#chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 		nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
 	};
 	#nixConfig.extra-substituters = [ "https://vicinae.cachix.org" ];
@@ -44,7 +44,6 @@
 				inputs.hjem.nixosModules.default
 				nixpkgs-xr.nixosModules.nixpkgs-xr
 				./configuration.nix
-				chaotic.nixosModules.default
 			];
 		};
 	};
