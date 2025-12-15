@@ -55,7 +55,7 @@
 			theme = "bgrt";
 			extraConfig = "DeviceScale=1";
 		};
-		kernelPackages = pkgs.linuxPackages_cachyos;
+		kernelPackages = pkgs.linuxPackages_latest;
 
 	};
 	networking = {
@@ -86,10 +86,6 @@
 	#users.users.immich.extraGroups = [ "video" "render" ];
 
 	services = {
-		scx = {
-			enable = true;
-			scheduler = "scx_lavd";
-		};
 		xserver = {
 			videoDrivers = [ "nvidia" "amdgpu" ];
 			xkb = {
@@ -334,13 +330,13 @@
 			flatpak
 			(quickshell.overrideAttrs (oldAttrs: {
 				buildInputs = oldAttrs.buildInputs ++ (with pkgs; [
-				  kdePackages.qtmultimedia
+					kdePackages.qtmultimedia
 					kdePackages.qtquick3d
 					kdePackages.qtquick3dphysics
 					openxr-loader
-          vulkan-headers
-          vulkan-loader
-          glib
+					vulkan-headers
+					vulkan-loader
+					glib
 				]);
 			}))
 			zed-editor
@@ -369,8 +365,8 @@
 			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
 		};
 		alvr = {
-		  enable = true;
-				openFirewall = true;
+			enable = true;
+			openFirewall = true;
 		};
 		dconf.enable = true;
 		kdeconnect = {
@@ -425,7 +421,7 @@
 			proggyfonts
 			#nerdfonts
 			nerd-fonts.fira-code
-  		nerd-fonts.droid-sans-mono
+  			nerd-fonts.droid-sans-mono
 			corefonts
 			liberation_ttf
 			vista-fonts

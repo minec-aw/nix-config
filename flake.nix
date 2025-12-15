@@ -27,7 +27,7 @@
 	#nixConfig.extra-trusted-public-keys = [ "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc=" ];
 
 
-	outputs = { self, nixpkgs, localPackages, chaotic, nixpkgs-xr, ... }@inputs:
+	outputs = { self, nixpkgs, localPackages, nixpkgs-xr, ... }@inputs:
 	let 
 		system = "x86_64-linux";
 		/*pkgs = import nixpkgs {
