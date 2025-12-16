@@ -41,6 +41,7 @@ ShellRoot {
         model: Quickshell.screens
         Scope {
             property var modelData
+
             Dock {
                 id: bar
                 screen: modelData
@@ -54,7 +55,6 @@ ShellRoot {
                     screen: modelData
                 }
             }
-            // a
             //Overview {screen: modelData; visible: Shared.overviewVisible && Hyprland.focusedMonitor == Hyprland.monitorFor(modelData)}
         }
     }
