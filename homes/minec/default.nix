@@ -2,10 +2,14 @@
 let
   wsuricons = pkgs.whitesur-icon-theme.override {
 		alternativeIcons = true;
-		themeVariants = ["red"];
+		themeVariants = ["purple"];
 	};
-	gtk-theme = "${pkgs.orchis-theme}/share/themes/Orchis-Red-Dark";
-
+	gtk-theme = "${
+		pkgs.catppuccin-gtk.override {
+			accents = ["lavender"];
+			variant = "mocha";
+		}
+	}/share/themes/catppuccin-mocha-lavender-standard";
 in
 {
 	# Define a user account. Don't forget to set a password with ‘passwd’.
@@ -40,19 +44,17 @@ in
 
 		# Cursors & icons & themes
 		".local/share/icons/macOS-x".source = "${pkgs.apple-cursor}/share/icons/macOS";
-		".local/share/icons/WhiteSurIcons".source = "${wsuricons}/share/icons/WhiteSur-red";
-		".local/share/icons/WhiteSurIcons-dark".source = "${wsuricons}/share/icons/WhiteSur-red-dark";
-		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-red-light";
+		".local/share/icons/WhiteSurIcons".source = "${wsuricons}/share/icons/WhiteSur-purple";
+		".local/share/icons/WhiteSurIcons-dark".source = "${wsuricons}/share/icons/WhiteSur-purple-dark";
+		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-purple-light";
+		".config/xsettingsd/xsettingsd.conf".source = ./xsettingsd.conf;
 		".config/gtk-3.0/settings.ini".source = ./gtk-3.0;
-			".config/gtk-4.0/settings.ini".source = ./gtk-4.0;
-			".config/gtk-4.0/gtk.css".source = "${gtk-theme}/gtk-4.0/gtk.css";
-			".config/gtk-4.0/gtk-dark.css".source = "${gtk-theme}/gtk-4.0/gtk-dark.css";
-			".config/gtk-4.0/assets".source = "${gtk-theme}/gtk-4.0/assets";
-			".themes/Orchis-Red".source = gtk-theme;
-			#".themes/Orchis-Red-dark".source = "${gtk-theme}-Dark";
-			
-
-			".gtkrc-2.0".source = ./.gtkrc-2.0;
+		".config/gtk-4.0/settings.ini".source = ./gtk-4.0;
+		".config/gtk-4.0/gtk.css".source = "${gtk-theme}/gtk-4.0/gtk.css";
+		".config/gtk-4.0/gtk-dark.css".source = "${gtk-theme}/gtk-4.0/gtk-dark.css";
+		".config/gtk-4.0/assets".source = "${gtk-theme}/gtk-4.0/assets";
+		".themes/catppuccin-mocha-lavender-standard".source = gtk-theme;
+		".gtkrc-2.0".source = ./gtkrc-2.0;
 
 		".config/ghostty/config".text = ''
 		background = 000000
@@ -115,6 +117,9 @@ in
 			# For quickshell
 			icoutils
 			localPackages.hyprfreeze
+
+			chicago95
+			
 
 		];
 	};
