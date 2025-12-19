@@ -4,12 +4,12 @@ let
 		alternativeIcons = true;
 		themeVariants = ["purple"];
 	};
-	gtk-theme = "${
+	/*gtk-theme = "${
 		pkgs.catppuccin-gtk.override {
 			accents = ["lavender"];
 			variant = "mocha";
 		}
-	}/share/themes/catppuccin-mocha-lavender-standard";
+	}/share/themes/catppuccin-mocha-lavender-standard";*/
 in
 {
 	# Define a user account. Don't forget to set a password with ‘passwd’.
@@ -47,14 +47,14 @@ in
 		".local/share/icons/WhiteSurIcons".source = "${wsuricons}/share/icons/WhiteSur-purple";
 		".local/share/icons/WhiteSurIcons-dark".source = "${wsuricons}/share/icons/WhiteSur-purple-dark";
 		".local/share/icons/WhiteSurIcons-light".source = "${wsuricons}/share/icons/WhiteSur-purple-light";
-		".config/xsettingsd/xsettingsd.conf".source = ./xsettingsd.conf;
+		/*".config/xsettingsd/xsettingsd.conf".source = ./xsettingsd.conf;
 		".config/gtk-3.0/settings.ini".source = ./gtk-3.0;
 		".config/gtk-4.0/settings.ini".source = ./gtk-4.0;
 		".config/gtk-4.0/gtk.css".source = "${gtk-theme}/gtk-4.0/gtk.css";
 		".config/gtk-4.0/gtk-dark.css".source = "${gtk-theme}/gtk-4.0/gtk-dark.css";
 		".config/gtk-4.0/assets".source = "${gtk-theme}/gtk-4.0/assets";
 		".themes/catppuccin-mocha-lavender-standard".source = gtk-theme;
-		".gtkrc-2.0".source = ./gtkrc-2.0;
+		".gtkrc-2.0".source = ./gtkrc-2.0;*/
 
 		".config/ghostty/config".text = ''
 		background = 000000
@@ -70,8 +70,8 @@ in
 		description = "Minec";
 		extraGroups = [ "networkmanager" "wheel" "adbusers" "kvm" "dialout" "flashrom" "corectrl" ];
 		packages = with pkgs; [
-      # Apps
-		  ghostty
+      		# Apps
+			ghostty
 			element-desktop
 			kdePackages.kdenlive
 			#jellyfin-media-player
@@ -93,6 +93,7 @@ in
 			bluejay
 			vicinae
 			blender
+			aseprite
 
 			# Tools for a decent computer experience
 			nautilus
@@ -110,17 +111,15 @@ in
 			python3
 			nodejs
 			libqalculate
+			
 
 			# Theming
-			libsForQt5.qt5ct
-			kdePackages.qt6ct
+			kde-rounded-corners
+			/*libsForQt5.qt5ct
+			kdePackages.qt6ct*/
 			# For quickshell
 			icoutils
 			localPackages.hyprfreeze
-
-			chicago95
-			
-
 		];
 	};
 }

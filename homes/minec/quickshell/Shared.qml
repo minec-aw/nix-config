@@ -27,7 +27,7 @@ Singleton {
     property int ramCapacity: 1
     property int usedRam: 2
     property int cpuUsage: 0
-    property string internetInterface: "enp42s0"
+    property string internetInterface: "enp12s0"
     property double totalDownload
     property double totalUpload
     property string uploadRate: "0 B/s"
@@ -174,7 +174,7 @@ Singleton {
         }
     }
 
-    // cat /proc/net/dev | awk '/enp42s0/ {print $2}'] //total downloaded
+    // cat /proc/net/dev | awk '/enp12s0/ {print $2}'] //total downloaded
     // hyprctl dispatch workspace e+1
 
     function randomString(length) {

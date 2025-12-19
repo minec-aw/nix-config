@@ -8,50 +8,34 @@
 		./hardware-configuration.nix
 		./refind/refind.nix
 		./homes/minec
-		./virtualisation
+		#./virtualisation
 	];
 
 	hjem.clobberByDefault = true;
 	boot = {
-		kernelParams = ["quiet" "splash" "loglevel=3"];
+		#kernelParams = ["quiet" "splash" "loglevel=3"];
 		/*extraModprobeConfig = ''
 			options nvidia NVreg_UsePageAttributeTable=1 NVreg_InitializeSystemMemoryAllocations=0 NVreg_EnableStreamMemOPs=1 NVreg_EnableGpuFirmware=0
 		'';*/
 		consoleLogLevel = 0;
 		loader = {
-			refind = {
-				enable = true;
-				extraConfig = ''
-				enable_mouse true
-				mouse_speed 10
-				mouse_size 22
-				textonly 0
-				resolution 2560 1440
-				scan_driver_dirs drivers,EFI/tools/drivers
-				include themes/rEFInd-minimal/theme.conf
-				dont_scan_dirs efi/nixos
-				'';
-				additionalFiles = {
-					"themes/rEFInd-minimal" = "${builtins.path { path = ./refind; }}/rEFInd-minimal-modded-theme";
-				};
-			};
-			# until refind is merged into nixpkgs, this must be here
 			systemd-boot = {
 				enable = true;
 				editor = false;
 			};
-			timeout = 2;
+			timeout = 1;
 			efi.canTouchEfiVariables = true;
 		};
+
 		initrd = {
 			verbose = true;
 			systemd.enable = true;
 		};
-		plymouth = {
-			enable = true;
-			theme = "bgrt";
-			extraConfig = "DeviceScale=1";
-		};
+		#plymouth = {
+		#	enable = true;
+		#	theme = "bgrt";
+		#	extraConfig = "DeviceScale=1";
+		#};
 		kernelPackages = pkgs.linuxPackages_latest;
 
 	};
@@ -105,21 +89,12 @@
 			#defaultRuntime = true;
 		};
 		playerctld.enable = true;
-		greetd = {
+		desktopManager.plasma6 = {
 			enable = true;
-			settings = {
-				initial_session = {
-					command = "${pkgs.hyprland}/bin/Hyprland";
-					user = "minec";
-				};
-				default_session = {
-					command = "$${pkgs.greetd.tuigreet}/bin/tuigreet --greeting ' ' --asterisks --remember --remember-user-session --time -cmd ${pkgs.hyprland}/bin/Hyprland";
-					user = "greeter";
-				};
-			};
 		};
-		/*displayManager = {
-			/*autoLogin = {
+
+		displayManager = {
+			autoLogin = {
 				enable = true;
 				user = "minec";
 			};
@@ -128,7 +103,7 @@
 				wayland.enable = true;
 				#autoLogin.relogin = true;
 			};
-		};*/
+		};
 		tailscale = {
 			enable = true;
 			useRoutingFeatures = "both";
@@ -225,8 +200,8 @@
 				reverseSync.enable = true;
 				offload.enableOffloadCmd = true;
 				# Enable if using an external GPU
-				amdgpuBusId = "PCI:6:0:0";
-				nvidiaBusId = "PCI:43:0:0";
+				amdgpuBusId = "PCI:17:0:0";
+				nvidiaBusId = "PCI:1:0:0";
 			};
 			nvidiaSettings = true;
 			package = config.boot.kernelPackages.nvidiaPackages.latest;
@@ -297,7 +272,7 @@
 			wl-clipboard
 			kdePackages.plasma-browser-integration
 			pulseaudio
-			inputs.nix-alien.packages.${system}.nix-alien
+			inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
 			kdePackages.qtdeclarative
 			dotnet-sdk_9
 
@@ -342,11 +317,11 @@
 		obs-studio = {
 			enable = true;
 		};
-		hyprland = {
+		/*hyprland = {
 			enable = true;
 			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
 			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-		};
+		};*/
 		alvr = {
 			enable = true;
 			openFirewall = true;
