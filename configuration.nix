@@ -13,7 +13,7 @@
 
 	hjem.clobberByDefault = true;
 	boot = {
-		#kernelParams = ["quiet" "splash" "loglevel=3"];
+		kernelParams = ["quiet" "splash" "loglevel=3"];
 		/*extraModprobeConfig = ''
 			options nvidia NVreg_UsePageAttributeTable=1 NVreg_InitializeSystemMemoryAllocations=0 NVreg_EnableStreamMemOPs=1 NVreg_EnableGpuFirmware=0
 		'';*/
@@ -31,11 +31,11 @@
 			verbose = true;
 			systemd.enable = true;
 		};
-		#plymouth = {
-		#	enable = true;
-		#	theme = "bgrt";
-		#	extraConfig = "DeviceScale=1";
-		#};
+		plymouth = {
+			enable = true;
+			theme = "bgrt";
+			extraConfig = "DeviceScale=1";
+		};
 		kernelPackages = pkgs.linuxPackages_latest;
 
 	};
