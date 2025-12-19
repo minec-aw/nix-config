@@ -286,7 +286,7 @@
 			wlx-overlay-s
 			vlc
 			flatpak
-			(quickshell.overrideAttrs (oldAttrs: {
+			/*(quickshell.overrideAttrs (oldAttrs: {
 				buildInputs = oldAttrs.buildInputs ++ (with pkgs; [
 					kdePackages.qtmultimedia
 					kdePackages.qtquick3d
@@ -296,7 +296,7 @@
 					vulkan-loader
 					glib
 				]);
-			}))
+			}))*/
 			zed-editor
 			# Theming
 			wsuricons
@@ -313,7 +313,7 @@
 	};
 
 	programs = {
-		corectrl.enable = true;
+		#corectrl.enable = true;
 		obs-studio = {
 			enable = true;
 		};

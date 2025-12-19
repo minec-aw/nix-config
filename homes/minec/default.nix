@@ -91,19 +91,19 @@ in
 			vesktop
 			faugus-launcher
 			bluejay
-			vicinae
 			blender
 			aseprite
 
 			# Tools for a decent computer experience
-			nautilus
+			#vicinae
+			#nautilus
 			pwvucontrol
-			kdePackages.ark
+			#kdePackages.ark
 			resources
-			loupe
-			showtime
-			gnome-text-editor
-			decibels
+			#loupe
+			#showtime
+			#gnome-text-editor
+			#decibels
 			gnome-disk-utility
 
 			# Tools for other stuff
