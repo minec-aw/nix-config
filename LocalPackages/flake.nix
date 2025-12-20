@@ -27,11 +27,11 @@
 			for pid in $gpu_pids; do
 				kill -9 $pid
 			done 
-			gpu_pids2=$(lsof $(realpath /dev/dri/by-path/pci-0000\:2b\:00.0-render) | awk 'NR!=1 {print $2}')
+			gpu_pids2=$(lsof $(realpath /dev/dri/by-path/pci-0000\:01\:00.0-render) | awk 'NR!=1 {print $2}')
 			for pid in $gpu_pids2; do
 				kill -9 $pid
 			done 
-			gpu_pids3=$(lsof $(realpath /dev/dri/by-path/pci-0000\:2b\:00.0-card) | awk 'NR!=1 {print $2}')
+			gpu_pids3=$(lsof $(realpath /dev/dri/by-path/pci-0000\:01\:00.0-card) | awk 'NR!=1 {print $2}')
 			for pid in $gpu_pids3; do
 				kill -9 $pid
 			done 
@@ -96,7 +96,7 @@
 			sleep 1
 			#systemctl start nvidia-powerd.service
 
-			echo 1 | tee /sys/bus/pci/devices/0000:2b:00.1/remove
+			echo 1 | tee /sys/bus/pci/devices/0000:01:00.1/remove
 			# ========================================
 
 			# If --once was passed, drop the marker

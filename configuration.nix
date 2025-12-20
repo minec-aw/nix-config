@@ -8,7 +8,7 @@
 		./hardware-configuration.nix
 		./refind/refind.nix
 		./homes/minec
-		#./virtualisation
+		./virtualisation
 	];
 
 	hjem.clobberByDefault = true;
