@@ -275,6 +275,7 @@
 			inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
 			kdePackages.qtdeclarative
 			dotnet-sdk_9
+			faugus-launcher
 
 			# Apps
 			(inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
