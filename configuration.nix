@@ -343,10 +343,13 @@
 			#gamescopeSession.enable = true;
 			enable = true;
 			protontricks.enable = true;
-			/*package = with pkgs; steam.override {
+			package = with pkgs; steam.override {
 				extraPkgs = pkgs: [
 					attr
 				];
+				extraEnv = {
+					LD_AUDIT = "${inputs.sls-steam.packages.${pkgs.stdenv.hostPlatform.system}.sls-steam}/SLSsteam.so";
+				};
 				extraLibraries = (pkgs: [
 					#(pkgs.callPackage ./LocalPackages/openssl {}).openssl_1_1
 					pkgs.openssl
@@ -359,7 +362,7 @@
 					pkgs.krb5
 					pkgs.keyutils
 				]);
-			};*/
+			};
 			remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
 			#dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
 		};

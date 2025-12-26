@@ -20,6 +20,10 @@
 			url = "github:feel-co/hjem";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
+		sls-steam = {
+			url = "github:AceSLS/SLSsteam";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 		#chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 		nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
 	};
