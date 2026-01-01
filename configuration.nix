@@ -168,14 +168,10 @@
 
 				];
 			};
-			/*outputs."HDMI-A-2" = {
-    			edid = "ignored.bin";
-        		mode = "d";
+			outputs."DP-1" = {
+    			edid = "wh.bin";
+        		mode = "e";
       		};
-			outputs."HDMI-A-3" = {
-    			edid = "ignored.bin";
-        		mode = "d";
-      		};*/
 		};
 		bluetooth = {
 			enable = true;
@@ -233,13 +229,6 @@
 			GSETTINGS_SCHEMA_DIR="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
 		};
 		sessionVariables = {
-			HYPR_PLUGIN_DIR = pkgs.symlinkJoin {
-				name = "hyprland-plugins";
-				paths = with pkgs.hyprlandPlugins; [
-					hyprbars
-					localPackages.csd-titlebar-move
-				];
-			};
 			ELECTRON_OZONE_PLATFORM_HINT = "wayland";
 			NIXOS_OZONE_WL = "1";
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
@@ -272,7 +261,7 @@
 			wl-clipboard
 			kdePackages.plasma-browser-integration
 			pulseaudio
-			inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
+			#inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
 			kdePackages.qtdeclarative
 			dotnet-sdk_9
 			faugus-launcher
@@ -280,9 +269,12 @@
 			# Apps
 			(inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
 				nativeMessagingHosts = [
+					pkgs.firefoxpwa
 					pkgs.kdePackages.plasma-browser-integration
 				];
 			})
+			firefoxpwa
+			
 			tail-tray
 			wlx-overlay-s
 			vlc
@@ -343,14 +335,14 @@
 			#gamescopeSession.enable = true;
 			enable = true;
 			protontricks.enable = true;
-			package = with pkgs; steam.override {
-				extraPkgs = pkgs: [
+			/*package = with pkgs; steam.override {
+				/*extraPkgs = pkgs: [
 					attr
 				];
 				extraEnv = {
 					LD_AUDIT = "${inputs.sls-steam.packages.${pkgs.stdenv.hostPlatform.system}.sls-steam}/SLSsteam.so";
 				};
-				extraLibraries = (pkgs: [
+				/*extraLibraries = (pkgs: [
 					#(pkgs.callPackage ./LocalPackages/openssl {}).openssl_1_1
 					pkgs.openssl
 					pkgs.nghttp2
@@ -362,7 +354,7 @@
 					pkgs.krb5
 					pkgs.keyutils
 				]);
-			};
+			};*/
 			remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
 			#dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
 		};

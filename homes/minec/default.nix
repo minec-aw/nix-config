@@ -84,7 +84,7 @@ in
 			krita
 			r2modman
 			qpwgraph
-			tenacity
+			#tenacity
 			scrcpy
 			btop
 			chromium
@@ -92,7 +92,6 @@ in
 			faugus-launcher
 			bluejay
 			blender
-			aseprite
 			rquickshare
 
 			# Tools for a decent computer experience

@@ -65,23 +65,6 @@
 		nvidia-unbind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-unbind-vfio" ''
 			#!/run/current-system/sw/bin/bash
 
-			MARKER_FILE="/tmp/my-script-once.flag"
-
-			# Handle arguments
-			ONCE=false
-			for arg in "$@"; do
-				case "$arg" in
-					--once) ONCE=true ;;
-				esac
-			done
-
-			# If --once was passed and the marker already exists, exit early
-			if $ONCE && [[ -e "$MARKER_FILE" ]]; then
-				echo "Already ran once this boot, skipping."
-				exit 0
-			fi
-
-			# ========== Your actual script ==========
 			modprobe -r vfio_pci
 			modprobe -r vfio_iommu_type1
 			modprobe -r vfio
@@ -92,17 +75,11 @@
 			modprobe nvidia_drm "modeset=1"
 			modprobe nvidia_modeset
 			modprobe nvidia_uvm
-			modprobe nvidia "NVreg_DynamicPowerManagement=0x02"
+			modprobe nvidia "NVreg_DynamicPowerManagement=0x03"
 			sleep 1
 			#systemctl start nvidia-powerd.service
 
 			echo 1 | tee /sys/bus/pci/devices/0000:01:00.1/remove
-			# ========================================
-
-			# If --once was passed, drop the marker
-			if $ONCE; then
-				touch "$MARKER_FILE"
-			fi
 		'';
 	};
 }
