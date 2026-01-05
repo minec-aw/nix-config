@@ -93,6 +93,8 @@ in
 			bluejay
 			blender
 			rquickshare
+			slack
+			nicotine-plus
 
 			# Tools for a decent computer experience
 			#vicinae
@@ -111,7 +113,7 @@ in
 			python3
 			nodejs
 			libqalculate
-			
+
 
 			# Theming
 			kde-rounded-corners
