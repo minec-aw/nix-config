@@ -1,4 +1,4 @@
-{ pkgs, localPackages, ... }:
+{ pkgs, localPackages, inputs, ... }:
 let
   wsuricons = pkgs.whitesur-icon-theme.override {
 		alternativeIcons = true;
@@ -95,6 +95,7 @@ in
 			rquickshare
 			slack
 			nicotine-plus
+			inputs.affinity-nix.packages.x86_64-linux.v3
 
 			# Tools for a decent computer experience
 			#vicinae
