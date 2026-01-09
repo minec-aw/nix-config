@@ -26,7 +26,10 @@
 		};
 		#chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 		nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
-		affinity-nix.url = "github:mrshmllow/affinity-nix";
+		affinity-nix = {
+			url = "github:mrshmllow/affinity-nix";
+			inputs.nixpkgs.follows = "nixpkgs";
+		};
 	};
 	#nixConfig.extra-substituters = [ "https://vicinae.cachix.org" ];
 	#nixConfig.extra-trusted-public-keys = [ "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc=" ];

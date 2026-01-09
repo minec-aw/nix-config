@@ -84,7 +84,7 @@ in
 			krita
 			r2modman
 			qpwgraph
-			#tenacity
+			tenacity
 			scrcpy
 			btop
 			chromium
@@ -122,7 +122,7 @@ in
 			kdePackages.qt6ct*/
 			# For quickshell
 			icoutils
-			localPackages.hyprfreeze
+			#localPackages.hyprfreeze
 		];
 	};
 }

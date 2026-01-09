@@ -279,17 +279,6 @@
 			wlx-overlay-s
 			vlc
 			flatpak
-			/*(quickshell.overrideAttrs (oldAttrs: {
-				buildInputs = oldAttrs.buildInputs ++ (with pkgs; [
-					kdePackages.qtmultimedia
-					kdePackages.qtquick3d
-					kdePackages.qtquick3dphysics
-					openxr-loader
-					vulkan-headers
-					vulkan-loader
-					glib
-				]);
-			}))*/
 			zed-editor
 			# Theming
 			wsuricons
@@ -310,11 +299,6 @@
 		obs-studio = {
 			enable = true;
 		};
-		/*hyprland = {
-			enable = true;
-			#package = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.hyprland;
-			#portalPackage = inputs.hyprland.packages.${pkgs.stdenv.hostPlatform.system}.xdg-desktop-portal-hyprland;
-		};*/
 		alvr = {
 			enable = true;
 			openFirewall = true;
@@ -323,7 +307,7 @@
 		kdeconnect = {
 			enable = true;
 		};
-		adb.enable = true;
+		#adb.enable = true;
 		bash = {
 			enable = true;
 			blesh.enable = true;
