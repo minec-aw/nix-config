@@ -9,6 +9,7 @@
 			kvmfr
 		];
 	};
+	hardware.nvidia-container-toolkit.enable = true;
 	virtualisation = {
 		docker.enable = true;
 		#waydroid.enable = true;
