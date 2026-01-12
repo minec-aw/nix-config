@@ -70,7 +70,7 @@ in
 		description = "Minec";
 		extraGroups = [ "networkmanager" "wheel" "adbusers" "kvm" "dialout" "flashrom" "corectrl" ];
 		packages = with pkgs; [
-      		# Apps
+      # Apps
 			ghostty
 			element-desktop
 			kdePackages.kdenlive
@@ -96,6 +96,7 @@ in
 			slack
 			nicotine-plus
 			inputs.affinity-nix.packages.x86_64-linux.v3
+			libreoffice-fresh
 
 			# Tools for a decent computer experience
 			#vicinae
