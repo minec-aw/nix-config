@@ -97,6 +97,10 @@ in
 			nicotine-plus
 			inputs.affinity-nix.packages.x86_64-linux.v3
 			libreoffice-fresh
+			okteta
+			pinta
+			weasis
+			vinegar
 
 			# Tools for a decent computer experience
 			#vicinae
