@@ -1,4 +1,4 @@
-{ pkgs, localPackages, inputs, ... }:
+{ pkgs, inputs, ... }:
 let
   wsuricons = pkgs.whitesur-icon-theme.override {
 		alternativeIcons = true;
@@ -14,7 +14,7 @@ in
 {
 	# Define a user account. Don't forget to set a password with ‘passwd’.
 	hjem.users.minec.files = {
-		".config/openxr/1/active_runtime.json".source = "${pkgs.wivrn}/share/openxr/1/openxr_wivrn.json";
+		#".config/openxr/1/active_runtime.json".source = "${pkgs.wivrn}/share/openxr/1/openxr_wivrn.json";
 		/*".config/openvr/openvrpaths.vrpath".text = ''
 			{
 				"config" :
@@ -101,6 +101,7 @@ in
 			pinta
 			weasis
 			vinegar
+			parsec-bin
 
 			# Tools for a decent computer experience
 			#vicinae

@@ -48,7 +48,7 @@
 			allowedTCPPorts = [ 3389 2234 ];
 		};
 	};
-	systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
+	#systemd.user.services.wivrn.serviceConfig.RemoveIPC = pkgs.lib.mkForce false;
 
 	zramSwap = {
 		enable = true;
@@ -80,14 +80,14 @@
 			relay.enable = true;
 		};
 		dbus.implementation = "broker";
-		wivrn = {
+		/*wivrn = {
 			enable = true;
 			openFirewall = true;
 			package = (pkgs.wivrn.override {
 				cudaSupport = true;
 			});
 			#defaultRuntime = true;
-		};
+		};*/
 		playerctld.enable = true;
 		desktopManager.plasma6 = {
 			enable = true;
@@ -276,7 +276,7 @@
 			firefoxpwa
 			
 			tail-tray
-			wlx-overlay-s
+			wayvr
 			vlc
 			flatpak
 			zed-editor
