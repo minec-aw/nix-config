@@ -101,6 +101,7 @@ in
 			pinta
 			weasis
 			vinegar
+			lapce
 			parsec-bin
 
 			# Tools for a decent computer experience
