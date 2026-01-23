@@ -16,6 +16,7 @@
 		wayfire-round-corners = pythonCallPackage ./wayfire-round-corners {};
 		csd-titlebar-move = callPackage ./hyprcsd { inherit mkHyprlandPlugin; };
 		hyprfreeze = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "hyprfreeze" (builtins.readFile ./hyprfreeze);
+		gnome-shell-extension-copyous = callPackage ./clipious-gnome-extension.nix {};
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" ''
 			#!/run/current-system/sw/bin/bash
 			# Commence a pci-rescan to make any sleeping nvidia stuff wake up again

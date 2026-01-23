@@ -2,7 +2,7 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-{ config, pkgs, inputs, localPackages, ... }:
+{ config, pkgs, inputs, lib, ... }:
 {
 	imports = [ # Include the results of the hardware scan.
 		./hardware-configuration.nix
@@ -10,6 +10,55 @@
 		./homes/minec
 		./virtualisation
 	];
+
+	nixpkgs.overlays = lib.singleton (final: prev: {
+    kdePackages = prev.kdePackages // {
+      plasma-workspace = let
+
+        # the package we want to override
+        basePkg = prev.kdePackages.plasma-workspace;
+
+        # a helper package that merges all the XDG_DATA_DIRS into a single directory
+        xdgdataPkg = pkgs.stdenv.mkDerivation {
+          name = "${basePkg.name}-xdgdata";
+          buildInputs = [ basePkg ];
+          dontUnpack = true;
+          dontFixup = true;
+          dontWrapQtApps = true;
+          installPhase = ''
+            mkdir -p $out/share
+            ( IFS=:
+              for DIR in $XDG_DATA_DIRS; do
+                if [[ -d "$DIR" ]]; then
+                  cp -r $DIR/. $out/share/
+                  chmod -R u+w $out/share
+                fi
+              done
+            )
+          '';
+        };
+
+        # undo the XDG_DATA_DIRS injection that is usually done in the qt wrapper
+        # script and instead inject the path of the above helper package
+        derivedPkg = basePkg.overrideAttrs {
+          preFixup = ''
+            for index in "''${!qtWrapperArgs[@]}"; do
+              if [[ ''${qtWrapperArgs[$((index+0))]} == "--prefix" ]] && [[ ''${qtWrapperArgs[$((index+1))]} == "XDG_DATA_DIRS" ]]; then
+                unset -v "qtWrapperArgs[$((index+0))]"
+                unset -v "qtWrapperArgs[$((index+1))]"
+                unset -v "qtWrapperArgs[$((index+2))]"
+                unset -v "qtWrapperArgs[$((index+3))]"
+              fi
+            done
+            qtWrapperArgs=("''${qtWrapperArgs[@]}")
+            qtWrapperArgs+=(--prefix XDG_DATA_DIRS : "${xdgdataPkg}/share")
+            qtWrapperArgs+=(--prefix XDG_DATA_DIRS : "$out/share")
+          '';
+        };
+
+      in derivedPkg;
+    };
+  });
 
 	hjem.clobberByDefault = true;
 	boot = {
@@ -89,7 +138,7 @@
 			#defaultRuntime = true;
 		};*/
 		playerctld.enable = true;
-		desktopManager.plasma6 = {
+		desktopManager.gnome = {
 			enable = true;
 		};
 
@@ -98,9 +147,9 @@
 				enable = true;
 				user = "minec";
 			};
-			sddm = {
+			gdm = {
 				enable = true;
-				wayland.enable = true;
+				#wayland.enable = true;
 				#autoLogin.relogin = true;
 			};
 		};
@@ -231,6 +280,7 @@
 		sessionVariables = {
 			ELECTRON_OZONE_PLATFORM_HINT = "wayland";
 			NIXOS_OZONE_WL = "1";
+			PROTON_ENABLE_WAYLAND = "1";
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
 
@@ -303,9 +353,26 @@
 			enable = true;
 			openFirewall = true;
 		};
-		dconf.enable = true;
+		dconf = {
+			enable = true;
+			profiles.user.databases = [
+				{
+				settings = {
+					"org/gnome/mutter" = {
+					experimental-features = [
+						"scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
+						"variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
+						#"xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
+						"autoclose-xwayland" # automatically terminates Xwayland if all relevant X11 clients are gone
+					];
+					};
+				};
+				}
+			];
+		};
 		kdeconnect = {
 			enable = true;
+			package = pkgs.gnomeExtensions.gsconnect;
 		};
 		#adb.enable = true;
 		bash = {

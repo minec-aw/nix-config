@@ -1,4 +1,4 @@
-{ pkgs, inputs, ... }:
+{ pkgs, inputs, localPackages, ... }:
 let
   wsuricons = pkgs.whitesur-icon-theme.override {
 		alternativeIcons = true;
@@ -121,7 +121,26 @@ in
 			python3
 			nodejs
 			libqalculate
-
+			
+			## GNOME
+			gnomeExtensions.appindicator
+			gnome-settings-daemon
+			gnomeExtensions.steal-my-focus-window
+			#gnomeExtensions.unpanel
+			#gnomeExtensions.tailscale-qs
+			gnomeExtensions.rounded-window-corners-reborn
+			gnomeExtensions.quick-settings-audio-panel
+			gnome-tweaks
+			#gnomeExtensions.pano
+			gnomeExtensions.gtk4-desktop-icons-ng-ding
+			gnomeExtensions.foresight
+			gnomeExtensions.blur-my-shell
+			gnomeExtensions.custom-hot-corners-extended
+			gnomeExtensions.hide-top-bar
+			gnomeExtensions.just-perfection
+			gnomeExtensions.search-light
+			gnomeExtensions.adw-gtk3-colorizer
+			localPackages.gnome-shell-extension-copyous
 
 			# Theming
 			kde-rounded-corners

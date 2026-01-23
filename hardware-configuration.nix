@@ -53,6 +53,12 @@
   };
   #networking.useDHCP = lib.mkDefault true;
   # networking.interfaces.enp12s0.useDHCP = lib.mkDefault true;
+  services.udev.extraRules = ''
+	SUBSYSTEM=="hidraw", ATTRS{idVendor}=="3151", ATTRS{idProduct}=="5009", TAG+="uaccess"
+  SUBSYSTEM=="usb", ATTRS{idVendor}=="3151", ATTRS{idProduct}=="5009", TAG+="uaccess"
+	'';
+
+  #3151:5009
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
