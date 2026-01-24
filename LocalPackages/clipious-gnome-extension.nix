@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchzip {
     #https://github.com/boerdereinar/copyous/releases
     url = "https://github.com/boerdereinar/copyous/releases/download/v${finalAttrs.version}/copyous@boerdereinar.dev.zip";
-    hash = lib.fakeHash;
+    hash = "sha256-Nq49kM6LcH7tp3AiaiE0M7wbHn16LSMhOHEQq4VFEuo=";
     stripRoot = false;
   };
 
@@ -29,9 +29,15 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    substituteInPlace extension.js \
-      --replace-fail "import Gda from 'gi://Gda?version>=5.0'" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default" \
-      --replace-fail "import GSound from 'gi://GSound'" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
+    substituteInPlace lib/misc/db.js \
+      --replace-fail "gda = (await import('gi://Gda')).default" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); gda = (await import('gi://Gda')).default"
+    substituteInPlace lib/common/sound.js \
+      --replace-fail "const gsound = (await import('gi://GSound')).default" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const gsound = (await import('gi://GSound')).default"
+    substituteInPlace lib/preferences/general/feedbackSettings.js \
+      --replace-fail "const GSound = (await import('gi://GSound')).default" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default"
+    substituteInPlace lib/preferences/dependencies/dependencies.js \
+      --replace-fail "await import('gi://GSound')" "imports.gi.GIRepository.Repository.prepend_search_path('${gsound}/lib/girepository-1.0'); const GSound = (await import('gi://GSound')).default" \
+      --replace-fail "const Gda = (await import('gi://Gda')).default" "imports.gi.GIRepository.Repository.prepend_search_path('${libgda6}/lib/girepository-1.0'); const Gda = (await import('gi://Gda')).default"
   '';
 
   installPhase = ''

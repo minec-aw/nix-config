@@ -103,6 +103,7 @@ in
 			vinegar
 			lapce
 			parsec-bin
+			catppuccin-gtk
 
 			# Tools for a decent computer experience
 			#vicinae
