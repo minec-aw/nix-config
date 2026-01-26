@@ -12,6 +12,10 @@
 
 	hjem.clobberByDefault = true;
 	boot = {
+		kernel.sysctl = {
+			"vm.vfs_cache_pressure" = 200; 
+		};
+		
 		kernelParams = ["quiet" "splash" "loglevel=3"];
 		/*extraModprobeConfig = ''
 			options nvidia NVreg_UsePageAttributeTable=1 NVreg_InitializeSystemMemoryAllocations=0 NVreg_EnableStreamMemOPs=1 NVreg_EnableGpuFirmware=0
@@ -207,9 +211,6 @@
 		config = {
 			allowUnfree = true;
 			android_sdk.accept_license = true;
-			permittedInsecurePackages = [
-				"qtwebengine-5.15.19"
-        	];
 		};
 	};
 	security = {
@@ -217,16 +218,10 @@
 		rtkit.enable = true;
 		#soteria.enable = true;
 	};
-	xdg.portal.extraPortals = with pkgs; [
-		xdg-desktop-portal-luminous
-	];
 	# List packages installed in system profile. To search, run:
 	# $ nix search wget
 	environment = {
 		shells = with pkgs; [bash];
-		variables = {
-			GSETTINGS_SCHEMA_DIR="${pkgs.gsettings-desktop-schemas}/share/gsettings-schemas/${pkgs.gsettings-desktop-schemas.name}/glib-2.0/schemas";
-		};
 		sessionVariables = {
 			ELECTRON_OZONE_PLATFORM_HINT = "wayland";
 			NIXOS_OZONE_WL = "1";
