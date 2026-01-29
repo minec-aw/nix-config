@@ -72,8 +72,6 @@ in
 		packages = with pkgs; [
       # Apps
 			ghostty
-			element-desktop
-			kdePackages.kdenlive
 			#jellyfin-media-player
 			kdePackages.isoimagewriter
 			kdiskmark
@@ -93,15 +91,11 @@ in
 			bluejay
 			blender
 			rquickshare
-			slack
 			nicotine-plus
-			inputs.affinity-nix.packages.x86_64-linux.v3
 			libreoffice-fresh
 			okteta
 			pinta
 			weasis
-			vinegar
-			lapce
 			parsec-bin
 
 			# Tools for a decent computer experience
@@ -131,7 +125,6 @@ in
 			gnomeExtensions.rounded-window-corners-reborn
 			gnomeExtensions.quick-settings-audio-panel
 			gnome-tweaks
-			#gnomeExtensions.pano
 			gnomeExtensions.gtk4-desktop-icons-ng-ding
 			gnomeExtensions.foresight
 			gnomeExtensions.blur-my-shell
@@ -143,7 +136,6 @@ in
 			localPackages.gnome-shell-extension-copyous
 
 			# Theming
-			kde-rounded-corners
 			/*libsForQt5.qt5ct
 			kdePackages.qt6ct*/
 			# For quickshell

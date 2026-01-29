@@ -95,13 +95,16 @@
 		desktopManager.gnome = {
 			enable = true;
 		};
+		desktopManager.cosmic = {
+			enable = true;
+		};
 
 		displayManager = {
-			autoLogin = {
+			/*autoLogin = {
 				enable = true;
 				user = "minec";
-			};
-			gdm = {
+			};*/
+			cosmic-greeter = {
 				enable = true;
 				#wayland.enable = true;
 				#autoLogin.relogin = true;
