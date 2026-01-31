@@ -11,15 +11,8 @@
 	];
 
 	hjem.clobberByDefault = true;
-	boot = {
-		kernel.sysctl = {
-			"vm.vfs_cache_pressure" = 200; 
-		};
-		
+	boot = {		
 		kernelParams = ["quiet" "splash" "loglevel=3"];
-		/*extraModprobeConfig = ''
-			options nvidia NVreg_UsePageAttributeTable=1 NVreg_InitializeSystemMemoryAllocations=0 NVreg_EnableStreamMemOPs=1 NVreg_EnableGpuFirmware=0
-		'';*/
 		consoleLogLevel = 0;
 		loader = {
 			systemd-boot = {
@@ -83,31 +76,18 @@
 			relay.enable = true;
 		};*/
 		dbus.implementation = "broker";
-		/*wivrn = {
-			enable = true;
-			openFirewall = true;
-			package = (pkgs.wivrn.override {
-				cudaSupport = true;
-			});
-			#defaultRuntime = true;
-		};*/
 		playerctld.enable = true;
-		/*desktopManager.gnome = {
-			enable = true;
-		};*/
 		desktopManager.cosmic = {
 			enable = true;
 		};
 
 		displayManager = {
-			/*autoLogin = {
+			autoLogin = {
 				enable = true;
 				user = "minec";
-			};*/
+			};
 			cosmic-greeter = {
 				enable = true;
-				#wayland.enable = true;
-				#autoLogin.relogin = true;
 			};
 		};
 		tailscale = {
@@ -234,12 +214,6 @@
 		};
 
 		systemPackages = with pkgs;
-		let
-			wsuricons = whitesur-icon-theme.override {
-				alternativeIcons = true;
-				themeVariants = ["red"];
-			};
-		in
 		[
 			# Tools
 			nixd
@@ -257,13 +231,9 @@
 			appimage-run
 			lsof
 			psmisc
-			wl-clipboard
 			kdePackages.plasma-browser-integration
 			pulseaudio
 			kdePackages.qtdeclarative
-			dotnet-sdk_9
-			faugus-launcher
-
 			# Apps
 			(inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
 				nativeMessagingHosts = [
@@ -274,15 +244,13 @@
 			firefoxpwa
 			
 			tail-tray
-			wayvr
-			vlc
 			flatpak
-			zed-editor
 			# Theming
-			wsuricons
 			darkly-qt5
 			darkly
 			adw-gtk3
+
+			# cosmic
 			cosmic-ext-applet-minimon
 			cosmic-ext-tweaks
 		];
@@ -303,27 +271,10 @@
 			enable = true;
 			openFirewall = true;
 		};*/
-		dconf = {
-			enable = true;
-			profiles.user.databases = [
-				{
-				settings = {
-					"org/gnome/mutter" = {
-					experimental-features = [
-						"scale-monitor-framebuffer" # Enables fractional scaling (125% 150% 175%)
-						"variable-refresh-rate" # Enables Variable Refresh Rate (VRR) on compatible displays
-						#"xwayland-native-scaling" # Scales Xwayland applications to look crisp on HiDPI screens
-						"autoclose-xwayland" # automatically terminates Xwayland if all relevant X11 clients are gone
-					];
-					};
-				};
-				}
-			];
-		};
-		kdeconnect = {
+		/*kdeconnect = {
 			enable = true;
 			package = pkgs.gnomeExtensions.gsconnect;
-		};
+		};*/
 		#adb.enable = true;
 		bash = {
 			enable = true;
@@ -376,7 +327,7 @@
 			proggyfonts
 			#nerdfonts
 			nerd-fonts.fira-code
-  			nerd-fonts.droid-sans-mono
+  		nerd-fonts.droid-sans-mono
 			corefonts
 			liberation_ttf
 			vista-fonts
