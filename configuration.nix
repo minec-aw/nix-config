@@ -92,9 +92,9 @@
 			#defaultRuntime = true;
 		};*/
 		playerctld.enable = true;
-		desktopManager.gnome = {
+		/*desktopManager.gnome = {
 			enable = true;
-		};
+		};*/
 		desktopManager.cosmic = {
 			enable = true;
 		};
@@ -227,8 +227,9 @@
 		shells = with pkgs; [bash];
 		sessionVariables = {
 			ELECTRON_OZONE_PLATFORM_HINT = "wayland";
-			NIXOS_OZONE_WL = "1";
-			PROTON_ENABLE_WAYLAND = "1";
+			NIXOS_OZONE_WL = 1;
+			PROTON_ENABLE_WAYLAND = 1;
+			COSMIC_DATA_CONTROL_ENABLED = 1;
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
 
@@ -259,7 +260,6 @@
 			wl-clipboard
 			kdePackages.plasma-browser-integration
 			pulseaudio
-			#inputs.nix-alien.packages.${pkgs.stdenv.hostPlatform.system}.nix-alien
 			kdePackages.qtdeclarative
 			dotnet-sdk_9
 			faugus-launcher
@@ -283,6 +283,8 @@
 			darkly-qt5
 			darkly
 			adw-gtk3
+			cosmic-ext-applet-minimon
+			cosmic-ext-tweaks
 		];
 	};
 	nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];

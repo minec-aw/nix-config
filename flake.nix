@@ -3,6 +3,7 @@
 
 	inputs = {
 		nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; #-24.11 #nixos-unstable
+		#nixpkgs.follows = "nixos-cosmic/nixpkgs";
 		# https://github.com/teatwig/nixpkgs/tree/wayfire-0.10.0
 		localPackages = {
 			url = "path:./LocalPackages";
@@ -10,10 +11,6 @@
 		};
 		zen-browser = {
 			url = "github:0xc000022070/zen-browser-flake";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
-		nix-alien = {
-			url = "github:thiagokokada/nix-alien";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
 		hjem = {
@@ -24,15 +21,8 @@
 			url = "github:AceSLS/SLSsteam";
 			inputs.nixpkgs.follows = "nixpkgs";
 		};
-		#chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
 		nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
-		affinity-nix = {
-			url = "github:mrshmllow/affinity-nix";
-			inputs.nixpkgs.follows = "nixpkgs";
-		};
 	};
-	#nixConfig.extra-substituters = [ "https://vicinae.cachix.org" ];
-	#nixConfig.extra-trusted-public-keys = [ "vicinae.cachix.org-1:1kDrfienkGHPYbkpNj1mWTr7Fm1+zcenzgTizIcI3oc=" ];
 
 
 	outputs = { self, nixpkgs, localPackages, nixpkgs-xr, ... }@inputs:
