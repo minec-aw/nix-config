@@ -14,7 +14,7 @@
 		macos-hyprcursor = callPackage ./macos-hyprcursor {};
 		csd-titlebar-move = callPackage ./hyprcsd { inherit mkHyprlandPlugin; };
 		hyprfreeze = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "hyprfreeze" (builtins.readFile ./hyprfreeze);
-		gnome-shell-extension-copyous = callPackage ./clipious-gnome-extension.nix {};
+		cosmic-ext-applet-clipboard-manager = callPackage ./cosmic-ext-applet-clipboard-manager {};
 		nvidia-bind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-bind-vfio" (builtins.readFile ./nvidia-bind-vfio);
 		nvidia-unbind-vfio = nixpkgs.legacyPackages.x86_64-linux.writeShellScriptBin "nvidia-unbind-vfio" (builtins.readFile ./nvidia-unbind-vfio);
 	};
