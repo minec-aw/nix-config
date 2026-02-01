@@ -234,6 +234,7 @@
 			kdePackages.plasma-browser-integration
 			pulseaudio
 			kdePackages.qtdeclarative
+			android-tools
 			# Apps
 			(inputs.zen-browser.packages."${pkgs.stdenv.hostPlatform.system}".default.override {
 				nativeMessagingHosts = [
