@@ -5,6 +5,7 @@
   rustPlatform,
   just,
   stdenv,
+  git,
   nix-update-script,
 }:
 
@@ -16,15 +17,15 @@ rustPlatform.buildRustPackage {
     owner = "cosmic-utils";
     repo = "clipboard-manager";
     rev = "7cc5868882718a2994418f94b1330f20eae5c8e5";
-    hash = lib.fakeHash;
+    hash = "sha256-aciPTGN4yN4xmOB/9/MF+nhiF3JGYF7h4fsFHzL7Fws=";
   };
 
-  useFetchCargoVendor = true;
-  cargoHash = lib.fakeHash;
+  cargoHash = "sha256-DmxrlYhxC1gh5ZoPwYqJcAPu70gzivFaZQ7hVMwz3aY=";
 
   nativeBuildInputs = [
     libcosmicAppHook
     just
+    git
   ];
 
   dontUseJustBuild = true;
@@ -34,26 +35,29 @@ rustPlatform.buildRustPackage {
     "--set"
     "prefix"
     (placeholder "out")
+    #"--set"
+    #"env-dst"
+    #"${placeholder "out"}/etc/profile.d/cosmic-ext-applet-clipboard-manager.sh"
     "--set"
-    "env-dst"
-    "${placeholder "out"}/etc/profile.d/cosmic-ext-applet-clipboard-manager.sh"
+    "cargo-target-dir"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}"#/release/cosmic-ext-applet-clipboard-manager"
     "--set"
-    "bin-src"
-    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-ext-applet-clipboard-manager"
+    "CLIPBOARD_MANAGER_COMMIT" 
+    "7cc5868"
   ];
-
-  preCheck = ''
-    export XDG_RUNTIME_DIR="$TMP"
-  '';
-
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script { 
+    extraArgs = [
+      "--version"
+      "branch=HEAD"
+    ];
+  };
 
   meta = {
     homepage = "https://github.com/cosmic-utils/clipboard-manager";
     description = "Clipboard manager for the COSMIC Desktop Environment";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
-      # lilyinstarlight
+       minec-aw
     ];
     platforms = lib.platforms.linux;
     mainProgram = "cosmic-ext-applet-clipboard-manager";

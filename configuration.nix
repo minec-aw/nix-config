@@ -139,7 +139,7 @@
 
 	hardware = {
 		i2c.enable = true;
-		/*display = {
+		display = {
 			edid = {
 				enable = true;
 				packages = [
@@ -158,7 +158,7 @@
     			edid = "wh.bin";
         		mode = "e";
       		};
-		};*/
+		};
 		bluetooth = {
 			enable = true;
 			powerOnBoot = true;
@@ -269,6 +269,28 @@
 		obs-studio = {
 			enable = true;
 		};
+		nix-ld.enable = true;
+		nix-ld.libraries = with pkgs; [
+			# Graphics / OpenGL
+			libGL
+			libGLU
+			libXi
+			libX11
+			libXext
+			libXrender
+			libXtst
+			libXrandr
+			libXcursor
+			libXcomposite
+			alsa-lib
+			libpulseaudio
+			mesa
+			libXxf86vm
+			# Audio
+			libpulseaudio
+			libvorbis
+			stdenv.cc.cc.lib
+		];
 		/*alvr = {
 			enable = true;
 			openFirewall = true;
