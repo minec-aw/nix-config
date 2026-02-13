@@ -31,6 +31,7 @@
 			okteta
 			pinta
 			weasis
+			direnv
 			parsec-bin
 
 			# Tools for a decent computer experience
@@ -45,6 +46,8 @@
 			python3
 			nodejs
 			libqalculate
+			jetbrains.webstorm
+			bun
 
 			# Theming
 			apple-cursor
