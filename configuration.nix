@@ -95,6 +95,10 @@
 			useRoutingFeatures = "both";
 			openFirewall = true;
 		};
+		llama-cpp = {
+			enable = true;
+			package = pkgs.llama-cpp-vulkan;
+		};
 
 		openssh.enable = true;
 		gvfs.enable = true;

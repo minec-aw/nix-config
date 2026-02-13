@@ -33,6 +33,7 @@
 			weasis
 			direnv
 			parsec-bin
+			zed-editor
 
 			# Tools for a decent computer experience
 			pwvucontrol
