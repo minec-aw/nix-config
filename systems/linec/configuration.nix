@@ -8,13 +8,7 @@
   ];
   waydroid.enable = true;
   coding.enable = true;
-  services = {
-    displayManager = {
-      sddm.enable = true;
-    };
-    desktopManager.plasma6.enable = true;
-    printing.enable = true;
-  };
+  services.printing.enable = true;
   environment.systemPackages = [ pkgs.moonlight-qt ];
   hardware.graphics = {
     enable = true;

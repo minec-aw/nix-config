@@ -9,6 +9,7 @@
   tailscale.enable = true;
   desktop-apps.enable = true;
   systemd-boot.enable = true;
+  plasma.enable = true;
 
   environment = {
     shells = with pkgs; [bash];
@@ -16,7 +17,6 @@
 			ELECTRON_OZONE_PLATFORM_HINT = "wayland";
 			NIXOS_OZONE_WL = 1;
 			PROTON_ENABLE_WAYLAND = 1;
-			COSMIC_DATA_CONTROL_ENABLED = 1;
 			#QML_IMPORT_PATH = "${pkgs.hyprland-qt-support}/lib/qt-6/qml";
 		};
     systemPackages = with pkgs; [

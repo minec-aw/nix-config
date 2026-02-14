@@ -8,6 +8,7 @@
     ./sunshine.nix
     ./systemd-boot.nix
     ./tailscale.nix
+		./plasma.nix
   ];
   options = {
     font-config.enable = lib.mkEnableOption "downloads fonts";
