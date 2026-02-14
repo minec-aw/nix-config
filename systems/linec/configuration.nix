@@ -1,4 +1,4 @@
-{ config, pkgs, localPackages, inputs, ... }:
+{ pkgs, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -12,8 +12,15 @@
     displayManager = {
       sddm.enable = true;
     };
-    plasma6.enable = true;
+    desktopManager.plasma6.enable = true;
     printing.enable = true;
+  };
+  environment.systemPackages = [ pkgs.moonlight-qt ];
+  hardware.graphics = {
+    enable = true;
+    extraPackages = with pkgs; [
+      intel-media-driver
+    ];
   };
 
   networking = {
