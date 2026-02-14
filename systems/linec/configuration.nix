@@ -2,8 +2,8 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ../shared-configurations.nix
-    ../modules
+    ../shared-configuration.nix
+    ../../modules
   ];
   waydroid.enable = true;
   

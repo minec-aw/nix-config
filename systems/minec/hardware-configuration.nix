@@ -56,25 +56,6 @@
   # (the default) this is the recommended approach. When using systemd-networkd it's
   # still possible to use this option, but it's recommended to use it in conjunction
   # with explicit per-interface declarations with `networking.interfaces.<interface>.useDHCP`.
-  display = {
-    edid = {
-      enable = true;
-      packages = [
-        (pkgs.runCommand "edid-creation" {} ''
-          mkdir -p "$out/lib/firmware/edid"
-          cp "${../edidFiles/SamsungTV}" $out/lib/firmware/edid/wh.bin
-        '')
-        (pkgs.runCommand "edid-creation" {} ''
-          mkdir -p "$out/lib/firmware/edid"
-          cp "${../edidFiles/Empty}" $out/lib/firmware/edid/ignored.bin
-        '')
-      ];
-    };
-    outputs."DP-1" = {
-      edid = "wh.bin";
-      mode = "e";
-    };
-  };
   networking = {
     hostName = "minec";
     networkmanager.enable = true;

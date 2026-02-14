@@ -4,7 +4,7 @@
   ];
   # These are non-negotiables
   hjem.clobberByDefault = true;
-  fonts.enable = true;
+  font-config.enable = true;
   nix-ld.enable = true;
   tailscale.enable = true;
   desktop-apps.enable = true;

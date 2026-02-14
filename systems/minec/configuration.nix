@@ -3,10 +3,10 @@
   imports = [
     ./hardware-configuration.nix
     ../../homes/minec
-    ../shared-configurations.nix
-    ../modules
+    ../shared-configuration.nix
+    ../../modules
   ];
-  virtualization.enable = true;
+  superVirtualization.enable = true;
   gaming.enable = true;
   coding.enable = true;
   nix-ld.enable = true;
@@ -39,6 +39,25 @@
 	};
 
   hardware = {
+		display = {
+			edid = {
+				enable = true;
+				packages = [
+					(pkgs.runCommand "edid-creation" {} ''
+						mkdir -p "$out/lib/firmware/edid"
+						cp "${../../edidFiles/SamsungTV}" $out/lib/firmware/edid/wh.bin
+					'')
+					(pkgs.runCommand "edid-creation" {} ''
+						mkdir -p "$out/lib/firmware/edid"
+						cp "${../../edidFiles/Empty}" $out/lib/firmware/edid/ignored.bin
+					'')
+				];
+			};
+			outputs."DP-1" = {
+				edid = "wh.bin";
+				mode = "e";
+			};
+		};
     nvidia = {
 			modesetting.enable = true;
 			open = true;
