@@ -10,6 +10,7 @@
   gaming.enable = true;
   coding.enable = true;
   nix-ld.enable = true;
+	sunshine.enable = true;
   environment.systemPackages = with pkgs; [
     cosmic-ext-applet-minimon
 		cosmic-ext-tweaks

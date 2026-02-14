@@ -10,7 +10,6 @@
   desktop-apps.enable = true;
   systemd-boot.enable = true;
 
-
   environment = {
     shells = with pkgs; [bash];
 		sessionVariables = {
