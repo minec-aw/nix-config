@@ -27,22 +27,35 @@
 
 	outputs = { self, nixpkgs, localPackages, nixpkgs-xr, ... }@inputs:
 	let 
-		system = "x86_64-linux";
 		/*pkgs = import nixpkgs {
 			inherit system;
 		};*/
 	in {
-		nixosConfigurations.minec = nixpkgs.lib.nixosSystem {
-		inherit system;
-			specialArgs = {
-				inherit inputs;
-				inherit localPackages;
+		nixosConfigurations = {
+			minec = nixpkgs.lib.nixosSystem {
+				system = "x86_64-linux";
+				specialArgs = {
+					inherit inputs;
+					inherit localPackages;
+				};
+				modules = [
+					inputs.hjem.nixosModules.default
+					nixpkgs-xr.nixosModules.nixpkgs-xr
+					./systems/minec/configuration.nix
+				];
 			};
-			modules = [
-				inputs.hjem.nixosModules.default
-				nixpkgs-xr.nixosModules.nixpkgs-xr
-				./configuration.nix
-			];
+			linec = nixpkgs.lib.nixosSystem {
+				system = "x86_64-linux";
+				specialArgs = {
+					inherit inputs;
+					inherit localPackages;
+				};
+				modules = [
+					inputs.hjem.nixosModules.default
+					./systems/linec/configuration.nix
+				];
+			};
 		};
+		
 	};
 }
