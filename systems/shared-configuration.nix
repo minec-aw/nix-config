@@ -24,6 +24,8 @@
       appimage-run
       unrar
       pulseaudio
+      obsidian
+
     ];
   };
   services = {
@@ -31,6 +33,12 @@
 		gvfs.enable = true;
     dbus.implementation = "broker";
     flatpak.enable = true;
+    syncthing = {
+			enable = true;
+      user = "minec";
+			openDefaultPorts = true;
+			relay.enable = true;
+		};
 		pipewire = {
 			enable = true; # if not already enabled
 			alsa.enable = true;

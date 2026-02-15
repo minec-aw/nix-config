@@ -10,6 +10,7 @@
   coding.enable = true;
   services.printing.enable = true;
   environment.systemPackages = [ pkgs.moonlight-qt ];
+  services.thermald.enable = true;
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [

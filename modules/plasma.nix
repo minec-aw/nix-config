@@ -67,6 +67,7 @@
       darkly
       darkly-qt5
       kde-rounded-corners
+      kdePackages.plasma-keyboard
     ];
   };
 }
