@@ -60,6 +60,7 @@
     hostName = "minec";
     networkmanager.enable = true;
     firewall.allowedUDPPorts = [ 7 9 ];
+    nftables.enable = true;
     useDHCP = lib.mkDefault true;
     interfaces = {
       enp12s0 = {
