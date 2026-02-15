@@ -20,6 +20,7 @@
 
   networking = {
     hostName = "linec";
+    nftables.enable = true;
     networkmanager.enable = true;
   };
 }
