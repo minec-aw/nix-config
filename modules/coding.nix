@@ -18,7 +18,7 @@
       android-tools
       
       zed-editor
-      vscodium
+      vscodium-fhs
       direnv
       git
       python3

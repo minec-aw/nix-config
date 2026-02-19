@@ -22,7 +22,6 @@
 		};
     systemPackages = with pkgs; [
       fastfetch
-      appimage-run
       unrar
       pulseaudio
       obsidian

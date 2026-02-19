@@ -3,13 +3,14 @@
     ./virtualization
     ./gaming.nix
     ./desktop-apps.nix
-		./coding.nix
-    ./nix-ld.nix
-    ./sunshine.nix
-    ./systemd-boot.nix
-    ./tailscale.nix
-		./piper.nix
-		./plasma.nix
+	./coding.nix
+	./nix-ld.nix
+	./sunshine.nix
+	./systemd-boot.nix
+	./tailscale.nix
+	./piper.nix
+	./plasma.nix
+	./ollama.nix
   ];
   options = {
     font-config.enable = lib.mkEnableOption "downloads fonts";
