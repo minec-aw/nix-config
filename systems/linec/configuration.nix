@@ -8,9 +8,12 @@
   ];
   waydroid.enable = true;
   coding.enable = true;
-  services.printing.enable = true;
+  services = {
+    printing.enable = true;
+    thermald.enable = true;
+  };
   environment.systemPackages = [ pkgs.moonlight-qt ];
-  services.thermald.enable = true;
+  hardware.sensor.iio.enable = true;
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [

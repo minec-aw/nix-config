@@ -18,7 +18,7 @@
       android-tools
       
       zed-editor
-      vscode
+      vscodium
       direnv
       git
       python3

@@ -3,7 +3,7 @@
     plasma.enable = lib.mkEnableOption "Enables KDE plasma and the niceities i put with it";
   };
   config = lib.mkIf config.plasma.enable {
-    nixpkgs.overlays = [
+    /*nixpkgs.overlays = [
       (final: prev: {
         kdePackages = prev.kdePackages.overrideScope (
           kdeFinal: kdePrev: {
@@ -54,7 +54,7 @@
           }
         );
       })
-    ];
+    ];*/
 
     services = {
       displayManager = {
@@ -66,7 +66,7 @@
     environment.systemPackages = with pkgs; [
       darkly
       darkly-qt5
-      kde-rounded-corners
+      #kde-rounded-corners
       kdePackages.plasma-keyboard
     ];
   };

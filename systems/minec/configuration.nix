@@ -43,7 +43,7 @@
 		};
 		nvidia = {
 			modesetting.enable = true;
-			open = true;
+			open = false;
 			powerManagement.enable = true;
 			prime = {
 				reverseSync.enable = true;
@@ -53,7 +53,7 @@
 				nvidiaBusId = "PCI:1:0:0";
 			};
 			nvidiaSettings = true;
-			package = config.boot.kernelPackages.nvidiaPackages.latest;
+			package = config.boot.kernelPackages.nvidiaPackages.beta;
 		};
 	};
 }

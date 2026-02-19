@@ -8,6 +8,7 @@
     ./sunshine.nix
     ./systemd-boot.nix
     ./tailscale.nix
+		./piper.nix
 		./plasma.nix
   ];
   options = {

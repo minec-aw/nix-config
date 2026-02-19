@@ -10,6 +10,7 @@
   desktop-apps.enable = true;
   systemd-boot.enable = true;
   plasma.enable = true;
+  piper.enable = true;
   nix.settings.trusted-users = [ "root" "minec" ];
   environment = {
     shells = with pkgs; [bash];
