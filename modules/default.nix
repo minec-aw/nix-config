@@ -8,7 +8,6 @@
 	./sunshine.nix
 	./systemd-boot.nix
 	./tailscale.nix
-	./piper.nix
 	./plasma.nix
 	./ollama.nix
   ];
@@ -35,7 +34,6 @@
 				nerd-fonts.fira-code
 				nerd-fonts.droid-sans-mono
 				corefonts
-				liberation_ttf
 				vista-fonts
 				jetbrains-mono
 				#inputs.apple-fonts.packages.${pkgs.system}.sf-pro

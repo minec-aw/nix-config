@@ -1,6 +1,12 @@
 { pkgs, lib, config, localPackages, ...}: {
   options = {
-    superVirtualization.enable = lib.mkEnableOption "enables nvidia gpu virtualization";
+    superVirtualization = {
+      enable = lib.mkEnableOption "enables nvidia gpu virtualization";
+      user = lib.mkOption {
+        type = lib.types.str;
+        description = "The user to grant virtualization group access to";
+      };
+    };
     waydroid.enable = lib.mkEnableOption "Enables waydroid";
   };
   
@@ -101,13 +107,13 @@
       ];
       users.groups = {
         libvirtd = {
-          members = ["minec"];
+          members = [config.superVirtualization.user];
         };
         input = {
-          members = ["minec"];
+          members = [config.superVirtualization.user];
         };
         kvm = {
-          members = ["minec"];
+          members = [config.superVirtualization.user];
         };
       };
 
@@ -140,7 +146,7 @@
             public = {
               path = "/media/Storage";
               browseable = "yes";
-              "valid users" = "minec";
+              "valid users" = config.superVirtualization.user;
               "read only" = "no";
               "guest ok" = "no";
             };
@@ -155,7 +161,7 @@
       networking.firewall.allowPing = true;
 
       services.udev.extraRules = ''
-      SUBSYSTEM=="kvmfr", ACTION=="add", RUN+="${pkgs.coreutils-full}/bin/chown minec:kvm /dev/kvmfr0", RUN+="${pkgs.coreutils-full}/bin/chmod 0660 /dev/kvmfr0"
+      SUBSYSTEM=="kvmfr", ACTION=="add", RUN+="${pkgs.coreutils-full}/bin/chown ${config.superVirtualization.user}:kvm /dev/kvmfr0", RUN+="${pkgs.coreutils-full}/bin/chmod 0660 /dev/kvmfr0"
       TAG=="seat", ENV{ID_FOR_SEAT}=="drm-pci-0000_01_00_0", ENV{ID_SEAT}="seat1", TAG-="master-of-seat"
       '';
       # SUBSYSTEM=="kvmfr", OWNER="minec", GROUP="kvm", MODE="0660", TAG+="uaccess"

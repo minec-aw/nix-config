@@ -6,7 +6,13 @@
 		../shared-configuration.nix
 		../../modules
 	];
-	superVirtualization.enable = true;
+	superVirtualization = {
+		enable = true;
+		user = "minec";
+	};
+	programs.bash.shellAliases = {
+		update = "nixos-rebuild switch --flake path:/home/minec/Shared/nixos --sudo";
+	};
 	gaming.enable = true;
 	coding.enable = true;
 	nix-ld.enable = true;
