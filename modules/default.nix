@@ -10,6 +10,7 @@
 	./tailscale.nix
 	./plasma.nix
 	./ollama.nix
+	./niri.nix
   ];
   options = {
     font-config.enable = lib.mkEnableOption "downloads fonts";

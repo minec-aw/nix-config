@@ -17,7 +17,6 @@
 	coding.enable = true;
 	nix-ld.enable = true;
 	sunshine.enable = true;
-	ollama.enable = true;
 	environment.systemPackages = with pkgs; [
 		weasis
 		blender
@@ -29,7 +28,7 @@
 	};
 
  	hardware = {
-		display = {
+		/*display = {
 			edid = {
 				enable = true;
 				packages = [
@@ -47,7 +46,7 @@
 				edid = "wh.bin";
 				mode = "e";
 			};
-		};
+			};*/
 		nvidia = {
 			modesetting.enable = true;
 			open = false;
@@ -63,4 +62,9 @@
 			package = config.boot.kernelPackages.nvidiaPackages.beta;
 		};
 	};
+
+  hjem.users.minec.files = {
+    # Cursors & icons & themes
+    ".config/niri/config.kdl".source = ./niri.kdl;
+  };
 }

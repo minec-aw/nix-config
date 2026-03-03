@@ -29,9 +29,12 @@
           onShutdown = "shutdown";
           enable = true;
           qemu = {
+            vhostUserPackages = with pkgs; [ virtiofsd ];
             swtpm.enable = true;
             verbatimConfig = ''
               namespaces = []
+              user = "root"
+              group = "root"
               cgroup_device_acl = [
                 "/dev/null", "/dev/full", "/dev/zero",
                 "/dev/random", "/dev/urandom",

@@ -30,6 +30,7 @@
       kdePackages.plasma-browser-integration
       apple-cursor
       krita
+      bitwarden-desktop
       amberol
     ]);
   };

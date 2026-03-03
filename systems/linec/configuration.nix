@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -15,7 +15,10 @@
     printing.enable = true;
     thermald.enable = true;
   };
-  environment.systemPackages = [ pkgs.moonlight-qt ];
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+    swayidle
+  ];
   hardware.sensor.iio.enable = true;
   hardware.graphics = {
     enable = true;
@@ -29,4 +32,10 @@
     nftables.enable = true;
     networkmanager.enable = true;
   };
+
+  hjem.users.minec.files = {
+		# Cursors & icons & themes
+		".config/niri/config.kdl".source = ./niri.kdl;
+	};
+
 }
