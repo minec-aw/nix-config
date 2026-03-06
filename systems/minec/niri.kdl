@@ -51,7 +51,7 @@ input {
 output "HDMI-A-1" {
     mode "2560x1440@119.998"
 
-    scale 1.25
+    scale 1.3333333333333333333333333333333333333333333333333333333333
     transform "normal"
     position x=1280 y=0
 }

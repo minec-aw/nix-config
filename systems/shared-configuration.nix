@@ -104,6 +104,7 @@
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
 	nix.settings = {
+    download-buffer-size = 1048576000;
 		auto-optimise-store = true;
 		experimental-features = [ "nix-command" "flakes" ];
 	};

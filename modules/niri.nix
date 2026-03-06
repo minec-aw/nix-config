@@ -62,6 +62,7 @@
       adwaita-qt
       adwaita-qt6
       adwaita-icon-theme
+      bazaar
       adw-gtk3
       loupe
       showtime

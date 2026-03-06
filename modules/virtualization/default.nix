@@ -1,4 +1,4 @@
-{ pkgs, lib, config, localPackages, ...}: {
+{ pkgs, lib, config, ...}: {
   options = {
     superVirtualization = {
       enable = lib.mkEnableOption "enables nvidia gpu virtualization";
@@ -9,7 +9,7 @@
     };
     waydroid.enable = lib.mkEnableOption "Enables waydroid";
   };
-  
+
   config = lib.mkMerge [
     (lib.mkIf config.superVirtualization.enable {
       boot = {
@@ -60,13 +60,13 @@
               sd
               lsof
               psmisc
-              localPackages.nvidia-bind-vfio
-              localPackages.nvidia-unbind-vfio
+              (pkgs.writeShellScriptBin "nvidia-bind-vfio" (builtins.readFile ./nvidia-bind-vfio))
+              (pkgs.writeShellScriptBin "nvidia-unbind-vfio" (builtins.readFile ./nvidia-unbind-vfio))
             ];
           };
               in
               [ env ];
-        
+
           preStart =
         ''
         mkdir -p /var/lib/libvirt/hooks
@@ -80,11 +80,11 @@
           groups = ["libvirtd"];
           commands = [
             {
-              command = "/run/current-system/sw/bin/nvidia-bind-vfio"; 
+              command = "/run/current-system/sw/bin/nvidia-bind-vfio";
               options = ["NOPASSWD"];
             }
             {
-              command = "/run/current-system/sw/bin/nvidia-unbind-vfio"; 
+              command = "/run/current-system/sw/bin/nvidia-unbind-vfio";
               options = ["NOPASSWD"];
             }
           ];
@@ -105,8 +105,8 @@
         libvncserver
         looking-glass-client
 
-        localPackages.nvidia-bind-vfio
-        localPackages.nvidia-unbind-vfio
+        (pkgs.writeShellScriptBin "nvidia-bind-vfio" (builtins.readFile ./nvidia-bind-vfio))
+        (pkgs.writeShellScriptBin "nvidia-unbind-vfio" (builtins.readFile ./nvidia-unbind-vfio))
       ];
       users.groups = {
         libvirtd = {

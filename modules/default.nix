@@ -9,8 +9,9 @@
 	./systemd-boot.nix
 	./tailscale.nix
 	./plasma.nix
-	./ollama.nix
+	./ollama
 	./niri.nix
+	./tilp
   ];
   options = {
     font-config.enable = lib.mkEnableOption "downloads fonts";

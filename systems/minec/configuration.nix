@@ -17,6 +17,8 @@
 	coding.enable = true;
 	nix-ld.enable = true;
 	sunshine.enable = true;
+	ollama.enable = true;
+	tilp.enable = true;
 	environment.systemPackages = with pkgs; [
 		weasis
 		blender
