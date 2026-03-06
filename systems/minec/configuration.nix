@@ -6,11 +6,19 @@
 		../shared-configuration.nix
 		../../modules
 	];
-	superVirtualization.enable = true;
+	superVirtualization = {
+		enable = true;
+		user = "minec";
+	};
+	programs.bash.shellAliases = {
+		update = "nixos-rebuild switch --flake path:/home/minec/Shared/nixos --sudo";
+	};
 	gaming.enable = true;
 	coding.enable = true;
 	nix-ld.enable = true;
 	sunshine.enable = true;
+	ollama.enable = true;
+	tilp.enable = true;
 	environment.systemPackages = with pkgs; [
 		weasis
 		blender
@@ -22,7 +30,7 @@
 	};
 
  	hardware = {
-		display = {
+		/*display = {
 			edid = {
 				enable = true;
 				packages = [
@@ -40,10 +48,10 @@
 				edid = "wh.bin";
 				mode = "e";
 			};
-		};
+			};*/
 		nvidia = {
 			modesetting.enable = true;
-			open = true;
+			open = false;
 			powerManagement.enable = true;
 			prime = {
 				reverseSync.enable = true;
@@ -53,7 +61,12 @@
 				nvidiaBusId = "PCI:1:0:0";
 			};
 			nvidiaSettings = true;
-			package = config.boot.kernelPackages.nvidiaPackages.latest;
+			package = config.boot.kernelPackages.nvidiaPackages.beta;
 		};
 	};
+
+  hjem.users.minec.files = {
+    # Cursors & icons & themes
+    ".config/niri/config.kdl".source = ./niri.kdl;
+  };
 }

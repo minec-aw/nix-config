@@ -9,7 +9,6 @@
 				allowedTCPPorts = [ 3389 2234 ];
 			};
 		};
-		environment.systemPackages = [ pkgs.tail-tray ];
 		services = {
 			tailscale = {
 				enable = true;

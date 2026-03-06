@@ -1,4 +1,4 @@
-{ pkgs, lib, config, ...}: {
+{ pkgs, lib, inputs, config, ...}: {
   options = {
     coding.enable = lib.mkEnableOption "Coding & development & debug & system utilities";
   };
@@ -16,9 +16,8 @@
       lsof
       psmisc
       android-tools
-      
-      zed-editor
-      vscode
+      inputs.zed.packages.${stdenv.hostPlatform.system}.default
+      vscodium-fhs
       direnv
       git
       python3

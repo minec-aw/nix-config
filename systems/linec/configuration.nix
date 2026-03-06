@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   imports = [
     ./hardware-configuration.nix
@@ -8,9 +8,18 @@
   ];
   waydroid.enable = true;
   coding.enable = true;
-  services.printing.enable = true;
-  environment.systemPackages = [ pkgs.moonlight-qt ];
-  services.thermald.enable = true;
+  programs.bash.shellAliases = {
+    update = "nixos-rebuild switch --flake path:/home/minec/Shared/nixos --sudo --build-host minec@192.168.68.60";
+  };
+  services = {
+    printing.enable = true;
+    thermald.enable = true;
+  };
+  environment.systemPackages = with pkgs; [
+    moonlight-qt
+    swayidle
+  ];
+  hardware.sensor.iio.enable = true;
   hardware.graphics = {
     enable = true;
     extraPackages = with pkgs; [
@@ -23,4 +32,10 @@
     nftables.enable = true;
     networkmanager.enable = true;
   };
+
+  hjem.users.minec.files = {
+		# Cursors & icons & themes
+		".config/niri/config.kdl".source = ./niri.kdl;
+	};
+
 }

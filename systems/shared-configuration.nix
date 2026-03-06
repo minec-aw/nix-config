@@ -9,7 +9,7 @@
   tailscale.enable = true;
   desktop-apps.enable = true;
   systemd-boot.enable = true;
-  plasma.enable = true;
+  niri.enable = true;
   nix.settings.trusted-users = [ "root" "minec" ];
   environment = {
     shells = with pkgs; [bash];
@@ -21,7 +21,6 @@
 		};
     systemPackages = with pkgs; [
       fastfetch
-      appimage-run
       unrar
       pulseaudio
       obsidian
@@ -31,6 +30,13 @@
   services = {
     openssh.enable = true;
 		gvfs.enable = true;
+		printing.enable = true;
+		displayManager = {
+      sddm = {
+        enable = true;
+        wayland.enable = true;
+      };
+    };
     dbus.implementation = "broker";
     flatpak.enable = true;
     syncthing = {
@@ -98,6 +104,7 @@
   nix.nixPath = ["nixpkgs=${inputs.nixpkgs}"];
 
 	nix.settings = {
+    download-buffer-size = 1048576000;
 		auto-optimise-store = true;
 		experimental-features = [ "nix-command" "flakes" ];
 	};

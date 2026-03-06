@@ -3,12 +3,15 @@
     ./virtualization
     ./gaming.nix
     ./desktop-apps.nix
-		./coding.nix
-    ./nix-ld.nix
-    ./sunshine.nix
-    ./systemd-boot.nix
-    ./tailscale.nix
-		./plasma.nix
+	./coding.nix
+	./nix-ld.nix
+	./sunshine.nix
+	./systemd-boot.nix
+	./tailscale.nix
+	./plasma.nix
+	./ollama
+	./niri.nix
+	./tilp
   ];
   options = {
     font-config.enable = lib.mkEnableOption "downloads fonts";
@@ -33,7 +36,6 @@
 				nerd-fonts.fira-code
 				nerd-fonts.droid-sans-mono
 				corefonts
-				liberation_ttf
 				vista-fonts
 				jetbrains-mono
 				#inputs.apple-fonts.packages.${pkgs.system}.sf-pro
