@@ -11,7 +11,7 @@
 		user = "minec";
 	};
 	programs.bash.shellAliases = {
-		update = "nixos-rebuild switch --flake path:/home/minec/Shared/nixos --sudo";
+		update = "nixos-rebuild switch --flake path:/home/minec/Shared/nix-config --sudo";
 	};
 	gaming.enable = true;
 	coding.enable = true;

@@ -9,7 +9,7 @@
   waydroid.enable = true;
   coding.enable = true;
   programs.bash.shellAliases = {
-    update = "nixos-rebuild switch --flake path:/home/minec/Shared/nixos --sudo --build-host minec@192.168.68.60";
+    update = "nixos-rebuild switch --flake path:/home/minec/Shared/nix-config --sudo --build-host minec@192.168.68.60";
   };
   services = {
     printing.enable = true;
