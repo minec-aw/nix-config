@@ -19,6 +19,8 @@
 		};
 		nixpkgs-xr.url = "github:nix-community/nixpkgs-xr";
 		zed.url = "github:zed-industries/zed";
+		spicetify-nix.url = "github:Gerg-L/spicetify-nix";
+
 	};
 
 

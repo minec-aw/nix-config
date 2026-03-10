@@ -63,6 +63,7 @@
       adwaita-qt6
       adwaita-icon-theme
       bazaar
+      file-roller
       adw-gtk3
       loupe
       showtime

@@ -17,13 +17,20 @@
 	coding.enable = true;
 	nix-ld.enable = true;
 	sunshine.enable = true;
-	ollama.enable = true;
+	llama-cpp.enable = true;
 	tilp.enable = true;
 	environment.systemPackages = with pkgs; [
 		weasis
 		blender
+		wineWow64Packages.staging
 		parsec-bin
+		winetricks
+		imsprog
 	];
+	services.udev.extraRules = ''
+        # CH341A Programmer
+        SUBSYSTEM=="usb", ATTRS{idVendor}=="1a86", ATTRS{idProduct}=="5512", MODE="0666"
+    '';
 	services.displayManager.autoLogin = {
 		enable = true;
 		user = "minec";

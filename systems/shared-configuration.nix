@@ -10,6 +10,7 @@
   desktop-apps.enable = true;
   systemd-boot.enable = true;
   niri.enable = true;
+  spicetify.enable = true;
   nix.settings.trusted-users = [ "root" "minec" ];
   environment = {
     shells = with pkgs; [bash];

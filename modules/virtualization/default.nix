@@ -162,6 +162,7 @@
         openFirewall = true;
       };
       networking.firewall.allowPing = true;
+      networking.firewall.trustedInterfaces = [ "virbr0" ];
 
       services.udev.extraRules = ''
       SUBSYSTEM=="kvmfr", ACTION=="add", RUN+="${pkgs.coreutils-full}/bin/chown ${config.superVirtualization.user}:kvm /dev/kvmfr0", RUN+="${pkgs.coreutils-full}/bin/chmod 0660 /dev/kvmfr0"
