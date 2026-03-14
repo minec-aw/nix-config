@@ -4,7 +4,7 @@
     };
     config = lib.mkIf config.llama-cpp.enable {
         services = {
-            /*
+            
             ollama = {
                 enable = true;
                 host = "0.0.0.0";
@@ -12,8 +12,9 @@
                     acceleration = "cuda";
                 };
                 environmentVariables = {
-                    OLLAMA_KV_CACHE_TYPE = "q8_0";
+                    OLLAMA_KV_CACHE_TYPE = "bf16";
                     OLLAMA_FLASH_ATTENTION = "1";
+                    OLLAMA_NUM_PARALLEL = "1";
                 };
             };
             open-webui = {
@@ -21,8 +22,8 @@
                 host = "0.0.0.0";
                 port = 10086;
             };
-            */
-            llama-cpp = {
+            
+            /*llama-cpp = {
                 enable = true;
                 host = "0.0.0.0";
                 port = 10087;
@@ -58,7 +59,7 @@
                     min-p = "0.01";
                   };
                 };
-            };
+            };*/
         };
     };
 }
