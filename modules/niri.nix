@@ -11,6 +11,7 @@
       niri.enable = true;
       foot = {
         enable = true;
+        xdg.serverAutostart = true;
         settings = {
           main = {
             font = "jetbrains mono:size=12";
