@@ -1,6 +1,7 @@
 { pkgs, lib, config, ...}: {
   options = {
     gaming.enable = lib.mkEnableOption "Gets steam, faugus, r2modman, protonplus and prismlauncher";
+    gaming.vr = lib.mkEnableOption "Enable VR support with wivrn and CUDA";
   };
   config = lib.mkIf config.gaming.enable {
     environment.systemPackages = (with pkgs; [
@@ -35,6 +36,10 @@
       };*/
       remotePlay.openFirewall = true; # Open ports in the firewall for Steam Remote Play
       #dedicatedServer.openFirewall = true; # Open ports in the firewall for Source Dedicated Server
+    };
+    services.wivrn = lib.mkIf config.gaming.vr {
+      enable = true;
+      package = pkgs.wivrn.override { cudaSupport = true; };
     };
   };
 }
