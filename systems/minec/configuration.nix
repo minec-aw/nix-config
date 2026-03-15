@@ -13,7 +13,10 @@
 	programs.bash.shellAliases = {
 		update = "nixos-rebuild switch --flake path:/home/minec/Shared/nix-config --sudo";
 	};
-	gaming.enable = true;
+	gaming = {
+	    enable = true;
+		vr = true;
+	};
 	coding.enable = true;
 	nix-ld.enable = true;
 	sunshine.enable = true;

@@ -4,12 +4,17 @@
     gaming.vr = lib.mkEnableOption "Enable VR support with wivrn and CUDA";
   };
   config = lib.mkIf config.gaming.enable {
-    environment.systemPackages = (with pkgs; [
+    environment.systemPackages = with pkgs; [
       faugus-launcher
       prismlauncher
       r2modman
       protonplus
-    ]);
+    ] ++ lib.optionals config.gaming.vr [
+      pkgs.wayvr
+    ];
+    environment.sessionVariables = lib.mkIf config.gaming.vr {
+        PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = 1;
+    };
     programs.steam = {
       #gamescopeSession.enable = true;
       enable = true;
@@ -39,6 +44,7 @@
     };
     services.wivrn = lib.mkIf config.gaming.vr {
       enable = true;
+      openFirewall = true;
       package = pkgs.wivrn.override { cudaSupport = true; };
     };
   };
