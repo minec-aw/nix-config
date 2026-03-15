@@ -17,11 +17,11 @@
                     OLLAMA_NUM_PARALLEL = "1";
                 };
             };
-            open-webui = {
+            /*open-webui = {
                 enable = true;
                 host = "0.0.0.0";
                 port = 10086;
-            };
+            };*/
             
         };
     };
