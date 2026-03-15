@@ -3,6 +3,7 @@
         llama-cpp.enable = lib.mkEnableOption "Enables llamacpp for local AI";
     };
     config = lib.mkIf config.llama-cpp.enable {
+        environment.systemPackages = [ pkgs.opencode pkgs.opencode-desktop];
         services = {
             searx = {
                 enable = true;
