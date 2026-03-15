@@ -4,7 +4,14 @@
     };
     config = lib.mkIf config.llama-cpp.enable {
         services = {
-            
+            searx = {
+                enable = true;
+                settings.server = {
+                    port = "10082";
+                    bind_address = "127.0.0.1";
+                    secret_key = "noiujkhlfdgsfjhfiujqehf3r9p8furfg89p0uyg3597ph35p9umtxcn34590";
+                };
+            };
             ollama = {
                 enable = true;
                 host = "0.0.0.0";
@@ -22,7 +29,7 @@
                 host = "0.0.0.0";
                 port = 10086;
             };*/
-            
+
         };
     };
 }
