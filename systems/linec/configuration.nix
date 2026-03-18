@@ -11,6 +11,7 @@
   programs.bash.shellAliases = {
     update = "nixos-rebuild switch --flake path:/home/minec/Shared/nix-config --sudo --build-host minec@192.168.68.60";
   };
+  boot.kernelParams = ["mem_sleep_default=deep"];
   services = {
     printing.enable = true;
     thermald.enable = true;
