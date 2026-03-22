@@ -11,6 +11,7 @@
       protonplus
     ] ++ lib.optionals config.gaming.vr [
       pkgs.wayvr
+      bs-manager
     ];
     environment.sessionVariables = lib.mkIf config.gaming.vr {
         PRESSURE_VESSEL_IMPORT_OPENXR_1_RUNTIMES = 1;
@@ -44,6 +45,7 @@
     };
     services.wivrn = lib.mkIf config.gaming.vr {
       enable = true;
+      defaultRuntime = true;
       openFirewall = true;
       package = pkgs.wivrn.override { cudaSupport = true; };
     };
