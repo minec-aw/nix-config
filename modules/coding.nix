@@ -17,7 +17,7 @@
       psmisc
       android-tools
       inputs.zed.packages.${stdenv.hostPlatform.system}.default
-      vscodium-fhs
+      antigravity
       direnv
       git
       python3
